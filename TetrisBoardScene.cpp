@@ -1,4 +1,5 @@
 #include "TetrisBoardScene.h"
+#include "UnitBlock.h"
 
 USING_NS_CC;
 
@@ -50,17 +51,25 @@ bool TetrisBoardScene::init()
 	_pl = Vec2(xd / 2, yd / 2);
 	_pf = _pl + Vec2(_u / 2, _u / 2);
 
+	// set UnitBlock::_u & UnitBlock::_pf
+	UnitBlock::_u = TetrisBoardScene::_u;
+	UnitBlock::_pf = TetrisBoardScene::_pf;
+
 	/* ---- testing of unit grid*/
 	auto drawNode = DrawNode::create();
 	this->addChild(drawNode);
 
-	for (double i = 0; i < NUM_OF_UNIT_BLOCKS_IN_WIDTH; ++i) 
+	for (double i = 0; i < NUM_OF_UNIT_BLOCKS_IN_WIDTH; ++i)
 	{
-		for (double j = 0; j < NUM_OF_UNIT_BLOCKS_IN_HEIGHT; ++j) 
+		for (double j = 0; j < NUM_OF_UNIT_BLOCKS_IN_HEIGHT; ++j)
 		{
 			drawNode->drawPoint(Vec2(i * _u + _pf.x, j * _u + _pf.y), 2, Color4F::ORANGE);
 		}
 	}
+
+	/* ---- testing of UnitBlock */
+	auto ub = UnitBlock::createunitBlock();
+	this->addChild(ub);
 
 	return true;
 }
