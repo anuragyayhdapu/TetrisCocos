@@ -33,3 +33,19 @@ bool UnitBlock::init()
 
 	return true;
 }
+
+void UnitBlock::placeAt(int x, int y, Color4F color)
+{
+	this->_x = x; this->_y = y;
+	this->_color = color;
+	this->drawHollow();
+}
+
+void UnitBlock::drawHollow()
+{
+	Vec2 midPoint(_pf.x + _x * _u, _pf.y - _y * _u);
+	Vec2 origin(midPoint.x - _u / 2, midPoint.y - _u / 2);
+	Vec2 destination(midPoint.x + _u / 2, midPoint.y + _u / 2);
+
+	_drawNode->drawRect(origin, destination, this->_color);
+}

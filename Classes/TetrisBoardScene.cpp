@@ -70,6 +70,7 @@ bool TetrisBoardScene::init()
 	/* ---- testing of UnitBlock */
 	auto ub = UnitBlock::createunitBlock();
 	this->addChild(ub);
+	ub->placeAt(24, 29);
 
 	return true;
 }
