@@ -48,8 +48,8 @@ bool TetrisBoardScene::init()
 	double xd = xv - x;
 	double yd = yv - y;
 
-	_pl = Vec2(xd / 2, yd / 2);
-	_pf = _pl + Vec2(_u / 2, _u / 2);
+	_pl = Vec2(xd / 2, (yd / 2) + y); // shifting this point from bottom left to top left
+	_pf = Vec2(_pl.x + _u / 2, _pl.y - _u / 2);
 
 	// set UnitBlock::_u & UnitBlock::_pf
 	UnitBlock::_u = TetrisBoardScene::_u;
@@ -63,7 +63,7 @@ bool TetrisBoardScene::init()
 	{
 		for (double j = 0; j < NUM_OF_UNIT_BLOCKS_IN_HEIGHT; ++j)
 		{
-			drawNode->drawPoint(Vec2(i * _u + _pf.x, j * _u + _pf.y), 2, Color4F::ORANGE);
+			drawNode->drawPoint(Vec2(i * _u + _pf.x, _pf.y - j * _u), 2, Color4F::ORANGE);
 		}
 	}
 
