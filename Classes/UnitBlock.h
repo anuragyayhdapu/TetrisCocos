@@ -20,20 +20,24 @@ public:
 	UnitBlock();
 	virtual ~UnitBlock();
 	virtual bool init();
-	static UnitBlock* createunitBlock();
-	void placeAt(int x = 0, int y = 0, cocos2d::Color4F color = cocos2d::Color4F::GRAY);
 	CREATE_FUNC(UnitBlock);
-
-private:
-	int _x, _y; // position of block in term of number of units
-	cocos2d::DrawNode* _drawNode;
-	cocos2d::Color4F _color;
-
+	static UnitBlock* createUnitBlock();
+	
+	void placeAt(int x = 0, int y = 0, cocos2d::Color4F color = cocos2d::Color4F::GRAY);
 	/*move functions; move by a unit*/
 	void moveUp();
 	void moveDown();
 	void moveLeft();
 	void moveRight();
+
+	int getX() { return _x; }
+	int getY() { return _y; }
+
+
+private:
+	int _x, _y; // position of block in term of number of units
+	cocos2d::DrawNode* _drawNode;
+	cocos2d::Color4F _color;
 
 	/*draw functions; */
 	void drawHollow();

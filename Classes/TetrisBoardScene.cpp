@@ -1,5 +1,5 @@
 #include "TetrisBoardScene.h"
-#include "UnitBlock.h"
+//#include "UnitBlock.h"
 
 USING_NS_CC;
 
@@ -55,6 +55,11 @@ bool TetrisBoardScene::init()
 	UnitBlock::_u = TetrisBoardScene::_u;
 	UnitBlock::_pf = TetrisBoardScene::_pf;
 
+	// set up keyboard event listner
+	auto eventListner = EventListenerKeyboard::create();
+	eventListner->onKeyPressed = CC_CALLBACK_2(TetrisBoardScene::onKeyPressed, this);
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(eventListner, this);
+
 	/* ---- testing of unit grid*/
 	auto drawNode = DrawNode::create();
 	this->addChild(drawNode);
@@ -68,9 +73,59 @@ bool TetrisBoardScene::init()
 	}
 
 	/* ---- testing of UnitBlock */
-	auto ub = UnitBlock::createunitBlock();
+	auto ub = UnitBlock::createUnitBlock();
 	this->addChild(ub);
 	ub->placeAt(24, 29);
 
+	/* ---- testing of movable nodes */
+	auto movableBlock = UnitBlock::createUnitBlock();
+	movableBlock->placeAt();
+	this->addChild(movableBlock);
+	this->movableBlockes.push_back(movableBlock);
+
 	return true;
+}
+
+
+void TetrisBoardScene::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event * event)
+{
+	switch (keyCode)
+	{
+		// only move blocks within boundary
+
+	case EventKeyboard::KeyCode::KEY_UP_ARROW:
+		for each (UnitBlock* block in movableBlockes)
+		{
+			if (block->getY() - 1 >= 0)
+				block->moveUp();
+		}
+		break;
+
+	case EventKeyboard::KeyCode::KEY_DOWN_ARROW:
+		for each (UnitBlock* block in movableBlockes)
+		{
+			if (block->getY() + 1 < TetrisBoardScene::NUM_OF_UNIT_BLOCKS_IN_HEIGHT)
+				block->moveDown();
+		}
+		break;
+
+	case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
+		for each (UnitBlock* block in movableBlockes)
+		{
+			if (block->getX() + 1 < TetrisBoardScene::NUM_OF_UNIT_BLOCKS_IN_WIDTH)
+				block->moveRight();
+		}
+		break;
+
+	case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
+		for each (UnitBlock* block in movableBlockes)
+		{
+			if (block->getX() - 1 >= 0)
+				block->moveLeft();
+		}
+		break;
+
+	default: break;
+
+	}
 }

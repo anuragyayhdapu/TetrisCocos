@@ -13,7 +13,7 @@ UnitBlock::~UnitBlock()
 {
 }
 
-UnitBlock * UnitBlock::createunitBlock()
+UnitBlock * UnitBlock::createUnitBlock()
 {
 	return UnitBlock::create();
 }
@@ -48,4 +48,37 @@ void UnitBlock::drawHollow()
 	Vec2 destination(midPoint.x + _u / 2, midPoint.y + _u / 2);
 
 	_drawNode->drawRect(origin, destination, this->_color);
+}
+
+void UnitBlock::moveUp()
+{
+	// calculate new coordinates
+	this->_y--;
+
+	// delete node at old place
+	this->_drawNode->clear();
+
+	// redraw at new
+	this->drawHollow();
+}
+
+void UnitBlock::moveDown()
+{
+	this->_y++;
+	this->_drawNode->clear();
+	this->drawHollow();
+}
+
+void UnitBlock::moveLeft()
+{
+	this->_x--;
+	this->_drawNode->clear();
+	this->drawHollow();
+}
+
+void UnitBlock::moveRight()
+{
+	this->_x++;
+	this->_drawNode->clear();
+	this->drawHollow();
 }
