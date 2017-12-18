@@ -107,6 +107,8 @@ void TetrisBoardScene::UpdateFunction(float dt)
 	{
 		movableBlockes.erase(std::remove(movableBlockes.begin(), movableBlockes.end(), block),
 			movableBlockes.end());
+		/* --- testing generateBlock */
+		this->generateBlock();
 	}
 }
 
@@ -154,4 +156,13 @@ void TetrisBoardScene::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, coc
 
 	}
 
+}
+
+
+void TetrisBoardScene::generateBlock(int posX, int posY)
+{
+	auto newBlock = UnitBlock::createUnitBlock();
+	newBlock->placeAt(posX, posY);
+	this->addChild(newBlock);
+	this->movableBlockes.push_back(newBlock);
 }
