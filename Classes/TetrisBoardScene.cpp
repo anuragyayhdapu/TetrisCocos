@@ -1,11 +1,12 @@
 #include "TetrisBoardScene.h"
-//#include "UnitBlock.h"
+#include <algorithm>
 
 USING_NS_CC;
 
 double TetrisBoardScene::_u = 0;
 Vec2 TetrisBoardScene::_pl = Vec2();
 Vec2 TetrisBoardScene::_pf = Vec2();
+int TetrisBoardScene::moveDelaySeconds = 0;
 
 TetrisBoardScene::TetrisBoardScene()
 {
@@ -60,6 +61,10 @@ bool TetrisBoardScene::init()
 	eventListner->onKeyPressed = CC_CALLBACK_2(TetrisBoardScene::onKeyPressed, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(eventListner, this);
 
+	// add update function to move movable tetris blocks
+	TetrisBoardScene::moveDelaySeconds = 1.0;	// TODO: later change dynamically based on level
+	schedule(schedule_selector(TetrisBoardScene::UpdateFunction), moveDelaySeconds);
+
 	/* ---- testing of unit grid*/
 	auto drawNode = DrawNode::create();
 	this->addChild(drawNode);
@@ -72,14 +77,9 @@ bool TetrisBoardScene::init()
 		}
 	}
 
-	/* ---- testing of UnitBlock */
-	auto ub = UnitBlock::createUnitBlock();
-	this->addChild(ub);
-	ub->placeAt(24, 29);
-
 	/* ---- testing of movable nodes */
 	auto movableBlock = UnitBlock::createUnitBlock();
-	movableBlock->placeAt();
+	movableBlock->placeAt(TetrisBoardScene::NUM_OF_UNIT_BLOCKS_IN_WIDTH / 2, 0);
 	this->addChild(movableBlock);
 	this->movableBlockes.push_back(movableBlock);
 
@@ -87,8 +87,33 @@ bool TetrisBoardScene::init()
 }
 
 
+void TetrisBoardScene::UpdateFunction(float dt)
+{
+	std::vector<UnitBlock*> blocksToRemove;
+
+	for each (UnitBlock* block in movableBlockes)
+	{
+		if (block->getY() + 3 < TetrisBoardScene::NUM_OF_UNIT_BLOCKS_IN_HEIGHT)
+		{
+			block->moveDown();
+		}
+		else
+		{
+			blocksToRemove.push_back(block);
+		}
+	}
+
+	for each (UnitBlock* block in blocksToRemove)
+	{
+		movableBlockes.erase(std::remove(movableBlockes.begin(), movableBlockes.end(), block),
+			movableBlockes.end());
+	}
+}
+
 void TetrisBoardScene::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event * event)
 {
+	CCLOG("onKeyPressed called");
+
 	switch (keyCode)
 	{
 		// only move blocks within boundary
@@ -128,4 +153,5 @@ void TetrisBoardScene::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, coc
 	default: break;
 
 	}
+
 }
