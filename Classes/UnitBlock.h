@@ -1,6 +1,7 @@
 #pragma once
 
 #include "cocos2d.h"
+#include "BoardPos.h"
 
 /*
  * Basic building block of the world
@@ -25,11 +26,12 @@ public:
 	
 	void placeAt(int x = 0, int y = 0, cocos2d::Color4F color = cocos2d::Color4F::GRAY);
 	/*move functions; move by a unit*/
-	void moveUp();
-	void moveDown();
-	void moveLeft();
-	void moveRight();
+	bool moveUp(const std::map<BoardPos, UnitBlock*, BoardPosComparator>& solidBlocks);
+	bool moveDown(const std::map<BoardPos, UnitBlock*, BoardPosComparator>& solidBlocks);
+	bool moveLeft(const std::map<BoardPos, UnitBlock*, BoardPosComparator>& solidBlocks);
+	bool moveRight(const std::map<BoardPos, UnitBlock*, BoardPosComparator>& solidBlocks);
 
+	BoardPos currPos() { return BoardPos(_x, _y); }
 	int getX() { return _x; }
 	int getY() { return _y; }
 

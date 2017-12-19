@@ -37,13 +37,13 @@ bool TetrisBoardScene::init()
 	_u = 0;
 	if (yv < xv)
 	{
-		_u = y / NUM_OF_UNIT_BLOCKS_IN_HEIGHT;
-		x = _u * NUM_OF_UNIT_BLOCKS_IN_WIDTH;
+		_u = y / Constant::NUM_OF_UNIT_BLOCKS_IN_HEIGHT;
+		x = _u * Constant::NUM_OF_UNIT_BLOCKS_IN_WIDTH;
 	}
 	else if (yv >= xv)
 	{
-		_u = x / NUM_OF_UNIT_BLOCKS_IN_WIDTH;
-		y = _u * NUM_OF_UNIT_BLOCKS_IN_HEIGHT;
+		_u = x / Constant::NUM_OF_UNIT_BLOCKS_IN_WIDTH;
+		y = _u * Constant::NUM_OF_UNIT_BLOCKS_IN_HEIGHT;
 	}
 
 	double xd = xv - x;
@@ -69,9 +69,9 @@ bool TetrisBoardScene::init()
 	auto drawNode = DrawNode::create();
 	this->addChild(drawNode);
 
-	for (double i = 0; i < NUM_OF_UNIT_BLOCKS_IN_WIDTH; ++i)
+	for (double i = 0; i < Constant::NUM_OF_UNIT_BLOCKS_IN_WIDTH; ++i)
 	{
-		for (double j = 0; j < NUM_OF_UNIT_BLOCKS_IN_HEIGHT; ++j)
+		for (double j = 0; j < Constant::NUM_OF_UNIT_BLOCKS_IN_HEIGHT; ++j)
 		{
 			drawNode->drawPoint(Vec2(i * _u + _pf.x, _pf.y - j * _u), 2, Color4F::ORANGE);
 		}
@@ -79,7 +79,7 @@ bool TetrisBoardScene::init()
 
 	/* ---- testing of movable nodes */
 	this->movableBlock = UnitBlock::createUnitBlock();
-	movableBlock->placeAt(TetrisBoardScene::NUM_OF_UNIT_BLOCKS_IN_WIDTH / 2, 0);
+	movableBlock->placeAt(Constant::NUM_OF_UNIT_BLOCKS_IN_WIDTH / 2, 0);
 	this->addChild(movableBlock);
 
 	return true;
@@ -88,22 +88,15 @@ bool TetrisBoardScene::init()
 
 void TetrisBoardScene::UpdateFunction(float dt)
 {
-	BoardPos nextPos(movableBlock->getX(), movableBlock->getY() + 1);
-	if (solidBlocks.find(nextPos) != solidBlocks.end() || nextPos.y > TetrisBoardScene::NUM_OF_UNIT_BLOCKS_IN_HEIGHT - 1)
+	if (!movableBlock->moveDown(solidBlocks))
 	{
-		// solidBlocks or bed ahead
-		this->generateBlock();
-	}
-	else
-	{
-		// nothing below, can safely move
-		this->movableBlock->moveDown();
+		generateBlock();
 	}
 }
 
 void TetrisBoardScene::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event * event)
 {
-	CCLOG("onKeyPressed called");
+	bool blockMoved = true;
 
 	switch (keyCode)
 	{
@@ -111,29 +104,33 @@ void TetrisBoardScene::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, coc
 
 	case EventKeyboard::KeyCode::KEY_UP_ARROW:
 		// not allowed, or may be allowed as a special power
-		//this->movableBlock->moveUp();
+		//blockMoved = movableBlock->moveUp(solidBlocks);
 		break;
 
 	case EventKeyboard::KeyCode::KEY_DOWN_ARROW:
-		this->movableBlock->moveDown();
+		blockMoved = movableBlock->moveDown(solidBlocks);
 		break;
 
 	case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
-		this->movableBlock->moveRight();
+		blockMoved = movableBlock->moveRight(solidBlocks);
 		break;
 
 	case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
-		this->movableBlock->moveLeft();
+		blockMoved = movableBlock->moveLeft(solidBlocks);
 		break;
 
 	default: break;
 
 	}
 
+	if (!blockMoved)
+	{
+		generateBlock();
+	}
 }
 
 
-// add to movable block to solidBlocks and generate new Block
+// add movable block to solidBlocks and generate new Block
 void TetrisBoardScene::generateBlock(int posX, int posY)
 {
 	BoardPos movableBlockPos(movableBlock->getX(), movableBlock->getY());
