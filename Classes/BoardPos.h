@@ -4,6 +4,7 @@
 // for easily maintaining blocks coordinates in TetrisBoard
 
 struct BoardPos {
+	BoardPos() { x = 0; y = 0; }
 	BoardPos(int x, int y) { this->x = x; this->y = y; }
 	int x, y;
 };
