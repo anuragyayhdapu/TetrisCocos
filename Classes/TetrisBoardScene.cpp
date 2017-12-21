@@ -88,42 +88,53 @@ bool TetrisBoardScene::init()
 
 void TetrisBoardScene::UpdateFunction(float dt)
 {
-	if (!movableBlock->moveDown(solidBlocks))
+	if (!movableBlock->checkMoveDown(solidBlocks))
 	{
 		generateBlock();
+	}
+	else
+	{
+		movableBlock->moveDown();
 	}
 }
 
 void TetrisBoardScene::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event * event)
 {
-	bool blockMoved = true;
+	bool hitSolidBlocks = false;
 
 	switch (keyCode)
 	{
-		// only move blocks within boundary
-
-	case EventKeyboard::KeyCode::KEY_UP_ARROW:
-		// not allowed, or may be allowed as a special power
-		//blockMoved = movableBlock->moveUp(solidBlocks);
-		break;
 
 	case EventKeyboard::KeyCode::KEY_DOWN_ARROW:
-		blockMoved = movableBlock->moveDown(solidBlocks);
+		if (movableBlock->checkMoveDown(solidBlocks))
+		{
+			movableBlock->moveDown();
+		}
+		else
+		{
+			hitSolidBlocks = true;
+		}
 		break;
 
 	case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
-		blockMoved = movableBlock->moveRight(solidBlocks);
+		if (movableBlock->checkMoveRight(solidBlocks))
+		{
+			movableBlock->moveRight();
+		}
 		break;
 
 	case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
-		blockMoved = movableBlock->moveLeft(solidBlocks);
+		if (movableBlock->checkMoveLeft(solidBlocks))
+		{
+			movableBlock->moveLeft();
+		}
 		break;
 
 	default: break;
 
 	}
 
-	if (!blockMoved)
+	if (hitSolidBlocks)
 	{
 		generateBlock();
 	}

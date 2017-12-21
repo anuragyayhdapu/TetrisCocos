@@ -6,9 +6,9 @@
 /*
  * Basic building block of the world
  *	1. Can be relatively positioned in the grid 
- *	2. Can be drawn (pending) 
- *  3. Can be moved (pending)
- *	4. Has physics attached (pending)
+ *	2. Can be drawn 
+ *  3. Can be moved 
+ *	4. Has physics attached (pending {for now my own collision system})
  *	5. Initiates and interacts with Animation (pending)
  */
 
@@ -25,11 +25,16 @@ public:
 	static UnitBlock* createUnitBlock();
 	
 	void placeAt(int x = 0, int y = 0, cocos2d::Color4F color = cocos2d::Color4F::GRAY);
-	/*move functions; move by a unit*/
-	bool moveUp(const std::map<BoardPos, UnitBlock*, BoardPosComparator>& solidBlocks);
-	bool moveDown(const std::map<BoardPos, UnitBlock*, BoardPosComparator>& solidBlocks);
-	bool moveLeft(const std::map<BoardPos, UnitBlock*, BoardPosComparator>& solidBlocks);
-	bool moveRight(const std::map<BoardPos, UnitBlock*, BoardPosComparator>& solidBlocks);
+	
+	/* check move functions, only checks if move is possible*/
+	bool checkMoveDown(const std::map<BoardPos, UnitBlock*, BoardPosComparator>& solidBlocks);
+	bool checkMoveLeft(const std::map<BoardPos, UnitBlock*, BoardPosComparator>& solidBlocks);
+	bool checkMoveRight(const std::map<BoardPos, UnitBlock*, BoardPosComparator>& solidBlocks);
+
+	/*move functions; actually moves block by a unit, call check move function before to check for collision*/
+	void moveDown();
+	void moveLeft();
+	void moveRight();
 
 	BoardPos currPos() { return BoardPos(_x, _y); }
 	int getX() { return _x; }

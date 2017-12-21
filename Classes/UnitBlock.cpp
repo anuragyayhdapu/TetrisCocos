@@ -51,30 +51,28 @@ void UnitBlock::drawHollow()
 	_drawNode->drawRect(origin, destination, this->_color);
 }
 
-bool UnitBlock::moveUp(const std::map<BoardPos, UnitBlock*, BoardPosComparator>& solidBlocks)
+void UnitBlock::moveDown()
 {
-	BoardPos nextPos(_x, _y - 1); // next position up
-	if (solidBlocks.find(nextPos) != solidBlocks.end()
-		|| nextPos.y < 0)
-	{
-		// block is either touching something or has hit the boundraies
-		return true;
-	}
-
-	// calculate new coordinates
-	this->_y--;
-
-	// delete node at old place
+	this->_y++;
 	this->_drawNode->clear();
-
-	// redraw at new
 	this->drawHollow();
-
-	return false;
 }
 
-// only in case when bottom can't be moved, generate new block
-bool UnitBlock::moveDown(const std::map<BoardPos, UnitBlock*, BoardPosComparator>& solidBlocks)
+void UnitBlock::moveLeft()
+{
+	this->_x--;
+	this->_drawNode->clear();
+	this->drawHollow();
+}
+
+void UnitBlock::moveRight()
+{
+	this->_x++;
+	this->_drawNode->clear();
+	this->drawHollow();
+}
+
+bool UnitBlock::checkMoveDown(const std::map<BoardPos, UnitBlock*, BoardPosComparator>& solidBlocks)
 {
 	BoardPos nextPos(_x, _y + 1); // next position down
 	if (solidBlocks.find(nextPos) != solidBlocks.end()
@@ -83,39 +81,30 @@ bool UnitBlock::moveDown(const std::map<BoardPos, UnitBlock*, BoardPosComparator
 		// block is either touching something or has hit the boundraies
 		return false;
 	}
-
-	this->_y++;
-	this->_drawNode->clear();
-	this->drawHollow();
 	return true;
 }
 
-bool UnitBlock::moveLeft(const std::map<BoardPos, UnitBlock*, BoardPosComparator>& solidBlocks)
+bool UnitBlock::checkMoveLeft(const std::map<BoardPos, UnitBlock*, BoardPosComparator>& solidBlocks)
 {
 	BoardPos nextPos(_x - 1, _y); // next position left
-	if(solidBlocks.find(nextPos) != solidBlocks.end() 
+	if (solidBlocks.find(nextPos) != solidBlocks.end()
 		|| nextPos.x < 0)
 	{
-		return true;
+		// block is either touching something or has hit the boundraies
+		return false;
 	}
-
-	this->_x--;
-	this->_drawNode->clear();
-	this->drawHollow();
 	return true;
 }
 
-bool UnitBlock::moveRight(const std::map<BoardPos, UnitBlock*, BoardPosComparator>& solidBlocks)
+bool UnitBlock::checkMoveRight(const std::map<BoardPos, UnitBlock*, BoardPosComparator>& solidBlocks)
 {
 	BoardPos nextPos(_x + 1, _y); // next position right
 	if (solidBlocks.find(nextPos) != solidBlocks.end()
 		|| nextPos.x > Constant::NUM_OF_UNIT_BLOCKS_IN_WIDTH - 1)
 	{
-		return true;
+		// block is either touching something or has hit the boundraies
+		return false;
 	}
-
-	this->_x++;
-	this->_drawNode->clear();
-	this->drawHollow();
 	return true;
 }
+
