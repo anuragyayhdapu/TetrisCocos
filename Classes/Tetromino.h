@@ -14,10 +14,9 @@ public:
 	virtual bool init();
 	CREATE_FUNC(Tetromino);
 
-	virtual bool moveLeft();
-	virtual bool moveRight();
-	virtual bool moveDown();
-	virtual bool moveUp();
+	bool moveLeft(const std::map<BoardPos, UnitBlock*, BoardPosComparator>& solidBlocks);
+	bool moveRight(const std::map<BoardPos, UnitBlock*, BoardPosComparator>& solidBlocks);
+	bool moveDown(const std::map<BoardPos, UnitBlock*, BoardPosComparator>& solidBlocks);
 
 	virtual bool rotateRight();
 	virtual bool rotateLeft();
