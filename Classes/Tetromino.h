@@ -11,8 +11,9 @@ class Tetromino : public cocos2d::Node
 public:
 	Tetromino();
 	virtual ~Tetromino();
-	virtual bool init();
-	CREATE_FUNC(Tetromino);
+	static Tetromino* create(int numOfBlocks, Constant::Matrix topGrid, Constant::Matrix rightGrid, Constant::Matrix bottomGrid, Constant::Matrix leftGrid);
+	bool init(int numOfBlocks, Constant::Matrix topGrid, Constant::Matrix rightGrid, Constant::Matrix bottomGrid, Constant::Matrix leftGrid);
+	/*CREATE_FUNC(Tetromino);*/
 
 	bool moveLeft(const std::map<BoardPos, UnitBlock*, BoardPosComparator>& solidBlocks);
 	bool moveRight(const std::map<BoardPos, UnitBlock*, BoardPosComparator>& solidBlocks);
@@ -21,13 +22,17 @@ public:
 	virtual bool rotateRight();
 	virtual bool rotateLeft();
 
+	virtual void drawTetromino();
+
 private:
 	Constant::RotationState rotationState;
+	short numUnitBlock;
 	std::vector<UnitBlock*> unitBlocksVec;
 	BoardPos gridMatrixPoint;	// top left point of gridmatrix
-	
-	bool rightGrid[4][4];
-	bool leftGrid[4][4];
-	bool topGrid[4][4];
-	bool bottomGrid[4][4];
+
+	Constant::Matrix topGrid;
+	Constant::Matrix rightGrid;
+	Constant::Matrix bottomGrid;
+	Constant::Matrix leftGrid;
+
 };
