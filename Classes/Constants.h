@@ -1,6 +1,7 @@
 #pragma once
 
 #include "BoardPos.h"
+#include <array>
 
 // constants accessed from multiple files
 namespace Constant
@@ -21,4 +22,8 @@ namespace Constant
 
 	const std::map<RotationState, RotationState> leftRotate = {
 		{ TOP, LEFT },{ RIGHT, TOP },{ BOTTOM, RIGHT },{ LEFT, TOP } };
+
+	const short GRID_MATRIX_SIZE = 4;
+	using Row = std::array<bool, GRID_MATRIX_SIZE>;
+	using Matrix = std::array<Row, GRID_MATRIX_SIZE>;
 }
