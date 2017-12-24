@@ -20,11 +20,10 @@ public:
 
 	UnitBlock();
 	virtual ~UnitBlock();
-	virtual bool init();
-	CREATE_FUNC(UnitBlock);
-	static UnitBlock* createUnitBlock();
-	
-	void placeAt(int x = 0, int y = 0, cocos2d::Color4F color = cocos2d::Color4F::GRAY);
+	static UnitBlock* create(int x = 0, int y = 0, cocos2d::Color4F color = cocos2d::Color4F::GRAY);
+	bool init(int x = 0, int y = 0, cocos2d::Color4F color = cocos2d::Color4F::GRAY);
+
+	void drawBlock();
 	
 	/* check move functions, only checks if move is possible*/
 	bool checkMoveDown(const std::map<BoardPos, UnitBlock*, BoardPosComparator>& solidBlocks);
@@ -45,9 +44,4 @@ private:
 	int _x, _y; // position of block in term of number of units
 	cocos2d::DrawNode* _drawNode;
 	cocos2d::Color4F _color;
-
-	/*draw functions; */
-	void drawHollow();
-	/*implement draw filled later, for now use drawHollow*/
-	//void drawFilled(cocos2d::Color4F boundary, cocos2d::Color4F inside);
 };

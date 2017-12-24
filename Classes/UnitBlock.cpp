@@ -14,20 +14,32 @@ UnitBlock::~UnitBlock()
 {
 }
 
-UnitBlock * UnitBlock::createUnitBlock()
+UnitBlock * UnitBlock::create(int x, int y, cocos2d::Color4F color)
 {
-	return UnitBlock::create();
+	UnitBlock* block = new(std::nothrow)UnitBlock();
+	if (block && block->init(x, y, color))
+	{
+		block->autorelease();
+		return block;
+	}
+	else
+	{
+		delete block;
+		block = nullptr;
+		return nullptr;
+	}
 }
 
-bool UnitBlock::init()
+bool UnitBlock::init(int x, int y, cocos2d::Color4F color)
 {
 	if (!Node::init())
 	{
 		return false;
 	}
 
-	// initialize to left most block
-	_x = _y = 0;
+	this->_x = x;
+	this->_y = y;
+	this->_color = color;
 
 	_drawNode = DrawNode::create();
 	this->addChild(_drawNode);
@@ -35,41 +47,32 @@ bool UnitBlock::init()
 	return true;
 }
 
-void UnitBlock::placeAt(int x, int y, Color4F color)
-{
-	this->_x = x; this->_y = y;
-	this->_color = color;
-	this->drawHollow();
-}
-
-void UnitBlock::drawHollow()
+void UnitBlock::drawBlock()
 {
 	Vec2 midPoint(_pf.x + _x * _u, _pf.y - _y * _u);
 	Vec2 origin(midPoint.x - _u / 2, midPoint.y - _u / 2);
 	Vec2 destination(midPoint.x + _u / 2, midPoint.y + _u / 2);
 
+	_drawNode->clear();
 	_drawNode->drawRect(origin, destination, this->_color);
 }
 
 void UnitBlock::moveDown()
 {
 	this->_y++;
-	this->_drawNode->clear();
-	this->drawHollow();
+	this->drawBlock();
 }
 
 void UnitBlock::moveLeft()
 {
 	this->_x--;
-	this->_drawNode->clear();
-	this->drawHollow();
+	this->drawBlock();
 }
 
 void UnitBlock::moveRight()
 {
 	this->_x++;
-	this->_drawNode->clear();
-	this->drawHollow();
+	this->drawBlock();
 }
 
 bool UnitBlock::checkMoveDown(const std::map<BoardPos, UnitBlock*, BoardPosComparator>& solidBlocks)

@@ -78,8 +78,8 @@ bool TetrisBoardScene::init()
 	}
 
 	/* ---- testing of movable nodes */
-	this->movableBlock = UnitBlock::createUnitBlock();
-	movableBlock->placeAt(Constant::NUM_OF_UNIT_BLOCKS_IN_WIDTH / 2, 0);
+	this->movableBlock = UnitBlock::create(Constant::NUM_OF_UNIT_BLOCKS_IN_WIDTH / 2, 0);
+	movableBlock->drawBlock();
 	this->addChild(movableBlock);
 
 	return true;
@@ -148,8 +148,8 @@ void TetrisBoardScene::generateBlock(int posX, int posY)
 	solidBlocks[movableBlockPos] = movableBlock;
 	movableBlock = nullptr;
 
-	auto newBlock = UnitBlock::createUnitBlock();
-	newBlock->placeAt(posX, posY);
+	auto newBlock = UnitBlock::create(posX, posY);
+	newBlock->drawBlock();
 	this->addChild(newBlock);
 	movableBlock = newBlock;
 }
