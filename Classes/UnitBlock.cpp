@@ -75,7 +75,28 @@ void UnitBlock::moveRight()
 	this->drawBlock();
 }
 
-bool UnitBlock::checkMoveDown(const std::map<BoardPos, UnitBlock*, BoardPosComparator>& solidBlocks)
+void UnitBlock::moveAt(BoardPos pos)
+{
+	this->_x = pos.x;
+	this->_y = pos.y;
+	drawBlock();
+}
+
+
+bool UnitBlock::checkMoveAt(BoardPos nextPos, SolidBlocksMap solidBlocks)
+{
+	if (solidBlocks.find(nextPos) != solidBlocks.end()
+		|| nextPos.x < 0 || nextPos.x > Constant::NUM_OF_UNIT_BLOCKS_IN_WIDTH - 1 
+		|| nextPos.y < 0 || nextPos.y > Constant::NUM_OF_UNIT_BLOCKS_IN_HEIGHT - 1)
+	{
+		// block is either touching something or has hit the boundraies
+		return false;
+	}
+
+	return true;
+}
+
+bool UnitBlock::checkMoveDown(SolidBlocksMap solidBlocks)
 {
 	BoardPos nextPos(_x, _y + 1); // next position down
 	if (solidBlocks.find(nextPos) != solidBlocks.end()
@@ -87,7 +108,7 @@ bool UnitBlock::checkMoveDown(const std::map<BoardPos, UnitBlock*, BoardPosCompa
 	return true;
 }
 
-bool UnitBlock::checkMoveLeft(const std::map<BoardPos, UnitBlock*, BoardPosComparator>& solidBlocks)
+bool UnitBlock::checkMoveLeft(SolidBlocksMap solidBlocks)
 {
 	BoardPos nextPos(_x - 1, _y); // next position left
 	if (solidBlocks.find(nextPos) != solidBlocks.end()
@@ -99,7 +120,7 @@ bool UnitBlock::checkMoveLeft(const std::map<BoardPos, UnitBlock*, BoardPosCompa
 	return true;
 }
 
-bool UnitBlock::checkMoveRight(const std::map<BoardPos, UnitBlock*, BoardPosComparator>& solidBlocks)
+bool UnitBlock::checkMoveRight(SolidBlocksMap solidBlocks)
 {
 	BoardPos nextPos(_x + 1, _y); // next position right
 	if (solidBlocks.find(nextPos) != solidBlocks.end()

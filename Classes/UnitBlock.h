@@ -5,15 +5,17 @@
 
 /*
  * Basic building block of the world
- *	1. Can be relatively positioned in the grid 
- *	2. Can be drawn 
- *  3. Can be moved 
+ *	1. Can be relatively positioned in the grid
+ *	2. Can be drawn
+ *  3. Can be moved
  *	4. Has physics attached (pending {for now my own collision system})
  *	5. Initiates and interacts with Animation (pending)
  */
 
 class UnitBlock : public cocos2d::Node
 {
+	using SolidBlocksMap = const std::map<BoardPos, UnitBlock*, BoardPosComparator>&;
+
 public:
 	static double _u;	// size of one unit block
 	static cocos2d::Vec2 _pf;	// // first middle point of a unit block in grid (point_first)
@@ -21,19 +23,21 @@ public:
 	UnitBlock();
 	virtual ~UnitBlock();
 	static UnitBlock* create(int x = 0, int y = 0, cocos2d::Color4F color = cocos2d::Color4F::GRAY);
-	bool init(int x = 0, int y = 0, cocos2d::Color4F color = cocos2d::Color4F::GRAY);
+	bool init(int x, int y, cocos2d::Color4F color);
 
 	void drawBlock();
-	
+
 	/* check move functions, only checks if move is possible*/
-	bool checkMoveDown(const std::map<BoardPos, UnitBlock*, BoardPosComparator>& solidBlocks);
-	bool checkMoveLeft(const std::map<BoardPos, UnitBlock*, BoardPosComparator>& solidBlocks);
-	bool checkMoveRight(const std::map<BoardPos, UnitBlock*, BoardPosComparator>& solidBlocks);
+	bool checkMoveDown(SolidBlocksMap solidBlocks);
+	bool checkMoveLeft(SolidBlocksMap solidBlocks);
+	bool checkMoveRight(SolidBlocksMap solidBlocks);
+	bool checkMoveAt(BoardPos nextPos, SolidBlocksMap solidBlocks);
 
 	/*move functions; actually moves block by a unit, call check move function before to check for collision*/
 	void moveDown();
 	void moveLeft();
 	void moveRight();
+	void moveAt(BoardPos pos);
 
 	BoardPos currPos() { return BoardPos(_x, _y); }
 	int getX() { return _x; }
