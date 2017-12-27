@@ -9,13 +9,7 @@ namespace Constant
 	const int NUM_OF_UNIT_BLOCKS_IN_WIDTH = 25;
 	const int NUM_OF_UNIT_BLOCKS_IN_TETROMINO = 4;
 
-	enum RotationState
-	{
-		TOP, RIGHT, BOTTOM, LEFT
-	};
-
-	const BoardPos SPAWN_POSITION(15, 0);
-	const RotationState SPAWN_ROTATION_STATE = TOP;
+	const BoardPos SPAWN_POSITION(10, 0);
 
 	const short GRID_MATRIX_SIZE = 4;
 }
