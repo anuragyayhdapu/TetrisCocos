@@ -4,6 +4,7 @@
 #include "UnitBlock.h"
 #include "BoardPos.h"
 #include "Constants.h"
+#include "Tetromino.h"
 
 class TetrisBoardScene : public cocos2d::Scene
 {

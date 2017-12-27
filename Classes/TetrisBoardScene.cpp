@@ -78,9 +78,15 @@ bool TetrisBoardScene::init()
 	}
 
 	/* ---- testing of movable nodes */
-	this->movableBlock = UnitBlock::create(Constant::NUM_OF_UNIT_BLOCKS_IN_WIDTH / 2, 0);
+	movableBlock = nullptr;
+	/*this->movableBlock = UnitBlock::create(Constant::NUM_OF_UNIT_BLOCKS_IN_WIDTH / 2, 0);
 	movableBlock->drawBlock();
-	this->addChild(movableBlock);
+	this->addChild(movableBlock);*/
+
+	/*Testing of Tetromino*/
+	auto t = Tetromino::create(TetrominoTemplate::rotationTemplates.at(6));
+	t->drawTetromino();
+	this->addChild(t);
 
 	return true;
 }
@@ -88,55 +94,61 @@ bool TetrisBoardScene::init()
 
 void TetrisBoardScene::UpdateFunction(float dt)
 {
-	if (!movableBlock->checkMoveDown(solidBlocks))
+	if (movableBlock != nullptr)
 	{
-		generateBlock();
-	}
-	else
-	{
-		movableBlock->moveDown();
+		if (!movableBlock->checkMoveDown(solidBlocks))
+		{
+			generateBlock();
+		}
+		else
+		{
+			movableBlock->moveDown();
+		}
 	}
 }
 
 void TetrisBoardScene::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event * event)
 {
-	bool hitSolidBlocks = false;
-
-	switch (keyCode)
+	if (movableBlock != nullptr)
 	{
+		bool hitSolidBlocks = false;
 
-	case EventKeyboard::KeyCode::KEY_DOWN_ARROW:
-		if (movableBlock->checkMoveDown(solidBlocks))
+		switch (keyCode)
 		{
-			movableBlock->moveDown();
+
+		case EventKeyboard::KeyCode::KEY_DOWN_ARROW:
+			if (movableBlock->checkMoveDown(solidBlocks))
+			{
+				movableBlock->moveDown();
+			}
+			else
+			{
+				hitSolidBlocks = true;
+			}
+			break;
+
+		case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
+			if (movableBlock->checkMoveRight(solidBlocks))
+			{
+				movableBlock->moveRight();
+			}
+			break;
+
+		case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
+			if (movableBlock->checkMoveLeft(solidBlocks))
+			{
+				movableBlock->moveLeft();
+			}
+			break;
+
+		default: break;
+
 		}
-		else
+
+		if (hitSolidBlocks)
 		{
-			hitSolidBlocks = true;
+			generateBlock();
 		}
-		break;
-
-	case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
-		if (movableBlock->checkMoveRight(solidBlocks))
-		{
-			movableBlock->moveRight();
-		}
-		break;
-
-	case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
-		if (movableBlock->checkMoveLeft(solidBlocks))
-		{
-			movableBlock->moveLeft();
-		}
-		break;
-
-	default: break;
-
-	}
-
-	if (hitSolidBlocks)
-	{
-		generateBlock();
 	}
 }
 
