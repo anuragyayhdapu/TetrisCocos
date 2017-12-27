@@ -9,11 +9,10 @@ Tetromino::~Tetromino()
 }
 
 
-Tetromino * Tetromino::create(int numOfBlocks,
-	Constant::Matrix topGrid, Constant::Matrix rightGrid, Constant::Matrix bottomGrid, Constant::Matrix leftGrid)
+Tetromino * Tetromino::create(RotationQ rotationQ, BoardPos gridMatrixPoint, int numOfBlocks)
 {
 	Tetromino* pRet = new(std::nothrow)Tetromino();
-	if (pRet && pRet->init(numOfBlocks, topGrid, rightGrid, bottomGrid, leftGrid))
+	if (pRet && pRet->init(rotationQ, gridMatrixPoint, numOfBlocks))
 	{
 		pRet->autorelease();
 		return pRet;
@@ -27,8 +26,7 @@ Tetromino * Tetromino::create(int numOfBlocks,
 }
 
 
-bool Tetromino::init(int numOfBlocks,
-	Constant::Matrix topGrid, Constant::Matrix rightGrid, Constant::Matrix bottomGrid, Constant::Matrix leftGrid)
+bool Tetromino::init(RotationQ rotationQ, BoardPos gridMatrixPoint, int numOfBlocks)
 {
 	if (!Node::init())
 	{
@@ -36,29 +34,43 @@ bool Tetromino::init(int numOfBlocks,
 	}
 
 	// initialze at spawn posiiton
-	this->rotationState = Constant::SPAWN_ROTATION_STATE;
-	this->gridMatrixPoint = Constant::SPAWN_POSITION;
+	this->gridMatrixPoint = gridMatrixPoint;
 
 	// set template
 	this->numUnitBlock = numOfBlocks;
-	this->topGrid = topGrid;
-	this->rightGrid = rightGrid;
-	this->bottomGrid = bottomGrid;
-	this->leftGrid = leftGrid;
+	this->rotationQ = rotationQ;
 
 	// initialize unitBlocks
-	for (int i = 0; i < numUnitBlock; i++)
-	{
-		auto block = UnitBlock::createUnitBlock();
-		unitBlocksVec.push_back(block);
-		this->addChild(block);
-	}
+	setBlocks(&rotationQ.currentRotation());
 
 	return true;
 }
 
+void Tetromino::setBlocks(Side side)
+{
+	for each (auto pos in *side)
+	{
+		auto x = gridMatrixPoint.x + pos.x;
+		auto y = gridMatrixPoint.y + pos.y;
+		
+		auto block = UnitBlock::create(x, y);
 
-bool Tetromino::moveLeft(const std::map<BoardPos, UnitBlock*, BoardPosComparator>& solidBlocks)
+		unitBlocksVec.push_back(block);
+		this->addChild(block);
+	}
+}
+
+void Tetromino::drawTetromino()
+{
+	// draw
+	for each (auto block in this->unitBlocksVec)
+	{
+		block->drawBlock();
+	}
+}
+
+
+bool Tetromino::moveLeft(BoardPosMap solidBlocks)
 {
 	// check if any block of tetromino has a problem with moving left
 	for each (auto block in unitBlocksVec)
@@ -72,11 +84,12 @@ bool Tetromino::moveLeft(const std::map<BoardPos, UnitBlock*, BoardPosComparator
 	{
 		block->moveLeft();
 	}
+	--gridMatrixPoint.x;
 	return true;
 }
 
 
-bool Tetromino::moveRight(const std::map<BoardPos, UnitBlock*, BoardPosComparator>& solidBlocks)
+bool Tetromino::moveRight(BoardPosMap solidBlocks)
 {
 	// check if any block of tetromino has a problem with moving right
 	for each (auto block in unitBlocksVec)
@@ -90,11 +103,12 @@ bool Tetromino::moveRight(const std::map<BoardPos, UnitBlock*, BoardPosComparato
 	{
 		block->moveRight();
 	}
+	++gridMatrixPoint.x;
 	return true;
 }
 
 
-bool Tetromino::moveDown(const std::map<BoardPos, UnitBlock*, BoardPosComparator>& solidBlocks)
+bool Tetromino::moveDown(BoardPosMap solidBlocks)
 {
 	// check if any block of tetromino has a problem with moving Down
 	for each (auto block in unitBlocksVec)
@@ -108,54 +122,18 @@ bool Tetromino::moveDown(const std::map<BoardPos, UnitBlock*, BoardPosComparator
 	{
 		block->moveDown();
 	}
+	++gridMatrixPoint.y;
 	return true;
 }
 
 
-bool Tetromino::rotateRight()
+bool Tetromino::rotateRight(BoardPosMap solidBlocks)
 {
 	return false;
 }
 
 
-bool Tetromino::rotateLeft()
+bool Tetromino::rotateLeft(BoardPosMap solidBlocks)
 {
 	return false;
-}
-
-// only for initial drawing and drawinf after rotation
-void Tetromino::drawTetromino()
-{
-	// get gridMatrixPoint
-	Constant::Matrix currentGrid;
-	switch (rotationState)
-	{
-	case Constant::TOP:
-		currentGrid =  topGrid;
-
-	case Constant::RIGHT:
-		currentGrid = rightGrid;
-
-	case Constant::BOTTOM:
-		currentGrid = bottomGrid;
-
-	case Constant::LEFT:
-		currentGrid = leftGrid;
-
-	default:
-		currentGrid = topGrid;
-	}
-
-	int b = 0;
-	// for all places with 1 draw unitBlock and add to vector
-	for (int i = 0; i < Constant::GRID_MATRIX_SIZE; i++)
-	{
-		for (int j = 0; i < Constant::GRID_MATRIX_SIZE; j++)
-		{
-			if (currentGrid[i][j] == 1)
-			{
-				unitBlocksVec.at(b)->placeAt(i, j);
-			}
-		}
-	}
 }
