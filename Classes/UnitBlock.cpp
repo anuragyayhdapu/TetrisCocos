@@ -83,7 +83,7 @@ void UnitBlock::moveAt(BoardPos pos)
 }
 
 
-bool UnitBlock::checkMoveAt(BoardPos nextPos, SolidBlocksMap solidBlocks)
+bool UnitBlock::checkMoveAt(BoardPos nextPos, SolidBlocksSet solidBlocks)
 {
 	if (solidBlocks.find(nextPos) != solidBlocks.end()
 		|| nextPos.x < 0 || nextPos.x > Constant::NUM_OF_UNIT_BLOCKS_IN_WIDTH - 1 
@@ -96,7 +96,7 @@ bool UnitBlock::checkMoveAt(BoardPos nextPos, SolidBlocksMap solidBlocks)
 	return true;
 }
 
-bool UnitBlock::checkMoveDown(SolidBlocksMap solidBlocks)
+bool UnitBlock::checkMoveDown(SolidBlocksSet solidBlocks)
 {
 	BoardPos nextPos(_x, _y + 1); // next position down
 	if (solidBlocks.find(nextPos) != solidBlocks.end()
@@ -108,7 +108,7 @@ bool UnitBlock::checkMoveDown(SolidBlocksMap solidBlocks)
 	return true;
 }
 
-bool UnitBlock::checkMoveLeft(SolidBlocksMap solidBlocks)
+bool UnitBlock::checkMoveLeft(SolidBlocksSet solidBlocks)
 {
 	BoardPos nextPos(_x - 1, _y); // next position left
 	if (solidBlocks.find(nextPos) != solidBlocks.end()
@@ -120,7 +120,7 @@ bool UnitBlock::checkMoveLeft(SolidBlocksMap solidBlocks)
 	return true;
 }
 
-bool UnitBlock::checkMoveRight(SolidBlocksMap solidBlocks)
+bool UnitBlock::checkMoveRight(SolidBlocksSet solidBlocks)
 {
 	BoardPos nextPos(_x + 1, _y); // next position right
 	if (solidBlocks.find(nextPos) != solidBlocks.end()

@@ -14,7 +14,7 @@
 
 class UnitBlock : public cocos2d::Node
 {
-	using SolidBlocksMap = const std::map<BoardPos, UnitBlock*, BoardPosComparator>&;
+	using SolidBlocksSet = const std::set<BoardPos, BoardPosComparator>&;
 
 public:
 	static double _u;	// size of one unit block
@@ -28,10 +28,10 @@ public:
 	void drawBlock();
 
 	/* check move functions, only checks if move is possible*/
-	bool checkMoveDown(SolidBlocksMap solidBlocks);
-	bool checkMoveLeft(SolidBlocksMap solidBlocks);
-	bool checkMoveRight(SolidBlocksMap solidBlocks);
-	bool checkMoveAt(BoardPos nextPos, SolidBlocksMap solidBlocks);
+	bool checkMoveDown(SolidBlocksSet solidBlocks);
+	bool checkMoveLeft(SolidBlocksSet solidBlocks);
+	bool checkMoveRight(SolidBlocksSet solidBlocks);
+	static bool checkMoveAt(BoardPos nextPos, SolidBlocksSet solidBlocks);
 
 	/*move functions; actually moves block by a unit, call check move function before to check for collision*/
 	void moveDown();
