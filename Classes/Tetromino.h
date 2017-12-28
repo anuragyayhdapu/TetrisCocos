@@ -11,7 +11,7 @@
 class Tetromino : public cocos2d::Node
 {
 	using Side = const std::vector<BoardPos>*;
-	using BoardPosMap = const std::map<BoardPos, UnitBlock*, BoardPosComparator>&;
+	using BoardPosSet = const std::set<BoardPos, BoardPosComparator>&;
 
 public:
 	Tetromino();
@@ -19,14 +19,16 @@ public:
 	static Tetromino* create(RotationQ rotationQ, BoardPos gridMatrixPoint = Constant::SPAWN_POSITION, int numOfBlocks = Constant::NUM_OF_UNIT_BLOCKS_IN_TETROMINO);
 	bool init(RotationQ rotationQ, BoardPos gridMatrixPoint, int numOfBlocks);
 
-	bool moveLeft(BoardPosMap solidBlocks);
-	bool moveRight(BoardPosMap solidBlocks);
-	bool moveDown(BoardPosMap solidBlocks);
+	bool moveLeft(BoardPosSet solidBlocks);
+	bool moveRight(BoardPosSet solidBlocks);
+	bool moveDown(BoardPosSet solidBlocks);
 
-	bool rotateRight(BoardPosMap solidBlocks);
-	bool rotateLeft(BoardPosMap solidBlocks);
+	bool rotateRight(BoardPosSet solidBlocks);
+	bool rotateLeft(BoardPosSet solidBlocks);
 
 	void drawTetromino();
+
+	const std::vector<UnitBlock*>& getUnitBlocksVec() { return unitBlocksVec; }
 
 private:
 	short numUnitBlock;
@@ -36,5 +38,5 @@ private:
 	RotationQ rotationQ;
 
 	void setBlocks(Side side);
-
+	void rotate();
 };
