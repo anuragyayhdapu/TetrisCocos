@@ -21,14 +21,14 @@ RotationQ::RotationQ(const std::vector<BoardPos> & top,const std::vector<BoardPo
 	head = topNode;
 }
 
-const std::vector<BoardPos> & RotationQ::nextRotation()
+const std::vector<BoardPos> & RotationQ::rotateRight()
 {
 	// change head position
 	head = head->next;
 	return head->face;
 }
 
-const std::vector<BoardPos> & RotationQ::prevRotation()
+const std::vector<BoardPos> & RotationQ::rotateLeft()
 {
 	head = head->prev;
 	return head->face;

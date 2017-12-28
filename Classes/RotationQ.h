@@ -22,9 +22,14 @@ public:
 	RotationQ() { head = nullptr; }
 	RotationQ(const std::vector<BoardPos>& top, const std::vector<BoardPos>& right, const std::vector<BoardPos>& bottom, const std::vector<BoardPos>& left);
 
-	const std::vector<BoardPos>& nextRotation();
-	const std::vector<BoardPos>& prevRotation();
-	const std::vector<BoardPos>& currentRotation() { return head->face; }
+	// getters
+	const std::vector<BoardPos>& getRightRotation() { return head->next->face; }
+	const std::vector<BoardPos>& getLeftRotation() { return head->prev->face; }
+	const std::vector<BoardPos>& getCurrentRotation() { return head->face; }
+
+	// for actually rotating
+	const std::vector<BoardPos>& rotateRight();
+	const std::vector<BoardPos>& rotateLeft();
 
 private:
 	Node * head;
