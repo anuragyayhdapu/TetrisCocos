@@ -23,8 +23,8 @@ private:
 	static cocos2d::Vec2 _pl;		// left-top point in grid (point_left)
 	static cocos2d::Vec2 _pf;		// first middle point of a unit block in grid (point_first)
 	static int moveDelaySeconds;	// speed at which block moves
-	UnitBlock* movableBlock;		// only one movable block at a time
-	std::map<BoardPos, UnitBlock*, BoardPosComparator> solidBlocks;	// immovable blocks laying down over bed
+	Tetromino* movableBlock;		// only one movable block at a time
+	std::set<BoardPos, BoardPosComparator> solidBlocks;	// immovable blocks laying down over bed
 
 	void UpdateFunction(float dt);
 	virtual void onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);

@@ -84,9 +84,16 @@ bool TetrisBoardScene::init()
 	this->addChild(movableBlock);*/
 
 	/*Testing of Tetromino*/
-	auto t = Tetromino::create(TetrominoTemplate::rotationTemplates.at(6));
-	t->drawTetromino();
-	this->addChild(t);
+	movableBlock = Tetromino::create(TetrominoTemplate::rotationTemplates.at(0));
+	movableBlock->drawTetromino();
+	this->addChild(movableBlock);
+	/*for (int i = 0; i < 7; ++i)
+	{
+		auto tetromino = TetrominoTemplate::rotationTemplates.at(i);
+		auto t = Tetromino::create(tetromino, BoardPos(0, 4 * i));
+		t->drawTetromino();
+		this->addChild(t);
+	}*/
 
 	return true;
 }
@@ -96,13 +103,9 @@ void TetrisBoardScene::UpdateFunction(float dt)
 {
 	if (movableBlock != nullptr)
 	{
-		if (!movableBlock->checkMoveDown(solidBlocks))
+		if (!movableBlock->moveDown(solidBlocks))
 		{
 			generateBlock();
-		}
-		else
-		{
-			movableBlock->moveDown();
 		}
 	}
 }
@@ -111,43 +114,44 @@ void TetrisBoardScene::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, coc
 {
 	if (movableBlock != nullptr)
 	{
-		bool hitSolidBlocks = false;
-
 		switch (keyCode)
 		{
 
 		case EventKeyboard::KeyCode::KEY_DOWN_ARROW:
-			if (movableBlock->checkMoveDown(solidBlocks))
+
+			if (!movableBlock->moveDown(solidBlocks))
 			{
-				movableBlock->moveDown();
+				generateBlock();
 			}
-			else
-			{
-				hitSolidBlocks = true;
-			}
+
 			break;
 
 		case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
-			if (movableBlock->checkMoveRight(solidBlocks))
-			{
-				movableBlock->moveRight();
-			}
+
+			movableBlock->moveRight(solidBlocks);
+
 			break;
 
 		case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
-			if (movableBlock->checkMoveLeft(solidBlocks))
-			{
-				movableBlock->moveLeft();
-			}
+
+			movableBlock->moveLeft(solidBlocks);
+
+			break;
+
+		case EventKeyboard::KeyCode::KEY_Z:
+
+			movableBlock->rotateLeft(solidBlocks);
+
+			break;
+
+		case EventKeyboard::KeyCode::KEY_X:
+
+			movableBlock->rotateRight(solidBlocks);
+
 			break;
 
 		default: break;
 
-		}
-
-		if (hitSolidBlocks)
-		{
-			generateBlock();
 		}
 	}
 }
@@ -156,12 +160,15 @@ void TetrisBoardScene::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, coc
 // add movable block to solidBlocks and generate new Block
 void TetrisBoardScene::generateBlock(int posX, int posY)
 {
-	BoardPos movableBlockPos(movableBlock->getX(), movableBlock->getY());
-	solidBlocks[movableBlockPos] = movableBlock;
+	for each (auto block in movableBlock->getUnitBlocksVec())
+	{
+		solidBlocks.insert(BoardPos(block->getX(), block->getY()));
+
+	}
 	movableBlock = nullptr;
 
-	auto newBlock = UnitBlock::create(posX, posY);
-	newBlock->drawBlock();
+	auto newBlock = Tetromino::create(TetrominoTemplate::rotationTemplates.at(0));
+	newBlock->drawTetromino();
 	this->addChild(newBlock);
 	movableBlock = newBlock;
 }
