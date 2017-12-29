@@ -77,23 +77,10 @@ bool TetrisBoardScene::init()
 		}
 	}
 
-	/* ---- testing of movable nodes */
+	// add movable Tetromino
 	movableBlock = nullptr;
-	/*this->movableBlock = UnitBlock::create(Constant::NUM_OF_UNIT_BLOCKS_IN_WIDTH / 2, 0);
-	movableBlock->drawBlock();
-	this->addChild(movableBlock);*/
+	this->generateBlock();
 
-	/*Testing of Tetromino*/
-	movableBlock = Tetromino::create(TetrominoTemplate::rotationTemplates.at(0));
-	movableBlock->drawTetromino();
-	this->addChild(movableBlock);
-	/*for (int i = 0; i < 7; ++i)
-	{
-		auto tetromino = TetrominoTemplate::rotationTemplates.at(i);
-		auto t = Tetromino::create(tetromino, BoardPos(0, 4 * i));
-		t->drawTetromino();
-		this->addChild(t);
-	}*/
 
 	return true;
 }
@@ -160,14 +147,15 @@ void TetrisBoardScene::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, coc
 // add movable block to solidBlocks and generate new Block
 void TetrisBoardScene::generateBlock(int posX, int posY)
 {
-	for each (auto block in movableBlock->getUnitBlocksVec())
+	if (movableBlock != nullptr)
 	{
-		solidBlocks.insert(BoardPos(block->getX(), block->getY()));
-
+		for each (auto block in movableBlock->getUnitBlocksVec())
+		{
+			solidBlocks.insert(BoardPos(block->getX(), block->getY()));
+		}
 	}
-	movableBlock = nullptr;
 
-	auto newBlock = Tetromino::create(TetrominoTemplate::rotationTemplates.at(0));
+	auto newBlock = Tetromino::create(TetrominoTemplate::rotationTemplates.at(rand() % TetrominoTemplate::rotationTemplates.size()));
 	newBlock->drawTetromino();
 	this->addChild(newBlock);
 	movableBlock = newBlock;
