@@ -51,10 +51,10 @@ void Tetromino::setBlocks(Side side)
 {
 	for each (auto pos in *side)
 	{
-		auto x = gridMatrixPoint.x + pos.x;
-		auto y = gridMatrixPoint.y + pos.y;
+		// adjust according to gridmatrix 
+		pos += gridMatrixPoint;
 
-		auto block = UnitBlock::create(x, y);
+		auto block = UnitBlock::create(pos.x, pos.y);
 
 		unitBlocksVec.push_back(block);
 		this->addChild(block);
@@ -71,10 +71,9 @@ void Tetromino::rotate()
 		auto side = rotationQ.getCurrentRotation();
 
 		// new positions
-		auto x = gridMatrixPoint.x + side.at(i).x;
-		auto y = gridMatrixPoint.y + side.at(i).y;
+		auto newPos = gridMatrixPoint + side.at(i);
 
-		unitBlocksVec.at(i)->moveAt(BoardPos(x, y));
+		unitBlocksVec.at(i)->moveAt(newPos);
 	}
 }
 
@@ -152,7 +151,7 @@ bool Tetromino::rotateRight(BoardPosSet solidBlocks)
 	auto nextRotation = rotationQ.getRightRotation();
 	for each (auto pos in nextRotation)
 	{
-		if (!UnitBlock::checkMoveAt(pos, solidBlocks))
+		if (!UnitBlock::checkMoveAt(gridMatrixPoint + pos, solidBlocks))
 			return false;
 	}
 
@@ -170,7 +169,7 @@ bool Tetromino::rotateLeft(BoardPosSet solidBlocks)
 	auto nextRotation = rotationQ.getLeftRotation();
 	for each (auto pos in nextRotation)
 	{
-		if (!UnitBlock::checkMoveAt(pos, solidBlocks))
+		if (!UnitBlock::checkMoveAt(gridMatrixPoint + pos, solidBlocks))
 			return false;
 	}
 
