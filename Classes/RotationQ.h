@@ -3,16 +3,6 @@
 #include "BoardPos.h"
 #include <vector>
 
-//Node of Circular Q
-struct Node
-{
-	Node *next, *prev;
-	const std::vector<BoardPos> face;
-
-	Node(const std::vector<BoardPos> _face) :
-		face(_face), next(nullptr), prev(nullptr) {}
-};
-
 
 // not a genric circularQ, 
 // only for purposes of getting next & previous rotation
@@ -32,5 +22,15 @@ public:
 	const std::vector<BoardPos>& rotateLeft();
 
 private:
+
+	//Node of Circular Q
+	struct Node
+	{
+		Node *next, *prev;
+		const std::vector<BoardPos> face;
+
+		Node(const std::vector<BoardPos> _face) :
+			face(_face), next(nullptr), prev(nullptr) {}
+	};
 	Node * head;
 };
