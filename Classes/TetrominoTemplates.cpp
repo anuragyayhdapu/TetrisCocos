@@ -13,20 +13,20 @@ std::vector<RotationQ> TetrominoTemplate::rotationTemplates = []() {
 	Face l_top = { xy(1,0), xy(1,1), xy(1,2), xy(2, 2) };
 	Face l_right = { xy(2,1), xy(1,1), xy(0,1), xy(0, 2) };
 	Face l_bottom = { xy(0,0), xy(1,0), xy(1,1), xy(1, 2) };
-	Face l_left = { xy(0,1), xy(1,1), xy(2,1), xy(3, 1) };
+	Face l_left = { xy(0,1), xy(1,1), xy(2,1), xy(2, 0) };
 	RotationQ l_rotations(l_top, l_right, l_bottom, l_left);
 	rotationTemplates.push_back(l_rotations);
 
 	// J
-	Face j_top = { xy(0,0), xy(1,1), xy(1,2), xy(0, 2) };
+	Face j_top = { xy(1,0), xy(1,1), xy(1,2), xy(0, 2) };
 	Face j_right = { xy(2,1), xy(1,1), xy(0,1), xy(0, 0) };
-	Face j_bottom = { xy(1,2), xy(1,1), xy(0,0), xy(2, 0) };
+	Face j_bottom = { xy(1,2), xy(1,1), xy(1,0), xy(2, 0) };
 	Face j_left = { xy(2,1), xy(2,0), xy(1,0), xy(0, 0) };
 	RotationQ j_rotations(j_top, j_right, j_bottom, j_left);
 	rotationTemplates.push_back(j_rotations);
 
 	// T
-	Face t_top = { xy(0,1), xy(1,1), xy(0,0), xy(2, 1) };
+	Face t_top = { xy(0,1), xy(1,1), xy(1,0), xy(2, 1) };
 	Face t_right = { xy(1,0), xy(1,1), xy(2,1), xy(1, 2) };
 	Face t_bottom = { xy(0,1), xy(1,1), xy(2,1), xy(1, 2) };
 	Face t_left = { xy(1,0), xy(1,1), xy(0,1), xy(1, 2) };
