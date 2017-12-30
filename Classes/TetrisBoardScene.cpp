@@ -77,6 +77,34 @@ bool TetrisBoardScene::init()
 		}
 	}
 
+	// bucket inner grid
+	for (double i = Constant::BUCKET_LEFT; i < Constant::BUCKET_RIGHT; ++i)
+	{
+		for (double j = Constant::BUCKET_TOP; j < Constant::BUCKET_BOTTOM; ++j)
+		{
+			drawNode->drawPoint(Vec2(i * _u + _pf.x, _pf.y - j * _u), 2, Color4F::MAGENTA);
+		}
+	}
+
+	// bucket walls
+	// left wall
+	drawNode->drawSolidRect(
+		Vec2((Constant::BUCKET_LEFT - 1) * _u + _pf.x - _u / 2, _pf.y - _u / 2 - (Constant::BUCKET_TOP + Constant::BUCKET_TOP_GAP) * _u),
+		Vec2(Constant::BUCKET_LEFT * _u + _pf.x - _u / 2, _pf.y - _u / 2 - (Constant::BUCKET_BOTTOM - 1) * _u),
+		Color4F::RED
+	);
+	// right wall
+	drawNode->drawSolidRect(
+		Vec2(Constant::BUCKET_RIGHT * _u + _pf.x - _u / 2, _pf.y - _u / 2 - (Constant::BUCKET_TOP + Constant::BUCKET_TOP_GAP) * _u),
+		Vec2((Constant::BUCKET_RIGHT + 1) * _u + _pf.x - _u / 2, _pf.y - _u / 2 - (Constant::BUCKET_BOTTOM - 1) * _u),
+		Color4F::RED
+	);
+	// bottom bed
+	drawNode->drawSolidRect(
+		Vec2((Constant::BUCKET_LEFT - 1)* _u + _pf.x - _u / 2, _pf.y - _u / 2 - (Constant::BUCKET_BOTTOM - 1) * _u),
+		Vec2((Constant::BUCKET_RIGHT + 1) * _u + _pf.x - _u / 2, _pf.y - _u / 2 - (Constant::BUCKET_BOTTOM) * _u), Color4F::GREEN
+	);
+
 	// add movable Tetromino
 	movableBlock = nullptr;
 	this->generateBlock();

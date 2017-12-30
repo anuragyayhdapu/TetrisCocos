@@ -86,8 +86,8 @@ void UnitBlock::moveAt(BoardPos pos)
 bool UnitBlock::checkMoveAt(BoardPos nextPos, SolidBlocksSet solidBlocks)
 {
 	if (solidBlocks.find(nextPos) != solidBlocks.end()
-		|| nextPos.x < 0 || nextPos.x > Constant::NUM_OF_UNIT_BLOCKS_IN_WIDTH - 1 
-		|| nextPos.y < 0 || nextPos.y > Constant::NUM_OF_UNIT_BLOCKS_IN_HEIGHT - 1)
+		|| nextPos.x < Constant::BUCKET_LEFT || nextPos.x > Constant::BUCKET_RIGHT - 1
+		|| nextPos.y < Constant::BUCKET_TOP || nextPos.y > Constant::BUCKET_BOTTOM - 1)
 	{
 		// block is either touching something or has hit the boundraies
 		return false;
@@ -100,7 +100,7 @@ bool UnitBlock::checkMoveDown(SolidBlocksSet solidBlocks)
 {
 	BoardPos nextPos(_x, _y + 1); // next position down
 	if (solidBlocks.find(nextPos) != solidBlocks.end()
-		|| nextPos.y > Constant::NUM_OF_UNIT_BLOCKS_IN_HEIGHT - 1)
+		|| nextPos.y > Constant::BUCKET_BOTTOM - 1)
 	{
 		// block is either touching something or has hit the boundraies
 		return false;
@@ -112,7 +112,7 @@ bool UnitBlock::checkMoveLeft(SolidBlocksSet solidBlocks)
 {
 	BoardPos nextPos(_x - 1, _y); // next position left
 	if (solidBlocks.find(nextPos) != solidBlocks.end()
-		|| nextPos.x < 0)
+		|| nextPos.x < Constant::BUCKET_LEFT)
 	{
 		// block is either touching something or has hit the boundraies
 		return false;
@@ -124,7 +124,7 @@ bool UnitBlock::checkMoveRight(SolidBlocksSet solidBlocks)
 {
 	BoardPos nextPos(_x + 1, _y); // next position right
 	if (solidBlocks.find(nextPos) != solidBlocks.end()
-		|| nextPos.x > Constant::NUM_OF_UNIT_BLOCKS_IN_WIDTH - 1)
+		|| nextPos.x > Constant::BUCKET_RIGHT - 1)
 	{
 		// block is either touching something or has hit the boundraies
 		return false;
