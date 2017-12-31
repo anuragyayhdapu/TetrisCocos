@@ -43,6 +43,8 @@ public:
 	int getX() { return _x; }
 	int getY() { return _y; }
 
+	cocos2d::Color4F getColor() { return _color; }
+	void clearDrawnBlock() { _drawNode->clear(); }
 
 private:
 	int _x, _y; // position of block in term of number of units
