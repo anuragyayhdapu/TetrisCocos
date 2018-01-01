@@ -4,18 +4,19 @@
 #include "BoardPos.h"
 #include "UnitBlock.h"
 #include "Tetromino.h"
-#include <vector>
-#include <set>
+#include <unordered_map>
+#include <forward_list>
+#include <unordered_set>
 
 class SolidBlocks : public cocos2d::Node {
 
 private:
 	// unitBlocks hudled together
 	struct SolidTetromino {
-		std::vector<UnitBlock*> unitBlocks;	
+		std::unordered_map<BoardPos, UnitBlock*, BoardPosComparator> unitBlocks;	
 		bool moved = false;
 	};
-	std::vector<SolidTetromino> solidTetrominos;
+	std::forward_list<SolidTetromino> solidTetrominos;
 
 	UnitBlock * bucket[Constant::BUCKET_HEIGHT][Constant::BUCKET_WIDTH];
 

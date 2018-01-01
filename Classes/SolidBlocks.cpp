@@ -30,16 +30,16 @@ void SolidBlocks::add(const std::vector<UnitBlock*>& newBlocks) {
 	// add to internal solidTetrominos also
 	SolidTetromino st;
 
-	for each (auto newBlock in newBlocks)
+	for (auto newBlock : newBlocks)
 	{
 		auto solidBlock = UnitBlock::create(newBlock->getX(), newBlock->getY(), newBlock->getColor());
 		bucket[solidBlock->getX()][solidBlock->getY()] = solidBlock;
 		this->addChild(solidBlock);
 
-		st.unitBlocks.push_back(solidBlock);
+		st.unitBlocks[solidBlock->currPos()] = solidBlock;
 	}
 
-	solidTetrominos.push_back(st);
+	solidTetrominos.push_front(st);
 }
 
 
@@ -79,7 +79,7 @@ void SolidBlocks::updateSolidBlocks(Tetromino * movableTetromino)
 	add(movableTetromino->getUnitBlocksVec());
 
 	// check if any rows are filled
-	std::set<int> filledRows;
+	std::unordered_set<int> filledRows;
 	for each (auto block in movableTetromino->getUnitBlocksVec())
 	{
 		auto y = block->getY();
@@ -97,21 +97,20 @@ void SolidBlocks::updateSolidBlocks(Tetromino * movableTetromino)
 
 
 			// find solidTetromino for this unitBlock
-			for (size_t k = 0; k < solidTetrominos.size(); k++)
+			for (auto &iterSt = solidTetrominos.begin(); iterSt != solidTetrominos.end(); iterSt++)
 			{
-				std::vector<UnitBlock*>& blocks = solidTetrominos.at(k).unitBlocks;
-				for (size_t t = 0; t < blocks.size(); t++)
+				auto &iterBlock = iterSt->unitBlocks.find(BoardPos(i, j));
+				if (iterBlock != iterSt->unitBlocks.end())
 				{
-					if (blocks.at(t) == bucket[i][j])
-					{
-						blocks.at(t) = nullptr;	// decrease referenc count
-						blocks.erase(blocks.begin() + t);
-					}
-				}
+					iterBlock->second = nullptr;	// dereference Node count
+					iterSt->unitBlocks.erase(iterBlock);
 
-				if (blocks.size() == 0)
-				{
-					// TODO: erase this tetromino
+					// if after removing this block tetromino becomes empty,
+					// erase this tetromino
+					if (iterSt->unitBlocks.empty())
+					{
+						solidTetrominos.erase_after(iterSt);
+					}
 				}
 			}
 
