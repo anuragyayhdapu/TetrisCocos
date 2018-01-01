@@ -65,7 +65,7 @@ void Tetromino::setBlocks(Side side)
 void Tetromino::rotate()
 {
 	// since each no.of.blocks(side) = no.of.blocks(unitBlocksVec)
-	for (int i = 0; i < unitBlocksVec.size(); ++i)
+	for (size_t i = 0; i < unitBlocksVec.size(); ++i)
 	{
 		// new rotation state
 		auto side = rotationQ.getCurrentRotation();
