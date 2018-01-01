@@ -120,7 +120,7 @@ void TetrisBoardScene::UpdateFunction(float dt)
 	{
 		if (!movableBlock->moveDown(solidBlocks))
 		{
-			generateBlock();
+			updateBucket();
 		}
 	}
 }
@@ -175,16 +175,55 @@ void TetrisBoardScene::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, coc
 // add movable block to solidBlocks and generate new Block
 void TetrisBoardScene::generateBlock(int posX, int posY)
 {
+	auto newBlock = Tetromino::create(TetrominoTemplate::rotationTemplates.at(rand() % TetrominoTemplate::rotationTemplates.size()));
+	newBlock->drawTetromino();
+	this->addChild(newBlock);
+	movableBlock = newBlock;
+}
+
+
+// update solid blocks, clear rows if neccessary, and generate new block
+void TetrisBoardScene::updateBucket()
+{
+	// add new block to solidblocks
 	if (movableBlock != nullptr)
 	{
 		for each (auto block in movableBlock->getUnitBlocksVec())
 		{
 			solidBlocks.insert(BoardPos(block->getX(), block->getY()));
 		}
+
+
+		// clear rows which are full
+		std::set<int> ySet;
+		for each (auto block in movableBlock->getUnitBlocksVec())
+		{
+			ySet.insert(block->getY());
+		}
+		// for each row
+		for each (auto y in ySet)
+		{
+			// check if all cells are filled
+			bool filled = true;
+			for (int i = 0; i < Constant::BUCKET_WIDTH; i++)
+			{
+				if (solidBlocks.find(BoardPos(i, y)) == solidBlocks.end())
+				{
+					// found a gap in row
+					filled = false;
+				}
+			}
+
+			if (filled = true)
+			{
+				// delete all blocks from this row
+
+
+				// move down all upper blocks
+			}
+		}
 	}
 
-	auto newBlock = Tetromino::create(TetrominoTemplate::rotationTemplates.at(rand() % TetrominoTemplate::rotationTemplates.size()));
-	newBlock->drawTetromino();
-	this->addChild(newBlock);
-	movableBlock = newBlock;
+	// 
+	generateBlock();
 }
