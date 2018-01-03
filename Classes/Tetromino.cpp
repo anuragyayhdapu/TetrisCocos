@@ -88,7 +88,7 @@ void Tetromino::drawTetromino()
 }
 
 
-bool Tetromino::moveLeft(BoardPosSet solidBlocks)
+bool Tetromino::moveLeft(const SolidBlocks& solidBlocks)
 {
 	// check if any block of tetromino has a problem with moving left
 	for each (auto block in unitBlocksVec)
@@ -107,7 +107,7 @@ bool Tetromino::moveLeft(BoardPosSet solidBlocks)
 }
 
 
-bool Tetromino::moveRight(BoardPosSet solidBlocks)
+bool Tetromino::moveRight(const SolidBlocks& solidBlocks)
 {
 	// check if any block of tetromino has a problem with moving right
 	for each (auto block in unitBlocksVec)
@@ -126,7 +126,7 @@ bool Tetromino::moveRight(BoardPosSet solidBlocks)
 }
 
 
-bool Tetromino::moveDown(BoardPosSet solidBlocks)
+bool Tetromino::moveDown(const SolidBlocks& solidBlocks)
 {
 	// check if any block of tetromino has a problem with moving Down
 	for each (auto block in unitBlocksVec)
@@ -145,7 +145,21 @@ bool Tetromino::moveDown(BoardPosSet solidBlocks)
 }
 
 
-bool Tetromino::rotateRight(BoardPosSet solidBlocks)
+bool Tetromino::checkMoveDown(const SolidBlocks& solidBlocks) const
+{
+	// check if any block of tetromino has a problem with moving Down
+	for each (auto block in unitBlocksVec)
+	{
+		if (!block->checkMoveDown(solidBlocks))
+			return false;
+	}
+
+	return true;
+}
+
+
+
+bool Tetromino::rotateRight(const SolidBlocks& solidBlocks)
 {
 	// check if next rotation won't collide with anything
 	auto nextRotation = rotationQ.getRightRotation();
@@ -163,7 +177,7 @@ bool Tetromino::rotateRight(BoardPosSet solidBlocks)
 }
 
 
-bool Tetromino::rotateLeft(BoardPosSet solidBlocks)
+bool Tetromino::rotateLeft(const SolidBlocks& solidBlocks)
 {
 	// check if next rotation won't collide with anything
 	auto nextRotation = rotationQ.getLeftRotation();
@@ -178,4 +192,20 @@ bool Tetromino::rotateLeft(BoardPosSet solidBlocks)
 	rotate();
 
 	return false;
+}
+
+
+void Tetromino::removeBlock(BoardPos pos)
+{
+	for (auto iter = unitBlocksVec.begin(); iter != unitBlocksVec.end(); ++iter)
+	{
+		auto block = *iter;
+		if (block->getX() == pos.x && block->getY() == pos.y)
+		{
+			block->clearDrawnBlock();
+			block = nullptr;
+			unitBlocksVec.erase(iter);
+			break;
+		}
+	}
 }

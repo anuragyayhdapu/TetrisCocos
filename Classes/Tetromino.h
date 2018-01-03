@@ -6,12 +6,16 @@
 #include "cocos2d.h"
 #include "TetrominoTemplates.h"
 #include "RotationQ.h"
+#include "SolidBlocks.h"
+
+class SolidBlocks;
+class UnitBlock;
 
 // base class for all tetrominos
 class Tetromino : public cocos2d::Node
 {
 	using Side = const std::vector<BoardPos>*;
-	using BoardPosSet = const std::set<BoardPos, BoardPosComparator>&;
+	//using BoardPosSet = const std::set<BoardPos, BoardPosComparator>&;
 
 public:
 	Tetromino();
@@ -19,12 +23,16 @@ public:
 	static Tetromino* create(RotationQ rotationQ, BoardPos gridMatrixPoint = Constant::SPAWN_POSITION, int numOfBlocks = Constant::NUM_OF_UNIT_BLOCKS_IN_TETROMINO);
 	bool init(RotationQ rotationQ, BoardPos gridMatrixPoint, int numOfBlocks);
 
-	bool moveLeft(BoardPosSet solidBlocks);
-	bool moveRight(BoardPosSet solidBlocks);
-	bool moveDown(BoardPosSet solidBlocks);
+	bool moveLeft(const SolidBlocks& solidBlocks);
+	bool moveRight(const SolidBlocks& solidBlocks);
+	bool moveDown(const SolidBlocks& solidBlocks);
+	bool checkMoveDown(const SolidBlocks& solidBlocks) const;
 
-	bool rotateRight(BoardPosSet solidBlocks);
-	bool rotateLeft(BoardPosSet solidBlocks);
+	bool rotateRight(const SolidBlocks& solidBlocks);
+	bool rotateLeft(const SolidBlocks& solidBlocks);
+
+	void removeBlock(BoardPos pos);
+	bool empty() { return unitBlocksVec.empty(); }
 
 	void drawTetromino();
 
