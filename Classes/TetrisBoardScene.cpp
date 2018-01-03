@@ -63,7 +63,7 @@ bool TetrisBoardScene::init()
 
 	// add update function to move movable tetris blocks
 	TetrisBoardScene::moveDelaySeconds = 1.0;	// TODO: later change dynamically based on level
-	schedule(schedule_selector(TetrisBoardScene::UpdateFunction), moveDelaySeconds);
+	schedule(schedule_selector(TetrisBoardScene::moveSchedular), moveDelaySeconds);
 
 	/* ---- testing of unit grid*/
 	auto drawNode = DrawNode::create();
@@ -109,20 +109,52 @@ bool TetrisBoardScene::init()
 	movableBlock = nullptr;
 	this->generateBlock();
 
+	// add solidBlocks
+	solidBlocks = SolidBlocks::create();
+	this->addChild(solidBlocks);
+
 
 	return true;
 }
 
 
-void TetrisBoardScene::UpdateFunction(float dt)
+void TetrisBoardScene::moveSchedular(float dt)
 {
 	if (movableBlock != nullptr)
 	{
-		if (!movableBlock->moveDown(solidBlocks))
+		if (!movableBlock->moveDown(*solidBlocks))
 		{
-			updateBucket();
+			solidBlocks->add(movableBlock);
+			unschedule(schedule_selector(TetrisBoardScene::moveSchedular));
+			schedule(schedule_selector(TetrisBoardScene::lineClearShedular), moveDelaySeconds);
 		}
 	}
+}
+
+
+void TetrisBoardScene::lineClearShedular(float dt)
+{
+	auto numOfLinesCleared = solidBlocks->clearLines();
+	unschedule(schedule_selector(TetrisBoardScene::lineClearShedular));
+
+	if (numOfLinesCleared > 0)
+	{
+		schedule(schedule_selector(TetrisBoardScene::dropHangingBlocksShedular), moveDelaySeconds);
+	}
+	else
+	{
+		generateBlock();
+		schedule(schedule_selector(TetrisBoardScene::moveSchedular), moveDelaySeconds);
+	}
+	
+}
+
+
+void TetrisBoardScene::dropHangingBlocksShedular(float dt)
+{
+	solidBlocks->dropHangingBlocks();
+	unschedule(schedule_selector(TetrisBoardScene::dropHangingBlocksShedular));
+	schedule(schedule_selector(TetrisBoardScene::lineClearShedular), moveDelaySeconds);
 }
 
 void TetrisBoardScene::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event * event)
@@ -134,34 +166,36 @@ void TetrisBoardScene::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, coc
 
 		case EventKeyboard::KeyCode::KEY_DOWN_ARROW:
 
-			if (!movableBlock->moveDown(solidBlocks))
+			if (!movableBlock->moveDown(*solidBlocks))
 			{
-				generateBlock();
+				solidBlocks->add(movableBlock);
+				unschedule(schedule_selector(TetrisBoardScene::moveSchedular));
+				schedule(schedule_selector(TetrisBoardScene::lineClearShedular), moveDelaySeconds);
 			}
 
 			break;
 
 		case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
 
-			movableBlock->moveRight(solidBlocks);
+			movableBlock->moveRight(*solidBlocks);
 
 			break;
 
 		case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
 
-			movableBlock->moveLeft(solidBlocks);
+			movableBlock->moveLeft(*solidBlocks);
 
 			break;
 
 		case EventKeyboard::KeyCode::KEY_Z:
 
-			movableBlock->rotateLeft(solidBlocks);
+			movableBlock->rotateLeft(*solidBlocks);
 
 			break;
 
 		case EventKeyboard::KeyCode::KEY_X:
 
-			movableBlock->rotateRight(solidBlocks);
+			movableBlock->rotateRight(*solidBlocks);
 
 			break;
 
@@ -179,51 +213,4 @@ void TetrisBoardScene::generateBlock(int posX, int posY)
 	newBlock->drawTetromino();
 	this->addChild(newBlock);
 	movableBlock = newBlock;
-}
-
-
-// update solid blocks, clear rows if neccessary, and generate new block
-void TetrisBoardScene::updateBucket()
-{
-	// add new block to solidblocks
-	if (movableBlock != nullptr)
-	{
-		for each (auto block in movableBlock->getUnitBlocksVec())
-		{
-			solidBlocks.insert(BoardPos(block->getX(), block->getY()));
-		}
-
-
-		// clear rows which are full
-		std::set<int> ySet;
-		for each (auto block in movableBlock->getUnitBlocksVec())
-		{
-			ySet.insert(block->getY());
-		}
-		// for each row
-		for each (auto y in ySet)
-		{
-			// check if all cells are filled
-			bool filled = true;
-			for (int i = 0; i < Constant::BUCKET_WIDTH; i++)
-			{
-				if (solidBlocks.find(BoardPos(i, y)) == solidBlocks.end())
-				{
-					// found a gap in row
-					filled = false;
-				}
-			}
-
-			if (filled = true)
-			{
-				// delete all blocks from this row
-
-
-				// move down all upper blocks
-			}
-		}
-	}
-
-	// 
-	generateBlock();
 }

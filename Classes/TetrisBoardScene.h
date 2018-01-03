@@ -5,6 +5,7 @@
 #include "BoardPos.h"
 #include "Constants.h"
 #include "Tetromino.h"
+#include "SolidBlocks.h"
 
 class TetrisBoardScene : public cocos2d::Scene
 {
@@ -24,10 +25,12 @@ private:
 	static cocos2d::Vec2 _pf;		// first middle point of a unit block in grid (point_first)
 	static int moveDelaySeconds;	// speed at which block moves
 	Tetromino* movableBlock;		// only one movable block at a time
-	std::set<BoardPos, BoardPosComparator> solidBlocks;	// immovable blocks laying down over bed
+	SolidBlocks* solidBlocks;		// immovable blocks laying down over bed
 
-	void UpdateFunction(float dt);
 	virtual void onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);
 	void generateBlock(int posX = Constant::NUM_OF_UNIT_BLOCKS_IN_WIDTH / 2, int posY = 0);
-	void updateBucket();
+
+	void moveSchedular(float dt);
+	void lineClearShedular(float dt);
+	void dropHangingBlocksShedular(float dt);
 };
