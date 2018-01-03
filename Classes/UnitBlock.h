@@ -2,6 +2,7 @@
 
 #include "cocos2d.h"
 #include "BoardPos.h"
+#include "SolidBlocks.h"
 
 /*
  * Basic building block of the world
@@ -12,9 +13,11 @@
  *	5. Initiates and interacts with Animation (pending)
  */
 
+class SolidBlocks;
+
 class UnitBlock : public cocos2d::Node
 {
-	using SolidBlocksSet = const std::set<BoardPos, BoardPosComparator>&;
+	//using SolidBlocksSet = const std::set<BoardPos, BoardPosComparator>&;
 
 public:
 	static double _u;	// size of one unit block
@@ -28,10 +31,10 @@ public:
 	void drawBlock();
 
 	/* check move functions, only checks if move is possible*/
-	bool checkMoveDown(SolidBlocksSet solidBlocks);
-	bool checkMoveLeft(SolidBlocksSet solidBlocks);
-	bool checkMoveRight(SolidBlocksSet solidBlocks);
-	static bool checkMoveAt(BoardPos nextPos, SolidBlocksSet solidBlocks);
+	bool checkMoveDown(const SolidBlocks& solidBlocks);
+	bool checkMoveLeft(const SolidBlocks& solidBlocks);
+	bool checkMoveRight(const SolidBlocks& solidBlocks);
+	static bool checkMoveAt(BoardPos nextPos, const SolidBlocks& solidBlocks);
 
 	/*move functions; actually moves block by a unit, call check move function before to check for collision*/
 	void moveDown();
