@@ -26,118 +26,128 @@ bool SolidBlocks::rowFilled(int rowNum) {
 }
 
 
-void SolidBlocks::add(const std::vector<UnitBlock*>& newBlocks) {
-	// add to internal solidTetrominos also
-	SolidTetromino st;
+void SolidBlocks::add(Tetromino* tetromino, bool firstTime)
+{
 
-	for (auto newBlock : newBlocks)
+	for (auto block : tetromino->getUnitBlocksVec())
 	{
-		auto solidBlock = UnitBlock::create(newBlock->getX(), newBlock->getY(), newBlock->getColor());
-		bucket[solidBlock->getX()][solidBlock->getY()] = solidBlock;
-		this->addChild(solidBlock);
+		// adjust block position relative to bucket
+		auto relativeX = block->getX() - Constant::BUCKET_LEFT;
+		auto relativeY = block->getY() - Constant::BUCKET_TOP;
 
-		st.unitBlocks[solidBlock->currPos()] = solidBlock;
+		bucket[relativeY][relativeX] = tetromino;
 	}
 
-	solidTetrominos.push_front(st);
+	if (firstTime)
+		solidTetrominos.push_front(tetromino);
 }
 
 
-void SolidBlocks::drawSolidBlocks(std::vector<int> rows)
+// shift this tetromino dow in bucket
+void SolidBlocks::shiftDown(Tetromino* tetromino)
 {
-	// draw entire matrix
-	if (rows.size() == 0)
+	// before moving : remove all blocks from bucket
+	for (auto block : tetromino->getUnitBlocksVec())
 	{
-		for (size_t i = 0; i < Constant::BUCKET_HEIGHT; i++)
-		{
-			for (size_t j = 0; j < Constant::BUCKET_WIDTH; j++)
-			{
-				if (bucket[i][j] != nullptr)
-					bucket[i][j]->drawBlock();
-			}
-		}
+		// adjust block position relative to bucket
+		auto relativeX = block->getX() - Constant::BUCKET_LEFT;
+		auto relativeY = block->getY() - Constant::BUCKET_TOP;
+
+		bucket[relativeY][relativeX] = nullptr;
 	}
 
-	// draw selected rows
-	else
+	// move down this tetromino
+	while (tetromino->moveDown(*this))
+		;
+
+	// after moving : update new positions
+	add(tetromino, false);
+}
+
+
+// draw entire matrix
+void SolidBlocks::drawSolidBlocks()
+{
+	for (auto tetromino : solidTetrominos)
 	{
-		for each (auto i in rows)
-		{
-			for (size_t j = 0; j < Constant::BUCKET_WIDTH; j++)
-			{
-				if (bucket[i][j] != nullptr)
-					bucket[i][j]->drawBlock();
-			}
-		}
+		tetromino->drawTetromino();
 	}
 }
 
 
-void SolidBlocks::updateSolidBlocks(Tetromino * movableTetromino)
+bool SolidBlocks::find(BoardPos bPos) const
 {
-	// adds all blocks of this tetromino in solidblocks matrix
-	add(movableTetromino->getUnitBlocksVec());
+	// adjust block position relative to bucket
+	auto relativeX = bPos.x - Constant::BUCKET_LEFT;
+	auto relativeY = bPos.y - Constant::BUCKET_TOP;
 
-	// check if any rows are filled
-	std::unordered_set<int> filledRows;
-	for each (auto block in movableTetromino->getUnitBlocksVec())
+	return bucket[relativeY][relativeX] != nullptr;
+}
+
+
+void SolidBlocks::dropHangingBlocks()
+{
+	for (auto tetromino : solidTetrominos)
 	{
-		auto y = block->getY();
-		if (rowFilled(y) == true)
-			filledRows.insert(y);
+		if (tetromino->checkMoveDown(*this))
+		{
+			shiftDown(tetromino);
+		}
 	}
 
-	// delete thows rows
-	for each (auto i in filledRows)
+
+	//for (auto i = Constant::BUCKET_HEIGHT; i >= 0; --i)
+	//{
+	//	for (int j = 0; j < Constant::BUCKET_WIDTH; j++)
+	//	{
+	//		if (bucket[i][j] != nullptr)
+	//		{
+	//			// move this tetromino till it hits bottom or a solidblock
+	//			auto tetromino = bucket[i][j];
+	//			shiftDown(tetromino);
+	//		}
+	//	}
+	//}
+}
+
+int SolidBlocks::clearLines()
+{
+	int numRowsFilled = 0;
+
+	// delete filled rows
+	for (auto i = Constant::BUCKET_HEIGHT; i >= 0; --i)
 	{
-		for (size_t j = 0; j < Constant::BUCKET_WIDTH; j++)
+		if (rowFilled(i))
 		{
-			// clear drawNodes
-			bucket[i][j]->clearDrawnBlock();
+			++numRowsFilled;
 
-
-			// find solidTetromino for this unitBlock
-			for (auto &iterSt = solidTetrominos.begin(); iterSt != solidTetrominos.end(); iterSt++)
+			for (size_t j = 0; j < Constant::BUCKET_WIDTH; j++)
 			{
-				auto &iterBlock = iterSt->unitBlocks.find(BoardPos(i, j));
-				if (iterBlock != iterSt->unitBlocks.end())
+				// calculate block position relative to bucket
+				auto absoluteX = j + Constant::BUCKET_LEFT;
+				auto absoluteY = i + Constant::BUCKET_TOP;
+				bucket[i][j]->removeBlock(BoardPos(absoluteX, absoluteY));
+
+				// if after removing this block tetromino becomes empty,
+				// erase this tetromino
+				if (bucket[i][j]->empty())
 				{
-					iterBlock->second = nullptr;	// dereference Node count
-					iterSt->unitBlocks.erase(iterBlock);
-
-					// if after removing this block tetromino becomes empty,
-					// erase this tetromino
-					if (iterSt->unitBlocks.empty())
+					for (auto iter = solidTetrominos.begin(); iter != solidTetrominos.end(); ++iter)
 					{
-						solidTetrominos.erase_after(iterSt);
+						if (*iter == bucket[i][j])
+						{
+							solidTetrominos.erase(iter);
+							break;
+						}
 					}
 				}
+
+				// set nullptr in matrix
+				bucket[i][j] = nullptr;
 			}
-
-			// set nullptr in matrix
-			bucket[i][j] = nullptr;
 		}
 	}
 
-	// shift above rows down
 
-	// get lowest x from filled rows
-	int lowX = Constant::BUCKET_HEIGHT;
-	for each (auto x in filledRows)
-	{
-		if (x < lowX)
-			lowX = x;
-	}
-
-	// move all tetromino of the lowest row, repeat recursively till top
-	for (int i = lowX + 1; i >= 0; i--)
-	{
-		for (int j = 0; j < Constant::BUCKET_WIDTH; j++)
-		{
-			//	TODO: find this u* in st*
-			// TODO: move that st* and update in matrix
-			// TODO: repeat for entire row
-		}
-	}
-
+	return numRowsFilled;
 }

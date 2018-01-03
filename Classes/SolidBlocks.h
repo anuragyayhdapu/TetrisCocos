@@ -8,36 +8,36 @@
 #include <forward_list>
 #include <unordered_set>
 
+class Tetromino;
+
 class SolidBlocks : public cocos2d::Node {
 
 private:
-	// unitBlocks hudled together
-	struct SolidTetromino {
-		std::unordered_map<BoardPos, UnitBlock*, BoardPosComparator> unitBlocks;	
-		bool moved = false;
-	};
-	std::forward_list<SolidTetromino> solidTetrominos;
+	std::list<Tetromino*> solidTetrominos;
 
-	UnitBlock * bucket[Constant::BUCKET_HEIGHT][Constant::BUCKET_WIDTH];
+	Tetromino* bucket[Constant::BUCKET_HEIGHT][Constant::BUCKET_WIDTH];
 
 	// checks if a single row is filled
 	bool rowFilled(int rowNum);
-
-	// add new blocks in solidBlock
-	void add(const std::vector<UnitBlock*>& newBlocks);
+	
+	// shift this tetromino dow in bucket
+	void shiftDown(Tetromino* tetromino);
 
 public:
+	// add new blocks in solidBlock
+	void add(Tetromino* tetromino, bool firstTime = true);
 
 	virtual bool init();
 	CREATE_FUNC(SolidBlocks);
 
-	bool find(BoardPos bPos) {
-		return bucket[bPos.x][bPos.y] != nullptr;
-	}
+	bool find(BoardPos bPos) const;
 
-	// checks which rows are filled, deletes them, and shifts top rows down to cover up the space
-	void updateSolidBlocks(Tetromino* movableTetromino);
+	// shifts down hanging block to cover up the space
+	void SolidBlocks::dropHangingBlocks();
 
-	// draws / redraws solidBlocks
-	void drawSolidBlocks(std::vector<int> rows = {});
+	// clear filled rows
+	int clearLines();
+
+	// draw entire matrix
+	void drawSolidBlocks();
 };
