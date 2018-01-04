@@ -69,3 +69,32 @@ std::vector<RotationQ> TetrominoTemplate::rotationTemplates = []() {
 	return rotationTemplates;
 
 }();
+
+
+std::vector<cocos2d::Color4B> TetrominoTemplate::colorTemplates = []() {
+
+	std::vector<cocos2d::Color4B> colorTemplates;
+
+	// L
+	colorTemplates.push_back(cocos2d::Color4B(245, 250, 200, 255));
+
+	// J
+	colorTemplates.push_back(cocos2d::Color4B(165, 240, 228, 255));
+
+	// T
+	colorTemplates.push_back(cocos2d::Color4B(142, 161, 240, 255));
+
+	// I
+	colorTemplates.push_back(cocos2d::Color4B(253, 214, 181, 255));
+
+	// Z
+	colorTemplates.push_back(cocos2d::Color4B(247, 80, 80, 255));
+
+	// S
+	colorTemplates.push_back(cocos2d::Color4B(189, 225, 138, 255));
+
+	// O
+	colorTemplates.push_back(cocos2d::Color4B(86, 86, 86, 255));
+
+	return colorTemplates;
+}();
