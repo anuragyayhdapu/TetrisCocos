@@ -29,6 +29,7 @@ private:
 
 	virtual void onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);
 	void generateBlock(int posX = Constant::NUM_OF_UNIT_BLOCKS_IN_WIDTH / 2, int posY = 0);
+	void freezeMovableBlock();
 
 	void moveSchedular(float dt);
 	void lineClearShedular(float dt);

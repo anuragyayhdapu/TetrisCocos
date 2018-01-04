@@ -1,18 +1,18 @@
 #include "Tetromino.h"
 
-Tetromino::Tetromino()
-{
-}
+//Tetromino::Tetromino()
+//{
+//}
+//
+//Tetromino::~Tetromino()
+//{
+//}
 
-Tetromino::~Tetromino()
-{
-}
 
-
-Tetromino * Tetromino::create(RotationQ rotationQ, BoardPos gridMatrixPoint, int numOfBlocks)
+Tetromino * Tetromino::create(RotationQ rotationQ, cocos2d::Color4B _color, BoardPos gridMatrixPoint, int numOfBlocks)
 {
 	Tetromino* pRet = new(std::nothrow)Tetromino();
-	if (pRet && pRet->init(rotationQ, gridMatrixPoint, numOfBlocks))
+	if (pRet && pRet->init(rotationQ, _color, gridMatrixPoint, numOfBlocks))
 	{
 		pRet->autorelease();
 		return pRet;
@@ -26,7 +26,7 @@ Tetromino * Tetromino::create(RotationQ rotationQ, BoardPos gridMatrixPoint, int
 }
 
 
-bool Tetromino::init(RotationQ rotationQ, BoardPos gridMatrixPoint, int numOfBlocks)
+bool Tetromino::init(RotationQ rotationQ, cocos2d::Color4B _color, BoardPos gridMatrixPoint, int numOfBlocks)
 {
 	if (!Node::init())
 	{
@@ -39,6 +39,7 @@ bool Tetromino::init(RotationQ rotationQ, BoardPos gridMatrixPoint, int numOfBlo
 	// set template
 	this->numUnitBlock = numOfBlocks;
 	this->rotationQ = rotationQ;
+	this->color = _color;
 
 	// initialize unitBlocks
 	setBlocks(&rotationQ.getCurrentRotation());
@@ -54,7 +55,7 @@ void Tetromino::setBlocks(Side side)
 		// adjust according to gridmatrix 
 		pos += gridMatrixPoint;
 
-		auto block = UnitBlock::create(pos.x, pos.y);
+		auto block = UnitBlock::create(pos.x, pos.y, this->color);
 
 		unitBlocksVec.push_back(block);
 		this->addChild(block);

@@ -124,9 +124,7 @@ void TetrisBoardScene::moveSchedular(float dt)
 	{
 		if (!movableBlock->moveDown(*solidBlocks))
 		{
-			solidBlocks->add(movableBlock);
-			unschedule(schedule_selector(TetrisBoardScene::moveSchedular));
-			schedule(schedule_selector(TetrisBoardScene::lineClearShedular), moveDelaySeconds);
+			freezeMovableBlock();
 		}
 	}
 }
@@ -168,9 +166,7 @@ void TetrisBoardScene::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, coc
 
 			if (!movableBlock->moveDown(*solidBlocks))
 			{
-				solidBlocks->add(movableBlock);
-				unschedule(schedule_selector(TetrisBoardScene::moveSchedular));
-				schedule(schedule_selector(TetrisBoardScene::lineClearShedular), moveDelaySeconds);
+				freezeMovableBlock();
 			}
 
 			break;
@@ -209,8 +205,21 @@ void TetrisBoardScene::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, coc
 // add movable block to solidBlocks and generate new Block
 void TetrisBoardScene::generateBlock(int posX, int posY)
 {
-	auto newBlock = Tetromino::create(TetrominoTemplate::rotationTemplates.at(rand() % TetrominoTemplate::rotationTemplates.size()));
+	int randNum = rand() % TetrominoTemplate::size;
+
+	auto newBlock = Tetromino::create(TetrominoTemplate::rotationTemplates.at(randNum), TetrominoTemplate::colorTemplates.at(randNum));
 	newBlock->drawTetromino();
 	this->addChild(newBlock);
 	movableBlock = newBlock;
+}
+
+
+// helper function
+void TetrisBoardScene::freezeMovableBlock()
+{
+	auto temp = movableBlock;
+	movableBlock = nullptr;		// setting movable block to nullptr freezes keyboard inputs & moveDown shedular
+	solidBlocks->add(temp);
+	unschedule(schedule_selector(TetrisBoardScene::moveSchedular));
+	schedule(schedule_selector(TetrisBoardScene::lineClearShedular), moveDelaySeconds);
 }

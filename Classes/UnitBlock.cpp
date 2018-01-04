@@ -6,15 +6,15 @@ USING_NS_CC;
 double UnitBlock::_u = 0;
 Vec2 UnitBlock::_pf = Vec2();
 
-UnitBlock::UnitBlock()
-{
-}
+//UnitBlock::UnitBlock()
+//{
+//}
+//
+//UnitBlock::~UnitBlock()
+//{
+//}
 
-UnitBlock::~UnitBlock()
-{
-}
-
-UnitBlock * UnitBlock::create(int x, int y, cocos2d::Color4F color)
+UnitBlock * UnitBlock::create(int x, int y, cocos2d::Color4B color)
 {
 	UnitBlock* block = new(std::nothrow)UnitBlock();
 	if (block && block->init(x, y, color))
@@ -30,7 +30,7 @@ UnitBlock * UnitBlock::create(int x, int y, cocos2d::Color4F color)
 	}
 }
 
-bool UnitBlock::init(int x, int y, cocos2d::Color4F color)
+bool UnitBlock::init(int x, int y, cocos2d::Color4B color)
 {
 	if (!Node::init())
 	{
@@ -54,7 +54,8 @@ void UnitBlock::drawBlock()
 	Vec2 destination(midPoint.x + _u / 2, midPoint.y + _u / 2);
 
 	_drawNode->clear();
-	_drawNode->drawRect(origin, destination, this->_color);
+	//_drawNode->drawRect(origin, destination, this->_color);
+	_drawNode->drawSolidRect(origin, destination, cocos2d::Color4F(this->_color));
 }
 
 void UnitBlock::moveDown()

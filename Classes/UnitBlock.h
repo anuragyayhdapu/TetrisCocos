@@ -23,10 +23,10 @@ public:
 	static double _u;	// size of one unit block
 	static cocos2d::Vec2 _pf;	// // first middle point of a unit block in grid (point_first)
 
-	UnitBlock();
-	virtual ~UnitBlock();
-	static UnitBlock* create(int x = 0, int y = 0, cocos2d::Color4F color = cocos2d::Color4F::GRAY);
-	bool init(int x, int y, cocos2d::Color4F color);
+	/*UnitBlock();
+	virtual ~UnitBlock();*/
+	static UnitBlock* create(int x, int y, cocos2d::Color4B color);
+	bool init(int x, int y, cocos2d::Color4B color);
 
 	void drawBlock();
 
@@ -46,11 +46,11 @@ public:
 	int getX() { return _x; }
 	int getY() { return _y; }
 
-	cocos2d::Color4F getColor() { return _color; }
+	cocos2d::Color4B getColor() { return _color; }
 	void clearDrawnBlock() { _drawNode->clear(); }
 
 private:
 	int _x, _y; // position of block in term of number of units
 	cocos2d::DrawNode* _drawNode;
-	cocos2d::Color4F _color;
+	cocos2d::Color4B _color;
 };
