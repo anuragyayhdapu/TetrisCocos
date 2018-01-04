@@ -87,27 +87,18 @@ bool SolidBlocks::find(BoardPos bPos) const
 
 void SolidBlocks::dropHangingBlocks()
 {
-	for (auto tetromino : solidTetrominos)
+	for (auto i = Constant::BUCKET_HEIGHT - 1; i >= 0; --i)
 	{
-		if (tetromino->checkMoveDown(*this))
+		for (int j = 0; j < Constant::BUCKET_WIDTH; j++)
 		{
-			shiftDown(tetromino);
+			if (bucket[i][j] != nullptr)
+			{
+				// move this tetromino till it hits bottom or a solidblock
+				auto tetromino = bucket[i][j];
+				shiftDown(tetromino);
+			}
 		}
 	}
-
-
-	//for (auto i = Constant::BUCKET_HEIGHT; i >= 0; --i)
-	//{
-	//	for (int j = 0; j < Constant::BUCKET_WIDTH; j++)
-	//	{
-	//		if (bucket[i][j] != nullptr)
-	//		{
-	//			// move this tetromino till it hits bottom or a solidblock
-	//			auto tetromino = bucket[i][j];
-	//			shiftDown(tetromino);
-	//		}
-	//	}
-	//}
 }
 
 int SolidBlocks::clearLines()
@@ -115,7 +106,7 @@ int SolidBlocks::clearLines()
 	int numRowsFilled = 0;
 
 	// delete filled rows
-	for (auto i = Constant::BUCKET_HEIGHT; i >= 0; --i)
+	for (auto i = Constant::BUCKET_HEIGHT - 1; i >= 0; --i)
 	{
 		if (rowFilled(i))
 		{
