@@ -20,8 +20,8 @@ class Tetromino : public cocos2d::Node
 public:
 	/*Tetromino();
 	virtual ~Tetromino();*/
-	static Tetromino* create(RotationQ rotationQ, cocos2d::Color4B _color = cocos2d::Color4B::GRAY, BoardPos gridMatrixPoint = Constant::SPAWN_POSITION, int numOfBlocks = Constant::NUM_OF_UNIT_BLOCKS_IN_TETROMINO);
-	bool init(RotationQ rotationQ, cocos2d::Color4B _color, BoardPos gridMatrixPoint, int numOfBlocks);
+	static Tetromino* create(RotationQ rotationQ, cocos2d::Color4B _color, cocos2d::Color4B _borderColor, BoardPos gridMatrixPoint = Constant::SPAWN_POSITION, int numOfBlocks = Constant::NUM_OF_UNIT_BLOCKS_IN_TETROMINO);
+	bool init(RotationQ rotationQ, cocos2d::Color4B _color, cocos2d::Color4B _borderColor, BoardPos gridMatrixPoint, int numOfBlocks);
 
 	bool moveLeft(const SolidBlocks& solidBlocks);
 	bool moveRight(const SolidBlocks& solidBlocks);
@@ -43,6 +43,7 @@ private:
 	std::vector<UnitBlock*> unitBlocksVec;
 	BoardPos gridMatrixPoint;	// top left point of gridmatrix
 	cocos2d::Color4B color;
+	cocos2d::Color4B borderColor;
 
 	RotationQ rotationQ;
 

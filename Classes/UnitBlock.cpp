@@ -14,10 +14,10 @@ Vec2 UnitBlock::_pf = Vec2();
 //{
 //}
 
-UnitBlock * UnitBlock::create(int x, int y, cocos2d::Color4B color)
+UnitBlock * UnitBlock::create(int x, int y, cocos2d::Color4B color, cocos2d::Color4B borderColor)
 {
 	UnitBlock* block = new(std::nothrow)UnitBlock();
-	if (block && block->init(x, y, color))
+	if (block && block->init(x, y, color, borderColor))
 	{
 		block->autorelease();
 		return block;
@@ -30,7 +30,7 @@ UnitBlock * UnitBlock::create(int x, int y, cocos2d::Color4B color)
 	}
 }
 
-bool UnitBlock::init(int x, int y, cocos2d::Color4B color)
+bool UnitBlock::init(int x, int y, cocos2d::Color4B color, cocos2d::Color4B borderColor)
 {
 	if (!Node::init())
 	{
@@ -40,6 +40,7 @@ bool UnitBlock::init(int x, int y, cocos2d::Color4B color)
 	this->_x = x;
 	this->_y = y;
 	this->_color = color;
+	this->_borderColor = color;
 
 	_drawNode = DrawNode::create();
 	this->addChild(_drawNode);
@@ -54,8 +55,9 @@ void UnitBlock::drawBlock()
 	Vec2 destination(midPoint.x + _u / 2, midPoint.y + _u / 2);
 
 	_drawNode->clear();
-	//_drawNode->drawRect(origin, destination, this->_color);
 	_drawNode->drawSolidRect(origin, destination, cocos2d::Color4F(this->_color));
+	_drawNode->drawRect(origin, destination, cocos2d::Color4F(cocos2d::Color4F::BLACK));	// well, using black as border looks cool !!
+	_drawNode->drawPoint(midPoint, 5.0f, cocos2d::Color4F(cocos2d::Color4F::BLACK));
 }
 
 void UnitBlock::moveDown()

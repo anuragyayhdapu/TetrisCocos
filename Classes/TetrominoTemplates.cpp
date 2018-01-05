@@ -76,25 +76,54 @@ std::vector<cocos2d::Color4B> TetrominoTemplate::colorTemplates = []() {
 	std::vector<cocos2d::Color4B> colorTemplates;
 
 	// L
-	colorTemplates.push_back(cocos2d::Color4B(245, 250, 200, 255));
+	colorTemplates.push_back(cocos2d::Color4B(126, 153, 123, 255));
 
 	// J
-	colorTemplates.push_back(cocos2d::Color4B(165, 240, 228, 255));
+	colorTemplates.push_back(cocos2d::Color4B(70, 132, 153, 255));
 
 	// T
-	colorTemplates.push_back(cocos2d::Color4B(142, 161, 240, 255));
+	colorTemplates.push_back(cocos2d::Color4B(176, 94, 168, 255));
 
 	// I
-	colorTemplates.push_back(cocos2d::Color4B(253, 214, 181, 255));
+	colorTemplates.push_back(cocos2d::Color4B(0, 128, 128, 255));
 
 	// Z
-	colorTemplates.push_back(cocos2d::Color4B(247, 80, 80, 255));
+	colorTemplates.push_back(cocos2d::Color4B(192, 57, 25, 255));
 
 	// S
-	colorTemplates.push_back(cocos2d::Color4B(189, 225, 138, 255));
+	colorTemplates.push_back(cocos2d::Color4B(87, 153, 81, 255));
 
 	// O
-	colorTemplates.push_back(cocos2d::Color4B(86, 86, 86, 255));
+	colorTemplates.push_back(cocos2d::Color4B(204, 196, 114, 255));
+
+	return colorTemplates;
+}();
+
+
+std::vector<cocos2d::Color4B> TetrominoTemplate::borderColorTemplates = []() {
+
+	std::vector<cocos2d::Color4B> borderColorTemplates;
+
+	// L
+	borderColorTemplates.push_back(cocos2d::Color4B(48, 60, 46, 255));
+
+	// J
+	borderColorTemplates.push_back(cocos2d::Color4B(17, 31, 36, 255));
+
+	// T
+	borderColorTemplates.push_back(cocos2d::Color4B(67, 33, 64, 255));
+
+	// I
+	borderColorTemplates.push_back(cocos2d::Color4B(0, 43, 43, 255));
+
+	// Z
+	borderColorTemplates.push_back(cocos2d::Color4B(72, 21, 9, 255));
+
+	// S
+	borderColorTemplates.push_back(cocos2d::Color4B(30, 53, 28, 255));
+
+	// O
+	borderColorTemplates.push_back(cocos2d::Color4B(84, 79, 30, 255));
 
 	return colorTemplates;
 }();

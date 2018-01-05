@@ -25,8 +25,8 @@ public:
 
 	/*UnitBlock();
 	virtual ~UnitBlock();*/
-	static UnitBlock* create(int x, int y, cocos2d::Color4B color);
-	bool init(int x, int y, cocos2d::Color4B color);
+	static UnitBlock* create(int x, int y, cocos2d::Color4B color, cocos2d::Color4B borderColor);
+	bool init(int x, int y, cocos2d::Color4B color, cocos2d::Color4B borderColor);
 
 	void drawBlock();
 
@@ -53,4 +53,5 @@ private:
 	int _x, _y; // position of block in term of number of units
 	cocos2d::DrawNode* _drawNode;
 	cocos2d::Color4B _color;
+	cocos2d::Color4B _borderColor;
 };
