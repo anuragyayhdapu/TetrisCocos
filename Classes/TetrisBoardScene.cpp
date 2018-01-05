@@ -69,13 +69,13 @@ bool TetrisBoardScene::init()
 	auto drawNode = DrawNode::create();
 	this->addChild(drawNode);
 
-	for (double i = 0; i < Constant::NUM_OF_UNIT_BLOCKS_IN_WIDTH; ++i)
+	/*for (double i = 0; i < Constant::NUM_OF_UNIT_BLOCKS_IN_WIDTH; ++i)
 	{
 		for (double j = 0; j < Constant::NUM_OF_UNIT_BLOCKS_IN_HEIGHT; ++j)
 		{
 			drawNode->drawPoint(Vec2(i * _u + _pf.x, _pf.y - j * _u), 2, Color4F::ORANGE);
 		}
-	}
+	}*/
 
 	// bucket inner grid
 	for (double i = Constant::BUCKET_LEFT; i < Constant::BUCKET_RIGHT; ++i)
@@ -86,26 +86,29 @@ bool TetrisBoardScene::init()
 		}
 	}
 
+
 	// bucket walls
 	// left wall
-	drawNode->drawSolidRect(
+	drawNode->drawRect(
 		Vec2((Constant::BUCKET_LEFT - 1) * _u + _pf.x - _u / 2, _pf.y - _u / 2 - (Constant::BUCKET_TOP + Constant::BUCKET_TOP_GAP) * _u),
 		Vec2(Constant::BUCKET_LEFT * _u + _pf.x - _u / 2, _pf.y - _u / 2 - (Constant::BUCKET_BOTTOM - 1) * _u),
-		Color4F::RED
+		Color4F(Color4B(105, 105, 105, 255))
 	);
 	// right wall
-	drawNode->drawSolidRect(
+	drawNode->drawRect(
 		Vec2(Constant::BUCKET_RIGHT * _u + _pf.x - _u / 2, _pf.y - _u / 2 - (Constant::BUCKET_TOP + Constant::BUCKET_TOP_GAP) * _u),
 		Vec2((Constant::BUCKET_RIGHT + 1) * _u + _pf.x - _u / 2, _pf.y - _u / 2 - (Constant::BUCKET_BOTTOM - 1) * _u),
-		Color4F::RED
+		Color4F(Color4B(105, 105, 105, 255))
 	);
 	// bottom bed
-	drawNode->drawSolidRect(
+	drawNode->drawRect(
 		Vec2((Constant::BUCKET_LEFT - 1)* _u + _pf.x - _u / 2, _pf.y - _u / 2 - (Constant::BUCKET_BOTTOM - 1) * _u),
-		Vec2((Constant::BUCKET_RIGHT + 1) * _u + _pf.x - _u / 2, _pf.y - _u / 2 - (Constant::BUCKET_BOTTOM) * _u), Color4F::GREEN
+		Vec2((Constant::BUCKET_RIGHT + 1) * _u + _pf.x - _u / 2, _pf.y - _u / 2 - (Constant::BUCKET_BOTTOM) * _u), 
+		Color4F(Color4B(105, 105, 105, 255))
 	);
 
 	// add movable Tetromino
+	srand(time(NULL));
 	movableBlock = nullptr;
 	this->generateBlock();
 
@@ -206,8 +209,11 @@ void TetrisBoardScene::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, coc
 void TetrisBoardScene::generateBlock(int posX, int posY)
 {
 	int randNum = rand() % TetrominoTemplate::size;
+	auto rotation = TetrominoTemplate::rotationTemplates.at(randNum);
+	auto color = TetrominoTemplate::colorTemplates.at(randNum);
+	auto borderColor = TetrominoTemplate::borderColorTemplates.at(randNum);
 
-	auto newBlock = Tetromino::create(TetrominoTemplate::rotationTemplates.at(randNum), TetrominoTemplate::colorTemplates.at(randNum));
+	auto newBlock = Tetromino::create(rotation, color, borderColor);
 	newBlock->drawTetromino();
 	this->addChild(newBlock);
 	movableBlock = newBlock;
