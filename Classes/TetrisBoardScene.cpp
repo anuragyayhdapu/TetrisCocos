@@ -1,4 +1,6 @@
 #include "TetrisBoardScene.h"
+#include "PauseScene.h"
+#include "GameOverScene.h"
 #include <algorithm>
 
 USING_NS_CC;
@@ -85,6 +87,23 @@ bool TetrisBoardScene::init()
 			drawNode->drawPoint(Vec2(i * _u + _pf.x, _pf.y - j * _u), 2, Color4F::MAGENTA);
 		}
 	}
+
+	//auto gridLinesDrawNode = DrawNode::create(3.0F);
+	//this->addChild(gridLinesDrawNode);
+	//for (double i = Constant::BUCKET_LEFT; i < Constant::BUCKET_RIGHT; ++i)
+	//{
+	//	//gridLinesDrawNode->drawLine(Vec2(_pf.x, _u * Constant::BUCKET_BOTTOM), Vec2(), Color4F(Color4B(21, 21, 21, 255)));
+	//}
+	//for (double j = Constant::BUCKET_TOP; j < Constant::BUCKET_BOTTOM; ++j)
+	//{
+	//	double x1 = Constant::BUCKET_LEFT * _u + _pf.x;
+	//	double x2 = Constant::BUCKET_RIGHT * _u + _pf.x;
+	//	double y1 = Constant::BUCKET_TOP * _u + _pf.y + j * _u, y2 = y1;
+	//	gridLinesDrawNode->drawLine(
+	//		Vec2(x1, y1),
+	//		Vec2(x2, y2),
+	//		Color4F::GREEN/*Color4F(Color4B(21, 21, 21, 255))*/);
+	//}
 
 
 	// bucket walls
@@ -228,4 +247,18 @@ void TetrisBoardScene::freezeMovableBlock()
 	solidBlocks->add(temp);
 	unschedule(schedule_selector(TetrisBoardScene::moveSchedular));
 	schedule(schedule_selector(TetrisBoardScene::lineClearShedular), moveDelaySeconds);
+}
+
+
+void TetrisBoardScene::GoToPauseScene(cocos2d::Ref *pSender)
+{
+	auto scene = PauseScene::createScene();
+	Director::getInstance()->pushScene(scene);
+}
+
+
+void TetrisBoardScene::GoToGameOverScene(cocos2d::Ref *pSender)
+{
+	auto scene = GameOverScene::createScene();
+	Director::getInstance()->replaceScene(scene);
 }

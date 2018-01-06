@@ -31,6 +31,10 @@ private:
 	void generateBlock(int posX = Constant::NUM_OF_UNIT_BLOCKS_IN_WIDTH / 2, int posY = 0);
 	void freezeMovableBlock();
 
+	void GoToPauseScene(cocos2d::Ref * pSender);
+
+	void GoToGameOverScene(cocos2d::Ref * pSender);
+
 	void moveSchedular(float dt);
 	void lineClearShedular(float dt);
 	void dropHangingBlocksShedular(float dt);
