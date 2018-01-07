@@ -37,7 +37,6 @@ bool Tetromino::init(RotationQ rotationQ, cocos2d::Color4B _color, cocos2d::Colo
 	this->gridMatrixPoint = gridMatrixPoint;
 
 	// set template
-	this->numUnitBlock = numOfBlocks;
 	this->rotationQ = rotationQ;
 	this->color = _color;
 	this->borderColor = _borderColor;

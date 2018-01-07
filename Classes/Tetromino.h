@@ -39,7 +39,6 @@ public:
 	const std::vector<UnitBlock*>& getUnitBlocksVec() { return unitBlocksVec; }
 
 private:
-	short numUnitBlock;
 	std::vector<UnitBlock*> unitBlocksVec;
 	BoardPos gridMatrixPoint;	// top left point of gridmatrix
 	cocos2d::Color4B color;
