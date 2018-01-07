@@ -205,15 +205,15 @@ void TetrisBoardScene::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, coc
 
 			break;
 
-		case EventKeyboard::KeyCode::KEY_Z:
+		case EventKeyboard::KeyCode::KEY_UP_ARROW:
 
 			movableBlock->rotateLeft(*solidBlocks);
 
 			break;
 
-		case EventKeyboard::KeyCode::KEY_X:
+		case EventKeyboard::KeyCode::KEY_SPACE:
 
-			movableBlock->rotateRight(*solidBlocks);
+			// configure for hard drop
 
 			break;
 
