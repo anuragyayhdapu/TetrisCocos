@@ -11,6 +11,7 @@ class RotationQ
 public:
 	RotationQ() { head = nullptr; }
 	RotationQ(const std::vector<BoardPos>& top, const std::vector<BoardPos>& right, const std::vector<BoardPos>& bottom, const std::vector<BoardPos>& left);
+	~RotationQ();
 
 	// getters
 	const std::vector<BoardPos>& getRightRotation() { return head->next->face; }
@@ -27,10 +28,16 @@ private:
 	struct Node
 	{
 		Node *next, *prev;
-		const std::vector<BoardPos> face;
+		std::vector<BoardPos> face;
 
 		Node(const std::vector<BoardPos> _face) :
 			face(_face), next(nullptr), prev(nullptr) {}
+
+		~Node() {
+			next = nullptr;
+			prev = nullptr;
+			face.clear();
+		}
 	};
 	Node * head;
 };

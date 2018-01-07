@@ -1,7 +1,7 @@
 #include "RotationQ.h"
 
 // hardcoded for now, change to generic if time permits
-RotationQ::RotationQ(const std::vector<BoardPos> & top,const std::vector<BoardPos> & right,const std::vector<BoardPos> & bottom,const std::vector<BoardPos> & left)
+RotationQ::RotationQ(const std::vector<BoardPos> & top, const std::vector<BoardPos> & right, const std::vector<BoardPos> & bottom, const std::vector<BoardPos> & left)
 {
 	Node* topNode = new Node(top);
 	Node* rightNode = new Node(right);
@@ -19,6 +19,22 @@ RotationQ::RotationQ(const std::vector<BoardPos> & top,const std::vector<BoardPo
 	topNode->prev = leftNode;
 
 	head = topNode;
+}
+
+RotationQ::~RotationQ()
+{
+	if (head != nullptr)
+	{
+		Node* tail = head;
+
+		do
+		{
+			Node* temp = head;
+			head = head->next;
+
+			delete temp;
+		} while (head != tail);
+	}
 }
 
 const std::vector<BoardPos> & RotationQ::rotateRight()
