@@ -1,12 +1,13 @@
 #include "RotationQ.h"
 
 // hardcoded for now, change to generic if time permits
-RotationQ::RotationQ(const std::vector<BoardPos> & top, const std::vector<BoardPos> & right, const std::vector<BoardPos> & bottom, const std::vector<BoardPos> & left)
+RotationQ::RotationQ(const std::array<BoardPos, 4> * top, const std::array<BoardPos, 4> * right,
+	const std::array<BoardPos, 4> * bottom, const std::array<BoardPos, 4> * left)
 {
-	Node* topNode = new Node(top);
-	Node* rightNode = new Node(right);
-	Node* bottomNode = new Node(bottom);
-	Node* leftNode = new Node(left);
+	Rnode* topNode = new Rnode(top);
+	Rnode* rightNode = new Rnode(right);
+	Rnode* bottomNode = new Rnode(bottom);
+	Rnode* leftNode = new Rnode(left);
 
 	topNode->next = rightNode;
 	rightNode->next = bottomNode;
@@ -19,33 +20,5 @@ RotationQ::RotationQ(const std::vector<BoardPos> & top, const std::vector<BoardP
 	topNode->prev = leftNode;
 
 	head = topNode;
-}
-
-RotationQ::~RotationQ()
-{
-	if (head != nullptr)
-	{
-		Node* tail = head;
-
-		do
-		{
-			Node* temp = head;
-			head = head->next;
-
-			delete temp;
-		} while (head != tail);
-	}
-}
-
-const std::vector<BoardPos> & RotationQ::rotateRight()
-{
-	// change head position
-	head = head->next;
-	return head->face;
-}
-
-const std::vector<BoardPos> & RotationQ::rotateLeft()
-{
-	head = head->prev;
-	return head->face;
+	tail = leftNode;
 }

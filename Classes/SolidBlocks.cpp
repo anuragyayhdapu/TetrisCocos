@@ -8,8 +8,8 @@ bool SolidBlocks::init()
 	}
 
 	// initialize bucket
-	for (size_t i = 0; i < Constant::BUCKET_HEIGHT; i++)
-		for (size_t j = 0; j < Constant::BUCKET_WIDTH; j++)
+	for (size_t i = 0; i < t_const::BUCKET_HEIGHT; i++)
+		for (size_t j = 0; j < t_const::BUCKET_WIDTH; j++)
 			bucket[i][j] = nullptr;
 
 	return true;
@@ -18,7 +18,7 @@ bool SolidBlocks::init()
 
 bool SolidBlocks::rowFilled(int rowNum) {
 
-	for (size_t i = 0; i < Constant::BUCKET_WIDTH; i++)
+	for (size_t i = 0; i < t_const::BUCKET_WIDTH; i++)
 		if (bucket[rowNum][i] == nullptr)
 			return false;
 
@@ -32,14 +32,16 @@ void SolidBlocks::add(Tetromino* tetromino, bool firstTime)
 	for (auto block : tetromino->getUnitBlocksVec())
 	{
 		// adjust block position relative to bucket
-		auto relativeX = block->getX() - Constant::BUCKET_LEFT;
-		auto relativeY = block->getY() - Constant::BUCKET_TOP;
+		auto relativeX = block->getX() - t_const::BUCKET_LEFT;
+		auto relativeY = block->getY() - t_const::BUCKET_TOP;
 
 		bucket[relativeY][relativeX] = tetromino;
 	}
 
 	if (firstTime)
+	{
 		solidTetrominos.push_front(tetromino);
+	}
 }
 
 
@@ -50,8 +52,8 @@ void SolidBlocks::shiftDown(Tetromino* tetromino)
 	for (auto block : tetromino->getUnitBlocksVec())
 	{
 		// adjust block position relative to bucket
-		auto relativeX = block->getX() - Constant::BUCKET_LEFT;
-		auto relativeY = block->getY() - Constant::BUCKET_TOP;
+		auto relativeX = block->getX() - t_const::BUCKET_LEFT;
+		auto relativeY = block->getY() - t_const::BUCKET_TOP;
 
 		bucket[relativeY][relativeX] = nullptr;
 	}
@@ -78,8 +80,8 @@ void SolidBlocks::drawSolidBlocks()
 bool SolidBlocks::find(BoardPos bPos) const
 {
 	// adjust block position relative to bucket
-	auto relativeX = bPos.x - Constant::BUCKET_LEFT;
-	auto relativeY = bPos.y - Constant::BUCKET_TOP;
+	auto relativeX = bPos.x - t_const::BUCKET_LEFT;
+	auto relativeY = bPos.y - t_const::BUCKET_TOP;
 
 	return bucket[relativeY][relativeX] != nullptr;
 }
@@ -87,9 +89,9 @@ bool SolidBlocks::find(BoardPos bPos) const
 
 void SolidBlocks::dropHangingBlocks()
 {
-	for (auto i = Constant::BUCKET_HEIGHT - 1; i >= 0; --i)
+	for (auto i = t_const::BUCKET_HEIGHT - 2; i >= 0; --i)
 	{
-		for (int j = 0; j < Constant::BUCKET_WIDTH; j++)
+		for (int j = 0; j < t_const::BUCKET_WIDTH; j++)
 		{
 			if (bucket[i][j] != nullptr)
 			{
@@ -106,17 +108,17 @@ int SolidBlocks::clearLines()
 	int numRowsFilled = 0;
 
 	// delete filled rows
-	for (auto i = Constant::BUCKET_HEIGHT - 1; i >= 0; --i)
+	for (auto i = t_const::BUCKET_HEIGHT - 1; i >= 0; --i)
 	{
 		if (rowFilled(i))
 		{
 			++numRowsFilled;
 
-			for (size_t j = 0; j < Constant::BUCKET_WIDTH; j++)
+			for (size_t j = 0; j < t_const::BUCKET_WIDTH; j++)
 			{
 				// calculate block position relative to bucket
-				auto absoluteX = j + Constant::BUCKET_LEFT;
-				auto absoluteY = i + Constant::BUCKET_TOP;
+				auto absoluteX = j + t_const::BUCKET_LEFT;
+				auto absoluteY = i + t_const::BUCKET_TOP;
 				bucket[i][j]->removeBlock(BoardPos(absoluteX, absoluteY));
 
 				// if after removing this block tetromino becomes empty,
@@ -127,6 +129,7 @@ int SolidBlocks::clearLines()
 					{
 						if (*iter == bucket[i][j])
 						{
+							(*iter)->cleanup();
 							solidTetrominos.erase(iter);
 							break;
 						}

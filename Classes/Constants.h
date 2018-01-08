@@ -3,7 +3,7 @@
 #include "BoardPos.h"
 
 // constants accessed from multiple files
-namespace Constant
+namespace t_const
 {
 	const int NUM_OF_UNIT_BLOCKS_IN_HEIGHT = 25;
 	const int NUM_OF_UNIT_BLOCKS_IN_WIDTH = 25;
@@ -21,4 +21,9 @@ namespace Constant
 	const BoardPos SPAWN_POSITION(10, 0);
 
 	const short GRID_MATRIX_SIZE = 4;
+
+	// things that are fixed for now, and probably will never change:
+		// number of blocks in any tetromino = 4
+		// number of rotation states = 4
+		// number of rotation templates = 7
 }

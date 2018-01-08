@@ -14,14 +14,14 @@ class UnitBlock;
 // base class for all tetrominos
 class Tetromino : public cocos2d::Node
 {
-	using Side = const std::vector<BoardPos>*;
+	//using Side = const std::vector<BoardPos>*;
 	//using BoardPosSet = const std::set<BoardPos, BoardPosComparator>&;
 
 public:
-	/*Tetromino();
-	virtual ~Tetromino();*/
-	static Tetromino* create(RotationQ rotationQ, cocos2d::Color4B _color, cocos2d::Color4B _borderColor, BoardPos gridMatrixPoint = Constant::SPAWN_POSITION, int numOfBlocks = Constant::NUM_OF_UNIT_BLOCKS_IN_TETROMINO);
-	bool init(RotationQ rotationQ, cocos2d::Color4B _color, cocos2d::Color4B _borderColor, BoardPos gridMatrixPoint, int numOfBlocks);
+	Tetromino();
+	virtual ~Tetromino();
+	static Tetromino* create(RotationQ::Rnode* rotationQ, cocos2d::Color4B _color, cocos2d::Color4B _borderColor, BoardPos gridMatrixPoint = t_const::SPAWN_POSITION, int numOfBlocks = t_const::NUM_OF_UNIT_BLOCKS_IN_TETROMINO);
+	bool init(RotationQ::Rnode* rotationQ, cocos2d::Color4B _color, cocos2d::Color4B _borderColor, BoardPos gridMatrixPoint, int numOfBlocks);
 
 	bool moveLeft(const SolidBlocks& solidBlocks);
 	bool moveRight(const SolidBlocks& solidBlocks);
@@ -44,8 +44,7 @@ private:
 	cocos2d::Color4B color;
 	cocos2d::Color4B borderColor;
 
-	RotationQ rotationQ;
+	RotationQ::Rnode * rotationQ;
 
-	void setBlocks(Side side);
 	void rotate();
 };

@@ -39,13 +39,13 @@ bool TetrisBoardScene::init()
 	_u = 0;
 	if (yv < xv)
 	{
-		_u = y / Constant::NUM_OF_UNIT_BLOCKS_IN_HEIGHT;
-		x = _u * Constant::NUM_OF_UNIT_BLOCKS_IN_WIDTH;
+		_u = y / t_const::NUM_OF_UNIT_BLOCKS_IN_HEIGHT;
+		x = _u * t_const::NUM_OF_UNIT_BLOCKS_IN_WIDTH;
 	}
 	else if (yv >= xv)
 	{
-		_u = x / Constant::NUM_OF_UNIT_BLOCKS_IN_WIDTH;
-		y = _u * Constant::NUM_OF_UNIT_BLOCKS_IN_HEIGHT;
+		_u = x / t_const::NUM_OF_UNIT_BLOCKS_IN_WIDTH;
+		y = _u * t_const::NUM_OF_UNIT_BLOCKS_IN_HEIGHT;
 	}
 
 	double xd = xv - x;
@@ -71,18 +71,18 @@ bool TetrisBoardScene::init()
 	auto drawNode = DrawNode::create();
 	this->addChild(drawNode);
 
-	/*for (double i = 0; i < Constant::NUM_OF_UNIT_BLOCKS_IN_WIDTH; ++i)
+	/*for (double i = 0; i < t_const::NUM_OF_UNIT_BLOCKS_IN_WIDTH; ++i)
 	{
-		for (double j = 0; j < Constant::NUM_OF_UNIT_BLOCKS_IN_HEIGHT; ++j)
+		for (double j = 0; j < t_const::NUM_OF_UNIT_BLOCKS_IN_HEIGHT; ++j)
 		{
 			drawNode->drawPoint(Vec2(i * _u + _pf.x, _pf.y - j * _u), 2, Color4F::ORANGE);
 		}
 	}*/
 
 	// bucket inner grid
-	for (double i = Constant::BUCKET_LEFT; i < Constant::BUCKET_RIGHT; ++i)
+	for (double i = t_const::BUCKET_LEFT; i < t_const::BUCKET_RIGHT; ++i)
 	{
-		for (double j = Constant::BUCKET_TOP; j < Constant::BUCKET_BOTTOM; ++j)
+		for (double j = t_const::BUCKET_TOP; j < t_const::BUCKET_BOTTOM; ++j)
 		{
 			drawNode->drawPoint(Vec2(i * _u + _pf.x, _pf.y - j * _u), 2, Color4F::MAGENTA);
 		}
@@ -90,15 +90,15 @@ bool TetrisBoardScene::init()
 
 	//auto gridLinesDrawNode = DrawNode::create(3.0F);
 	//this->addChild(gridLinesDrawNode);
-	//for (double i = Constant::BUCKET_LEFT; i < Constant::BUCKET_RIGHT; ++i)
+	//for (double i = t_const::BUCKET_LEFT; i < t_const::BUCKET_RIGHT; ++i)
 	//{
-	//	//gridLinesDrawNode->drawLine(Vec2(_pf.x, _u * Constant::BUCKET_BOTTOM), Vec2(), Color4F(Color4B(21, 21, 21, 255)));
+	//	//gridLinesDrawNode->drawLine(Vec2(_pf.x, _u * t_const::BUCKET_BOTTOM), Vec2(), Color4F(Color4B(21, 21, 21, 255)));
 	//}
-	//for (double j = Constant::BUCKET_TOP; j < Constant::BUCKET_BOTTOM; ++j)
+	//for (double j = t_const::BUCKET_TOP; j < t_const::BUCKET_BOTTOM; ++j)
 	//{
-	//	double x1 = Constant::BUCKET_LEFT * _u + _pf.x;
-	//	double x2 = Constant::BUCKET_RIGHT * _u + _pf.x;
-	//	double y1 = Constant::BUCKET_TOP * _u + _pf.y + j * _u, y2 = y1;
+	//	double x1 = t_const::BUCKET_LEFT * _u + _pf.x;
+	//	double x2 = t_const::BUCKET_RIGHT * _u + _pf.x;
+	//	double y1 = t_const::BUCKET_TOP * _u + _pf.y + j * _u, y2 = y1;
 	//	gridLinesDrawNode->drawLine(
 	//		Vec2(x1, y1),
 	//		Vec2(x2, y2),
@@ -109,20 +109,20 @@ bool TetrisBoardScene::init()
 	// bucket walls
 	// left wall
 	drawNode->drawRect(
-		Vec2((Constant::BUCKET_LEFT - 1) * _u + _pf.x - _u / 2, _pf.y - _u / 2 - (Constant::BUCKET_TOP + Constant::BUCKET_TOP_GAP) * _u),
-		Vec2(Constant::BUCKET_LEFT * _u + _pf.x - _u / 2, _pf.y - _u / 2 - (Constant::BUCKET_BOTTOM - 1) * _u),
+		Vec2((t_const::BUCKET_LEFT - 1) * _u + _pf.x - _u / 2, _pf.y - _u / 2 - (t_const::BUCKET_TOP + t_const::BUCKET_TOP_GAP) * _u),
+		Vec2(t_const::BUCKET_LEFT * _u + _pf.x - _u / 2, _pf.y - _u / 2 - (t_const::BUCKET_BOTTOM - 1) * _u),
 		Color4F(Color4B(105, 105, 105, 255))
 	);
 	// right wall
 	drawNode->drawRect(
-		Vec2(Constant::BUCKET_RIGHT * _u + _pf.x - _u / 2, _pf.y - _u / 2 - (Constant::BUCKET_TOP + Constant::BUCKET_TOP_GAP) * _u),
-		Vec2((Constant::BUCKET_RIGHT + 1) * _u + _pf.x - _u / 2, _pf.y - _u / 2 - (Constant::BUCKET_BOTTOM - 1) * _u),
+		Vec2(t_const::BUCKET_RIGHT * _u + _pf.x - _u / 2, _pf.y - _u / 2 - (t_const::BUCKET_TOP + t_const::BUCKET_TOP_GAP) * _u),
+		Vec2((t_const::BUCKET_RIGHT + 1) * _u + _pf.x - _u / 2, _pf.y - _u / 2 - (t_const::BUCKET_BOTTOM - 1) * _u),
 		Color4F(Color4B(105, 105, 105, 255))
 	);
 	// bottom bed
 	drawNode->drawRect(
-		Vec2((Constant::BUCKET_LEFT - 1)* _u + _pf.x - _u / 2, _pf.y - _u / 2 - (Constant::BUCKET_BOTTOM - 1) * _u),
-		Vec2((Constant::BUCKET_RIGHT + 1) * _u + _pf.x - _u / 2, _pf.y - _u / 2 - (Constant::BUCKET_BOTTOM) * _u), 
+		Vec2((t_const::BUCKET_LEFT - 1)* _u + _pf.x - _u / 2, _pf.y - _u / 2 - (t_const::BUCKET_BOTTOM - 1) * _u),
+		Vec2((t_const::BUCKET_RIGHT + 1) * _u + _pf.x - _u / 2, _pf.y - _u / 2 - (t_const::BUCKET_BOTTOM) * _u), 
 		Color4F(Color4B(105, 105, 105, 255))
 	);
 
@@ -228,9 +228,9 @@ void TetrisBoardScene::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, coc
 void TetrisBoardScene::generateBlock(int posX, int posY)
 {
 	int randNum = rand() % TetrominoTemplate::size;
-	auto rotation = TetrominoTemplate::rotationTemplates.at(randNum);
-	auto color = TetrominoTemplate::colorTemplates.at(randNum);
-	auto borderColor = TetrominoTemplate::borderColorTemplates.at(randNum);
+	auto rotation = TetrominoTemplate::rotationTemplates->at(randNum)->getInitialRotation();
+	auto color = TetrominoTemplate::colorTemplates->at(randNum);
+	auto borderColor = TetrominoTemplate::borderColorTemplates->at(randNum);
 
 	auto newBlock = Tetromino::create(rotation, color, borderColor);
 	newBlock->drawTetromino();

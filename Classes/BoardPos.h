@@ -5,8 +5,8 @@
 
 struct BoardPos {
 	BoardPos() { x = 0; y = 0; }
-	BoardPos(int x, int y) { this->x = x; this->y = y; }
-	int x, y;
+	BoardPos(short x, short y) { this->x = x; this->y = y; }
+	short x, y;
 
 	BoardPos operator+ (const BoardPos& other)
 	{

@@ -28,7 +28,7 @@ private:
 	SolidBlocks* solidBlocks;		// immovable blocks laying down over bed
 
 	virtual void onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);
-	void generateBlock(int posX = Constant::NUM_OF_UNIT_BLOCKS_IN_WIDTH / 2, int posY = 0);
+	void generateBlock(int posX = t_const::NUM_OF_UNIT_BLOCKS_IN_WIDTH / 2, int posY = 0);
 	void freezeMovableBlock();
 
 	void GoToPauseScene(cocos2d::Ref * pSender);

@@ -2,15 +2,15 @@
 
 #include "BoardPos.h"
 #include "RotationQ.h"
-#include <vector>
+#include <array>
 #include "cocos2d.h"
 
 
 class TetrominoTemplate
 {
 public:
-	const static int size = 7;
-	static std::vector<RotationQ> rotationTemplates;
-	static std::vector<cocos2d::Color4B> colorTemplates;
-	static std::vector<cocos2d::Color4B> borderColorTemplates;
+	const static short size = 7;
+	static std::array<RotationQ*, size> * rotationTemplates;
+	static std::array<cocos2d::Color4B, size> * colorTemplates;
+	static std::array<cocos2d::Color4B, size> * borderColorTemplates;
 };

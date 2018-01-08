@@ -9,35 +9,20 @@
 class RotationQ
 {
 public:
-	RotationQ() { head = nullptr; }
-	RotationQ(const std::vector<BoardPos>& top, const std::vector<BoardPos>& right, const std::vector<BoardPos>& bottom, const std::vector<BoardPos>& left);
-	~RotationQ();
-
-	// getters
-	const std::vector<BoardPos>& getRightRotation() { return head->next->face; }
-	const std::vector<BoardPos>& getLeftRotation() { return head->prev->face; }
-	const std::vector<BoardPos>& getCurrentRotation() { return head->face; }
-
-	// for actually rotating
-	const std::vector<BoardPos>& rotateRight();
-	const std::vector<BoardPos>& rotateLeft();
-
-private:
-
 	//Node of Circular Q
-	struct Node
+	struct Rnode
 	{
-		Node *next, *prev;
-		std::vector<BoardPos> face;
+		Rnode *next, *prev;
+		const std::array<BoardPos, 4> * face;
 
-		Node(const std::vector<BoardPos> _face) :
+		Rnode(const std::array<BoardPos, 4> * _face) :
 			face(_face), next(nullptr), prev(nullptr) {}
-
-		~Node() {
-			next = nullptr;
-			prev = nullptr;
-			face.clear();
-		}
 	};
-	Node * head;
+	RotationQ(const std::array<BoardPos, 4> * top, const std::array<BoardPos, 4> * right,
+		const std::array<BoardPos, 4> * bottom, const std::array<BoardPos, 4> * left);
+
+	// getter
+	Rnode* getInitialRotation() { return head; }
+private:
+	Rnode * head, * tail;
 };

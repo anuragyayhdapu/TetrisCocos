@@ -15,12 +15,12 @@ class SolidBlocks : public cocos2d::Node {
 private:
 	std::list<Tetromino*> solidTetrominos;
 
-	Tetromino* bucket[Constant::BUCKET_HEIGHT][Constant::BUCKET_WIDTH];
+	Tetromino* bucket[t_const::BUCKET_HEIGHT][t_const::BUCKET_WIDTH];
 
 	// checks if a single row is filled
 	bool rowFilled(int rowNum);
 	
-	// shift this tetromino dow in bucket
+	// shift this tetromino down in bucket
 	void shiftDown(Tetromino* tetromino);
 
 public:

@@ -1,15 +1,17 @@
 #include "Tetromino.h"
 
-//Tetromino::Tetromino()
-//{
-//}
-//
-//Tetromino::~Tetromino()
-//{
-//}
+Tetromino::Tetromino()
+{
+}
+
+Tetromino::~Tetromino()
+{
+	unitBlocksVec.clear();
+	rotationQ = nullptr;
+}
 
 
-Tetromino * Tetromino::create(RotationQ rotationQ, cocos2d::Color4B _color, cocos2d::Color4B _borderColor, BoardPos gridMatrixPoint, int numOfBlocks)
+Tetromino * Tetromino::create(RotationQ::Rnode* rotationQ, cocos2d::Color4B _color, cocos2d::Color4B _borderColor, BoardPos gridMatrixPoint, int numOfBlocks)
 {
 	Tetromino* pRet = new(std::nothrow)Tetromino();
 	if (pRet && pRet->init(rotationQ, _color, _borderColor, gridMatrixPoint, numOfBlocks))
@@ -26,7 +28,7 @@ Tetromino * Tetromino::create(RotationQ rotationQ, cocos2d::Color4B _color, coco
 }
 
 
-bool Tetromino::init(RotationQ rotationQ, cocos2d::Color4B _color, cocos2d::Color4B _borderColor, BoardPos gridMatrixPoint, int numOfBlocks)
+bool Tetromino::init(RotationQ::Rnode* rotationQ, cocos2d::Color4B _color, cocos2d::Color4B _borderColor, BoardPos gridMatrixPoint, int numOfBlocks)
 {
 	if (!Node::init())
 	{
@@ -42,15 +44,8 @@ bool Tetromino::init(RotationQ rotationQ, cocos2d::Color4B _color, cocos2d::Colo
 	this->borderColor = _borderColor;
 
 	// initialize unitBlocks
-	setBlocks(&rotationQ.getCurrentRotation());
-
-	return true;
-}
-
-
-void Tetromino::setBlocks(Side side)
-{
-	for each (auto pos in *side)
+	auto sides = this->rotationQ->face;
+	for (auto pos : *sides)
 	{
 		// adjust according to gridmatrix 
 		pos += gridMatrixPoint;
@@ -60,22 +55,9 @@ void Tetromino::setBlocks(Side side)
 		unitBlocksVec.push_back(block);
 		this->addChild(block);
 	}
-}
 
 
-void Tetromino::rotate()
-{
-	// since each no.of.blocks(side) = no.of.blocks(unitBlocksVec)
-	for (size_t i = 0; i < unitBlocksVec.size(); ++i)
-	{
-		// new rotation state
-		auto side = rotationQ.getCurrentRotation();
-
-		// new positions
-		auto newPos = gridMatrixPoint + side.at(i);
-
-		unitBlocksVec.at(i)->moveAt(newPos);
-	}
+	return true;
 }
 
 
@@ -159,19 +141,34 @@ bool Tetromino::checkMoveDown(const SolidBlocks& solidBlocks) const
 }
 
 
+void Tetromino::rotate()
+{
+	// since each no.of.blocks(side) = no.of.blocks(unitBlocksVec)
+	for (size_t i = 0; i < unitBlocksVec.size(); ++i)
+	{
+		// new rotation state
+		auto side = rotationQ->face;
+
+		// new positions
+		auto newPos = gridMatrixPoint + side->at(i);
+
+		unitBlocksVec.at(i)->moveAt(newPos);
+	}
+}
+
 
 bool Tetromino::rotateRight(const SolidBlocks& solidBlocks)
 {
 	// check if next rotation won't collide with anything
-	auto nextRotation = rotationQ.getRightRotation();
-	for each (auto pos in nextRotation)
+	auto nextRotation = rotationQ->next;
+	for (auto pos : *(nextRotation->face))
 	{
 		if (!UnitBlock::checkMoveAt(gridMatrixPoint + pos, solidBlocks))
 			return false;
 	}
 
 	// actually rotate
-	rotationQ.rotateRight();
+	rotationQ = rotationQ->next;
 	rotate();
 
 	return true;
@@ -181,15 +178,15 @@ bool Tetromino::rotateRight(const SolidBlocks& solidBlocks)
 bool Tetromino::rotateLeft(const SolidBlocks& solidBlocks)
 {
 	// check if next rotation won't collide with anything
-	auto nextRotation = rotationQ.getLeftRotation();
-	for each (auto pos in nextRotation)
+	auto nextRotation = rotationQ->prev;
+	for (auto pos : *(nextRotation->face))
 	{
 		if (!UnitBlock::checkMoveAt(gridMatrixPoint + pos, solidBlocks))
 			return false;
 	}
 
 	// actually rotate
-	rotationQ.rotateLeft();
+	rotationQ = rotationQ->prev;
 	rotate();
 
 	return false;
@@ -204,7 +201,7 @@ void Tetromino::removeBlock(BoardPos pos)
 		if (block->getX() == pos.x && block->getY() == pos.y)
 		{
 			block->clearDrawnBlock();
-			block = nullptr;
+			block->cleanup();
 			unitBlocksVec.erase(iter);
 			break;
 		}
