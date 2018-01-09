@@ -10,6 +10,47 @@ Tetromino::~Tetromino()
 	rotationQ = nullptr;
 }
 
+Tetromino * Tetromino::createCopy(const Tetromino & old, short y_axis)
+{
+	Tetromino* pRet = new(std::nothrow)Tetromino();
+	if (pRet && pRet->initCopy(old, y_axis))
+	{
+		pRet->autorelease();
+		return pRet;
+	}
+	else
+	{
+		delete pRet;
+		pRet = nullptr;
+		return nullptr;
+	}
+}
+
+bool Tetromino::initCopy(const Tetromino& old, short y_axis)
+{
+	if (!Node::init())
+	{
+		return false;
+	}
+
+	this->gridMatrixPoint = old.gridMatrixPoint;
+	this->color = old.color;
+	this->borderColor = old.borderColor;
+
+	for (auto oldBlock : old.getUnitBlocksVec())
+	{
+		if (oldBlock->getY() > y_axis)
+		{
+			auto newBlock = UnitBlock::create(oldBlock->getX(), oldBlock->getY(), this->color, this->borderColor);
+
+			unitBlocksVec.push_back(newBlock);
+			this->addChild(newBlock);
+		}
+	}
+
+	return true;
+}
+
 
 Tetromino * Tetromino::create(RotationQ::Rnode* rotationQ, cocos2d::Color4B _color, cocos2d::Color4B _borderColor, BoardPos gridMatrixPoint, int numOfBlocks)
 {

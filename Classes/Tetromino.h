@@ -20,6 +20,8 @@ class Tetromino : public cocos2d::Node
 public:
 	Tetromino();
 	virtual ~Tetromino();
+	static Tetromino* createCopy(const Tetromino& old, short y_axis);
+	bool initCopy(const Tetromino &, short y_axis);
 	static Tetromino* create(RotationQ::Rnode* rotationQ, cocos2d::Color4B _color, cocos2d::Color4B _borderColor, BoardPos gridMatrixPoint = t_const::SPAWN_POSITION, int numOfBlocks = t_const::NUM_OF_UNIT_BLOCKS_IN_TETROMINO);
 	bool init(RotationQ::Rnode* rotationQ, cocos2d::Color4B _color, cocos2d::Color4B _borderColor, BoardPos gridMatrixPoint, int numOfBlocks);
 
@@ -36,7 +38,7 @@ public:
 
 	void drawTetromino();
 
-	const std::vector<UnitBlock*>& getUnitBlocksVec() { return unitBlocksVec; }
+	const std::vector<UnitBlock*>& getUnitBlocksVec() const { return unitBlocksVec; }
 
 private:
 	std::vector<UnitBlock*> unitBlocksVec;
