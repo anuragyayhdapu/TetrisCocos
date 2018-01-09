@@ -23,6 +23,9 @@ private:
 	// shift this tetromino down in bucket
 	void shiftDown(Tetromino* tetromino);
 
+	// create new tetromino for top blocks
+	void divideTetromino(Tetromino * old, short y_axis);
+
 public:
 	// add new blocks in solidBlock
 	void add(Tetromino* tetromino, bool firstTime = true);

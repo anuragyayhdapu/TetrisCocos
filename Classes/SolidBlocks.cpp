@@ -121,6 +121,11 @@ int SolidBlocks::clearLines()
 				auto absoluteY = i + t_const::BUCKET_TOP;
 				bucket[i][j]->removeBlock(BoardPos(absoluteX, absoluteY));
 
+				// if after removing block, tetromino is divided
+				// create new tetromin for top
+				
+
+
 				// if after removing this block tetromino becomes empty,
 				// erase this tetromino
 				if (bucket[i][j]->empty())
@@ -144,4 +149,35 @@ int SolidBlocks::clearLines()
 
 
 	return numRowsFilled;
+}
+
+
+void SolidBlocks::divideTetromino(Tetromino* old, short y) 
+{
+	bool createNewTetrominoFlag = false;
+	std::vector<BoardPos> pos;
+
+	// create a new tetromino for top
+	for (auto block : old->getUnitBlocksVec())
+	{
+		if (block->getY() > y)
+		{
+			createNewTetrominoFlag = true;
+		}
+		else
+		{
+			pos.push_back(block->currPos());
+		}
+	}
+
+	if (createNewTetrominoFlag == true)
+	{
+		auto topTetromino = Tetromino::createCopy(*old, y);
+		topTetromino->drawTetromino();
+	}
+
+	for (auto p : pos)
+	{
+		old->removeBlock(p);
+	}
 }
