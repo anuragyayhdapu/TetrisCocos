@@ -10,10 +10,10 @@ Tetromino::~Tetromino()
 	rotationQ = nullptr;
 }
 
-Tetromino * Tetromino::createCopy(const Tetromino & old, short y_axis)
+Tetromino * Tetromino::createWithBlocks(const Tetromino& old, std::forward_list<BoardPos> blocksPos)
 {
 	Tetromino* pRet = new(std::nothrow)Tetromino();
-	if (pRet && pRet->initCopy(old, y_axis))
+	if (pRet && pRet->initWithBlocks(old, blocksPos))
 	{
 		pRet->autorelease();
 		return pRet;
@@ -26,7 +26,7 @@ Tetromino * Tetromino::createCopy(const Tetromino & old, short y_axis)
 	}
 }
 
-bool Tetromino::initCopy(const Tetromino& old, short y_axis)
+bool Tetromino::initWithBlocks(const Tetromino& old, std::forward_list<BoardPos> blocksPos)
 {
 	if (!Node::init())
 	{
@@ -37,15 +37,12 @@ bool Tetromino::initCopy(const Tetromino& old, short y_axis)
 	this->color = old.color;
 	this->borderColor = old.borderColor;
 
-	for (auto oldBlock : old.getUnitBlocksVec())
+	for (auto pos : blocksPos)
 	{
-		if (oldBlock->getY() > y_axis)
-		{
-			auto newBlock = UnitBlock::create(oldBlock->getX(), oldBlock->getY(), this->color, this->borderColor);
+		auto block = UnitBlock::create(pos.x, pos.y, this->color, this->borderColor);
 
-			unitBlocksVec.push_back(newBlock);
-			this->addChild(newBlock);
-		}
+		unitBlocksVec.push_back(block);
+		this->addChild(block);
 	}
 
 	return true;

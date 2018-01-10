@@ -7,6 +7,7 @@
 #include "TetrominoTemplates.h"
 #include "RotationQ.h"
 #include "SolidBlocks.h"
+#include <forward_list>
 
 class SolidBlocks;
 class UnitBlock;
@@ -20,8 +21,8 @@ class Tetromino : public cocos2d::Node
 public:
 	Tetromino();
 	virtual ~Tetromino();
-	static Tetromino* createCopy(const Tetromino& old, short y_axis);
-	bool initCopy(const Tetromino &, short y_axis);
+	static Tetromino* createWithBlocks(const Tetromino& old, std::forward_list<BoardPos> blocksPos);
+	bool initWithBlocks(const Tetromino& old, std::forward_list<BoardPos> blocksPos);
 	static Tetromino* create(RotationQ::Rnode* rotationQ, cocos2d::Color4B _color, cocos2d::Color4B _borderColor, BoardPos gridMatrixPoint = t_const::SPAWN_POSITION, int numOfBlocks = t_const::NUM_OF_UNIT_BLOCKS_IN_TETROMINO);
 	bool init(RotationQ::Rnode* rotationQ, cocos2d::Color4B _color, cocos2d::Color4B _borderColor, BoardPos gridMatrixPoint, int numOfBlocks);
 
