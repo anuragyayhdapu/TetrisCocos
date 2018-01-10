@@ -14,6 +14,7 @@ UnitBlock::UnitBlock()
 UnitBlock::~UnitBlock()
 {
 	_drawNode->clear();
+	this->removeAllChildrenWithCleanup(true);
 }
 
 UnitBlock * UnitBlock::create(short x, short y, cocos2d::Color4B color, cocos2d::Color4B borderColor)

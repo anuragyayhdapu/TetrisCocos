@@ -7,6 +7,7 @@ Tetromino::Tetromino()
 Tetromino::~Tetromino()
 {
 	unitBlocksVec.clear();
+	this->removeAllChildrenWithCleanup(true);
 	rotationQ = nullptr;
 }
 
@@ -238,8 +239,7 @@ void Tetromino::removeBlock(BoardPos pos)
 		auto block = *iter;
 		if (block->getX() == pos.x && block->getY() == pos.y)
 		{
-			block->clearDrawnBlock();
-			block->cleanup();
+			this->removeChild(block);
 			unitBlocksVec.erase(iter);
 			break;
 		}

@@ -28,6 +28,11 @@ bool SolidBlocks::rowFilled(int rowNum) {
 
 void SolidBlocks::add(Tetromino* tetromino, bool firstTime)
 {
+	// change owenrship
+	tetromino->retain();
+	tetromino->removeFromParent();
+	this->addChild(tetromino);
+	tetromino->release();
 
 	for (auto block : tetromino->getUnitBlocksVec())
 	{
@@ -141,7 +146,7 @@ int SolidBlocks::clearLines()
 					{
 						if (*iter == bucket[i][j])
 						{
-							(*iter)->cleanup();
+							this->removeChild(*iter);
 							solidTetrominos.erase(iter);
 							break;
 						}
