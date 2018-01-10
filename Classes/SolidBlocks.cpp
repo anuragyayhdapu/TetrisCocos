@@ -103,6 +103,7 @@ void SolidBlocks::dropHangingBlocks()
 	}
 }
 
+
 int SolidBlocks::clearLines()
 {
 	int numRowsFilled = 0;
@@ -121,10 +122,16 @@ int SolidBlocks::clearLines()
 				auto absoluteY = i + t_const::BUCKET_TOP;
 				bucket[i][j]->removeBlock(BoardPos(absoluteX, absoluteY));
 
-				// if after removing block, tetromino is divided
-				// create new tetromin for top
-				
-
+				// check if tetromino is to be divided
+				for (auto block : bucket[i][j]->getUnitBlocksVec())
+				{
+					// check for bottom blocks
+					if (block->getY() > i) 
+					{
+						divideTetromino(bucket[i][j], i);
+						break;
+					}
+				}
 
 				// if after removing this block tetromino becomes empty,
 				// erase this tetromino
@@ -154,30 +161,40 @@ int SolidBlocks::clearLines()
 
 void SolidBlocks::divideTetromino(Tetromino* old, short y) 
 {
-	bool createNewTetrominoFlag = false;
-	std::vector<BoardPos> pos;
+	bool createNewTetromino = false;
+	std::forward_list<BoardPos> topBlockPos;
 
-	// create a new tetromino for top
+	// check for top blocks
 	for (auto block : old->getUnitBlocksVec())
 	{
-		if (block->getY() > y)
+		if (block->getY() < y)
 		{
-			createNewTetrominoFlag = true;
-		}
-		else
-		{
-			pos.push_back(block->currPos());
+			createNewTetromino = true;
+			topBlockPos.push_front(block->currPos());
 		}
 	}
 
-	if (createNewTetrominoFlag == true)
+	// create new Tetromino with top blocks
+	if (createNewTetromino == true)
 	{
-		auto topTetromino = Tetromino::createCopy(*old, y);
+		auto topTetromino = Tetromino::createWithBlocks(*old, topBlockPos);
+		this->addChild(topTetromino);
 		topTetromino->drawTetromino();
+		solidTetrominos.push_back(topTetromino);
+
+		// update bucket
+		for (auto pos : topBlockPos)
+		{
+			// adjust block position relative to bucket
+			auto relativeX = pos.x - t_const::BUCKET_LEFT;
+			auto relativeY = pos.y - t_const::BUCKET_TOP;
+			bucket[relativeY][relativeX] = topTetromino;
+		}
 	}
 
-	for (auto p : pos)
+	// update bottom tetromino
+	for (auto pos : topBlockPos)
 	{
-		old->removeBlock(p);
+		old->removeBlock(pos);
 	}
 }
