@@ -1,7 +1,7 @@
 # TetrisCocos
 A Tetris clone I am building in C++ using open source game engine Cocos2dx.
 
-![alt text](https://github.com/anuragyayhdapu/TetrisCocos/blob/master/Screenshots/Screenshot%20(1)-small.png)
+![TetrisCocos screenshot](https://github.com/anuragyayhdapu/TetrisCocos/blob/master/Screenshots/Screenshot%20(1)-small.png)
 
 Setup this Project
 --------------------
