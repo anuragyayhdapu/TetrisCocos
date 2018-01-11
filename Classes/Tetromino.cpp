@@ -50,10 +50,10 @@ bool Tetromino::initWithBlocks(const Tetromino& old, std::forward_list<BoardPos>
 }
 
 
-Tetromino * Tetromino::create(RotationQ::Rnode* rotationQ, cocos2d::Color4B _color, cocos2d::Color4B _borderColor, BoardPos gridMatrixPoint, int numOfBlocks)
+Tetromino * Tetromino::create(RotationQ::Rnode* rotationQ, cocos2d::Color4B _color, cocos2d::Color4B _borderColor, BoardPos gridMatrixPoint)
 {
 	Tetromino* pRet = new(std::nothrow)Tetromino();
-	if (pRet && pRet->init(rotationQ, _color, _borderColor, gridMatrixPoint, numOfBlocks))
+	if (pRet && pRet->init(rotationQ, _color, _borderColor, gridMatrixPoint))
 	{
 		pRet->autorelease();
 		return pRet;
@@ -67,7 +67,7 @@ Tetromino * Tetromino::create(RotationQ::Rnode* rotationQ, cocos2d::Color4B _col
 }
 
 
-bool Tetromino::init(RotationQ::Rnode* rotationQ, cocos2d::Color4B _color, cocos2d::Color4B _borderColor, BoardPos gridMatrixPoint, int numOfBlocks)
+bool Tetromino::init(RotationQ::Rnode* rotationQ, cocos2d::Color4B _color, cocos2d::Color4B _borderColor, BoardPos gridMatrixPoint)
 {
 	if (!Node::init())
 	{
@@ -97,16 +97,6 @@ bool Tetromino::init(RotationQ::Rnode* rotationQ, cocos2d::Color4B _color, cocos
 
 
 	return true;
-}
-
-
-void Tetromino::drawTetromino()
-{
-	// draw
-	for each (auto block in this->unitBlocksVec)
-	{
-		block->drawBlock();
-	}
 }
 
 
@@ -228,7 +218,7 @@ bool Tetromino::rotateLeft(const SolidBlocks& solidBlocks)
 	rotationQ = rotationQ->prev;
 	rotate();
 
-	return false;
+	return true;
 }
 
 

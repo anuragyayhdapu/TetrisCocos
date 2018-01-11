@@ -71,6 +71,14 @@ bool TetrisBoardScene::init()
 	auto drawNode = DrawNode::create();
 	this->addChild(drawNode);
 
+	// add drawNodes
+	movingTetDrawNode = DrawNode::create();
+	this->addChild(movingTetDrawNode);
+	solidTetDrawNode = DrawNode::create();
+	this->addChild(solidTetDrawNode);
+
+	
+
 	/*for (double i = 0; i < t_const::NUM_OF_UNIT_BLOCKS_IN_WIDTH; ++i)
 	{
 		for (double j = 0; j < t_const::NUM_OF_UNIT_BLOCKS_IN_HEIGHT; ++j)
@@ -122,7 +130,7 @@ bool TetrisBoardScene::init()
 	// bottom bed
 	drawNode->drawRect(
 		Vec2((t_const::BUCKET_LEFT - 1)* _u + _pf.x - _u / 2, _pf.y - _u / 2 - (t_const::BUCKET_BOTTOM - 1) * _u),
-		Vec2((t_const::BUCKET_RIGHT + 1) * _u + _pf.x - _u / 2, _pf.y - _u / 2 - (t_const::BUCKET_BOTTOM) * _u), 
+		Vec2((t_const::BUCKET_RIGHT + 1) * _u + _pf.x - _u / 2, _pf.y - _u / 2 - (t_const::BUCKET_BOTTOM) * _u),
 		Color4F(Color4B(105, 105, 105, 255))
 	);
 
@@ -148,6 +156,10 @@ void TetrisBoardScene::moveSchedular(float dt)
 		{
 			freezeMovableBlock();
 		}
+		else
+		{
+			drawMovingTetromino();
+		}
 	}
 }
 
@@ -159,6 +171,7 @@ void TetrisBoardScene::lineClearShedular(float dt)
 
 	if (numOfLinesCleared > 0)
 	{
+		drawSolidTetromino();
 		schedule(schedule_selector(TetrisBoardScene::dropHangingBlocksShedular), moveDelaySeconds);
 	}
 	else
@@ -166,13 +179,14 @@ void TetrisBoardScene::lineClearShedular(float dt)
 		generateBlock();
 		schedule(schedule_selector(TetrisBoardScene::moveSchedular), moveDelaySeconds);
 	}
-	
+
 }
 
 
 void TetrisBoardScene::dropHangingBlocksShedular(float dt)
 {
 	solidBlocks->dropHangingBlocks();
+	drawSolidTetromino();
 	unschedule(schedule_selector(TetrisBoardScene::dropHangingBlocksShedular));
 	schedule(schedule_selector(TetrisBoardScene::lineClearShedular), moveDelaySeconds);
 }
@@ -190,24 +204,37 @@ void TetrisBoardScene::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, coc
 			{
 				freezeMovableBlock();
 			}
+			else
+			{
+				drawMovingTetromino();
+			}
 
 			break;
 
 		case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
 
-			movableBlock->moveRight(*solidBlocks);
+			if (movableBlock->moveRight(*solidBlocks))
+			{
+				drawMovingTetromino();
+			}
 
 			break;
 
 		case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
 
-			movableBlock->moveLeft(*solidBlocks);
+			if (movableBlock->moveLeft(*solidBlocks))
+			{
+				drawMovingTetromino();
+			}
 
 			break;
 
 		case EventKeyboard::KeyCode::KEY_UP_ARROW:
 
-			movableBlock->rotateLeft(*solidBlocks);
+			if (movableBlock->rotateLeft(*solidBlocks))
+			{
+				drawMovingTetromino();
+			}
 
 			break;
 
@@ -225,7 +252,7 @@ void TetrisBoardScene::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, coc
 
 
 // add movable block to solidBlocks and generate new Block
-void TetrisBoardScene::generateBlock(int posX, int posY)
+void TetrisBoardScene::generateBlock()
 {
 	int randNum = rand() % TetrominoTemplate::size;
 	auto rotation = TetrominoTemplate::rotationTemplates->at(randNum)->getInitialRotation();
@@ -233,9 +260,9 @@ void TetrisBoardScene::generateBlock(int posX, int posY)
 	auto borderColor = TetrominoTemplate::borderColorTemplates->at(randNum);
 
 	auto newBlock = Tetromino::create(rotation, color, borderColor);
-	newBlock->drawTetromino();
 	this->addChild(newBlock);
 	movableBlock = newBlock;
+	drawMovingTetromino();
 }
 
 
@@ -245,9 +272,37 @@ void TetrisBoardScene::freezeMovableBlock()
 	auto temp = movableBlock;
 	movableBlock = nullptr;		// setting movable block to nullptr freezes keyboard inputs & moveDown shedular
 	solidBlocks->add(temp);
+	drawSolidTetromino();
+	movingTetDrawNode->clear();
 	unschedule(schedule_selector(TetrisBoardScene::moveSchedular));
 	schedule(schedule_selector(TetrisBoardScene::lineClearShedular), moveDelaySeconds);
 }
+
+void TetrisBoardScene::drawMovingTetromino()
+{
+	movingTetDrawNode->clear();
+	drawingHelper(movableBlock, movingTetDrawNode);
+}
+
+void TetrisBoardScene::drawSolidTetromino()
+{
+	solidTetDrawNode->clear();
+	for (auto tetromino : solidBlocks->getSolidTetrominos())
+	{
+		drawingHelper(tetromino, solidTetDrawNode);
+	}
+}
+
+void TetrisBoardScene::drawingHelper(const Tetromino* tetromino, DrawNode* drwaNode)
+{
+	for (auto block : tetromino->getUnitBlocksVec())
+	{
+		auto dd = block->getDrawingData();
+		drwaNode->drawSolidRect(dd.origin, dd.destination, dd.color);
+		drwaNode->drawRect(dd.origin, dd.destination, cocos2d::Color4F::BLACK);
+		drwaNode->drawPoint(dd.midPoint, 5.0f, cocos2d::Color4F::BLACK);
+	}
+} 
 
 
 void TetrisBoardScene::GoToPauseScene(cocos2d::Ref *pSender)

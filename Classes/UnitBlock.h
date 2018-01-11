@@ -3,6 +3,7 @@
 #include "cocos2d.h"
 #include "BoardPos.h"
 #include "SolidBlocks.h"
+#include "DrawData.h"
 
 /*
  * Basic building block of the world
@@ -28,8 +29,6 @@ public:
 	static UnitBlock* create(short x, short y, cocos2d::Color4B color, cocos2d::Color4B borderColor);
 	bool init(short x, short y, cocos2d::Color4B color, cocos2d::Color4B borderColor);
 
-	void drawBlock();
-
 	/* check move functions, only checks if move is possible*/
 	bool checkMoveDown(const SolidBlocks& solidBlocks);
 	bool checkMoveLeft(const SolidBlocks& solidBlocks);
@@ -45,13 +44,11 @@ public:
 	BoardPos currPos() { return BoardPos(_x, _y); }
 	short getX() { return _x; }
 	short getY() { return _y; }
-
-	cocos2d::Color4B getColor() { return _color; }
-	void clearDrawnBlock() { _drawNode->clear(); }
+	const DrawData& getDrawingData() const { return drawData; }
 
 private:
 	short _x, _y; // position of block in term of number of units
-	cocos2d::DrawNode* _drawNode;
-	cocos2d::Color4B _color;
-	cocos2d::Color4B _borderColor;
+	DrawData drawData;
+
+	void calcDrawData();
 };

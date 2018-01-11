@@ -8,14 +8,8 @@ Vec2 UnitBlock::_pf = Vec2();
 
 UnitBlock::UnitBlock()
 {
-	_drawNode = nullptr;
 }
 
-UnitBlock::~UnitBlock()
-{
-	_drawNode->clear();
-	this->removeAllChildrenWithCleanup(true);
-}
 
 UnitBlock * UnitBlock::create(short x, short y, cocos2d::Color4B color, cocos2d::Color4B borderColor)
 {
@@ -42,50 +36,48 @@ bool UnitBlock::init(short x, short y, cocos2d::Color4B color, cocos2d::Color4B 
 
 	this->_x = x;
 	this->_y = y;
-	this->_color = color;
-	this->_borderColor = color;
-
-	_drawNode = DrawNode::create();
-	this->addChild(_drawNode);
+	drawData.color = cocos2d::Color4F(color);
+	drawData.borderColor = cocos2d::Color4F(borderColor);
+	drawData.midPoint = drawData.origin = drawData.destination = Vec2();
 
 	return true;
 }
 
-void UnitBlock::drawBlock()
+
+void UnitBlock::calcDrawData()
 {
 	Vec2 midPoint(_pf.x + _x * _u, _pf.y - _y * _u);
 	Vec2 origin(midPoint.x - _u / 2, midPoint.y - _u / 2);
 	Vec2 destination(midPoint.x + _u / 2, midPoint.y + _u / 2);
 
-	_drawNode->clear();
-	_drawNode->drawSolidRect(origin, destination, cocos2d::Color4F(this->_color));
-	_drawNode->drawRect(origin, destination, cocos2d::Color4F(cocos2d::Color4F::BLACK));	// well, using black as border looks cool !!
-	_drawNode->drawPoint(midPoint, 5.0f, cocos2d::Color4F(cocos2d::Color4F::BLACK));
+	drawData.midPoint = midPoint;
+	drawData.origin = origin;
+	drawData.destination = destination;
 }
 
 void UnitBlock::moveDown()
 {
 	this->_y++;
-	this->drawBlock();
+	calcDrawData();
 }
 
 void UnitBlock::moveLeft()
 {
 	this->_x--;
-	this->drawBlock();
+	calcDrawData();
 }
 
 void UnitBlock::moveRight()
 {
 	this->_x++;
-	this->drawBlock();
+	calcDrawData();
 }
 
 void UnitBlock::moveAt(BoardPos pos)
 {
 	this->_x = pos.x;
 	this->_y = pos.y;
-	drawBlock();
+	calcDrawData();
 }
 
 

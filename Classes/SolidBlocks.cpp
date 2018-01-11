@@ -72,16 +72,6 @@ void SolidBlocks::shiftDown(Tetromino* tetromino)
 }
 
 
-// draw entire matrix
-void SolidBlocks::drawSolidBlocks()
-{
-	for (auto tetromino : solidTetrominos)
-	{
-		tetromino->drawTetromino();
-	}
-}
-
-
 bool SolidBlocks::find(BoardPos bPos) const
 {
 	// adjust block position relative to bucket
@@ -184,7 +174,6 @@ void SolidBlocks::divideTetromino(Tetromino* old, short y)
 	{
 		auto topTetromino = Tetromino::createWithBlocks(*old, topBlockPos);
 		this->addChild(topTetromino);
-		topTetromino->drawTetromino();
 		solidTetrominos.push_back(topTetromino);
 
 		// update bucket

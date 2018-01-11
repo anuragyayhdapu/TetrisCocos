@@ -41,6 +41,5 @@ public:
 	// clear filled rows
 	int clearLines();
 
-	// draw entire matrix
-	void drawSolidBlocks();
+	const std::list<Tetromino*>& getSolidTetrominos() const { return solidTetrominos; }
 };
