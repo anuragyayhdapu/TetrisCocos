@@ -38,7 +38,7 @@ bool UnitBlock::init(short x, short y, cocos2d::Color4B color, cocos2d::Color4B 
 	this->_y = y;
 	drawData.color = cocos2d::Color4F(color);
 	drawData.borderColor = cocos2d::Color4F(borderColor);
-	drawData.midPoint = drawData.origin = drawData.destination = Vec2();
+	calcDrawData();
 
 	return true;
 }
