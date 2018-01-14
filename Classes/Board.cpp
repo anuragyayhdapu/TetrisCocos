@@ -93,13 +93,16 @@ bool Board::init(Vec2 leftTopPoint)
 
 void Board::movingBlockDown()
 {
-	if (!movableBlock->moveDown(*solidBlocks))
+	if (movableBlock != nullptr)
 	{
-		freezeMovableBlock();
-	}
-	else
-	{
-		drawMovingTetromino();
+		if (!movableBlock->moveDown(*solidBlocks))
+		{
+			freezeMovableBlock();
+		}
+		else
+		{
+			drawMovingTetromino();
+		}
 	}
 }
 
