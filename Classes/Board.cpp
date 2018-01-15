@@ -2,9 +2,6 @@
 
 USING_NS_CC;
 
-double Board::_u = 0;
-Vec2 Board::_pf = Vec2();
-
 Board::Board()
 {
 }
@@ -13,10 +10,10 @@ Board::~Board()
 {
 }
 
-Board * Board::createBoard(Vec2 leftTopPoint)
+Board * Board::createBoard(double u, Vec2 leftTopPoint)
 {
 	Board* board = new(std::nothrow)Board();
-	if (board && board->init(leftTopPoint))
+	if (board && board->init(u, leftTopPoint))
 	{
 		board->autorelease();
 		return board;
@@ -29,14 +26,15 @@ Board * Board::createBoard(Vec2 leftTopPoint)
 	}
 }
 
-bool Board::init(Vec2 leftTopPoint)
+bool Board::init(double u, Vec2 leftTopPoint)
 {
 	if (!Node::init())
 	{
 		return false;
 	}
 
-	this->leftTopPoint = leftTopPoint;
+	this->_pf = leftTopPoint;
+	this->_u = u;
 
 	// add update function to move movable tetris blocks
 	moveDelaySeconds = 1.0f; // TODO: later change dynamically based on level
@@ -79,6 +77,15 @@ bool Board::init(Vec2 leftTopPoint)
 		Color4F(Color4B(105, 105, 105, 255))
 	);
 
+	/* ---- this board area*/
+	/*for (double i = 0; i < t_const::NUM_OF_UNIT_BLOCKS_IN_WIDTH; ++i)
+	{
+		for (double j = 0; j < t_const::NUM_OF_UNIT_BLOCKS_IN_HEIGHT; ++j)
+		{
+			tempDrawNode->drawPoint(Vec2(i * _u + _pf.x, _pf.y - j * _u), 2, Color4F::ORANGE);
+		}
+	}*/
+
 	// add movable Tetromino
 	movableBlock = nullptr;
 	this->generateBlock();
@@ -109,34 +116,47 @@ void Board::movingBlockDown()
 
 void Board::movingBlockLeft()
 {
-	if (movableBlock->moveLeft(*solidBlocks))
+	if (movableBlock != nullptr)
 	{
-		drawMovingTetromino();
+		if (movableBlock->moveLeft(*solidBlocks))
+		{
+			drawMovingTetromino();
+		}
 	}
 }
 
 
 void Board::movingBlockRight()
 {
-	if (movableBlock->moveRight(*solidBlocks))
+	if (movableBlock != nullptr)
 	{
-		drawMovingTetromino();
+		if (movableBlock->moveRight(*solidBlocks))
+		{
+			drawMovingTetromino();
+		}
 	}
 }
 
 
 void Board::movingBlockRotate()
 {
-	if (movableBlock->rotateLeft(*solidBlocks))
+	if (movableBlock != nullptr)
 	{
-		drawMovingTetromino();
+		if (movableBlock->rotateLeft(*solidBlocks))
+		{
+			drawMovingTetromino();
+		}
 	}
 }
 
 
 void Board::movingBlockGravityDrop()
 {
-	// configure for hard drop
+	if (movableBlock != nullptr)
+	{
+		// configure for hard drop
+
+	}
 }
 
 
@@ -148,7 +168,7 @@ void Board::generateBlock()
 	auto color = TetrominoTemplate::colorTemplates->at(randNum);
 	auto borderColor = TetrominoTemplate::borderColorTemplates->at(randNum);
 
-	auto newBlock = Tetromino::create(rotation, color, borderColor);
+	auto newBlock = Tetromino::create(_u, _pf, rotation, color, borderColor);
 	this->addChild(newBlock);
 	movableBlock = newBlock;
 	drawMovingTetromino();

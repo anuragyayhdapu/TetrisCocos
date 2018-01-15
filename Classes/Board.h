@@ -9,11 +9,8 @@ class Board : public cocos2d::Node
 public:
 	Board();
 	virtual ~Board();
-	static Board* createBoard(cocos2d::Vec2 leftTopPoint);
-	virtual bool init(cocos2d::Vec2 leftTopPoint);
-
-	static double _u;			// size of one unit block
-	static cocos2d::Vec2 _pf;	 // first middle point of a unit block in grid (point_first)
+	static Board* createBoard(double u, cocos2d::Vec2 leftTopPoint);
+	virtual bool init(double u, cocos2d::Vec2 leftTopPoint);
 
 	void movingBlockDown();
 	void movingBlockLeft();
@@ -22,7 +19,8 @@ public:
 	void movingBlockGravityDrop();
 
 private:
-	cocos2d::Vec2 leftTopPoint;
+	double _u;			 // size of one unit block
+	cocos2d::Vec2 _pf;	 // first middle point of a unit block in grid (point_first)
 	Tetromino * movableBlock;	// only one movable block at a time
 	SolidBlocks* solidBlocks;	// immovable blocks laying down over bed
 	cocos2d::DrawNode *movingTetDrawNode, *solidTetDrawNode;
