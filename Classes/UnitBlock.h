@@ -21,13 +21,13 @@ class UnitBlock : public cocos2d::Node
 	//using SolidBlocksSet = const std::set<BoardPos, BoardPosComparator>&;
 
 public:
-	static double _u;	// size of one unit block
-	static cocos2d::Vec2 _pf;	// // first middle point of a unit block in grid (point_first)
+	double _u;	// size of one unit block
+	cocos2d::Vec2 _pf;	// // first middle point of a unit block in grid (point_first)
 
 	UnitBlock();
-	virtual ~UnitBlock();
-	static UnitBlock* create(short x, short y, cocos2d::Color4B color, cocos2d::Color4B borderColor);
-	bool init(short x, short y, cocos2d::Color4B color, cocos2d::Color4B borderColor);
+	//virtual ~UnitBlock();
+	static UnitBlock* create(double u, cocos2d::Vec2 pf, short x, short y, cocos2d::Color4B color, cocos2d::Color4B borderColor);
+	bool init(double u, cocos2d::Vec2 pf, short x, short y, cocos2d::Color4B color, cocos2d::Color4B borderColor);
 
 	/* check move functions, only checks if move is possible*/
 	bool checkMoveDown(const SolidBlocks& solidBlocks);

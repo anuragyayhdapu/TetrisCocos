@@ -3,18 +3,15 @@
 
 USING_NS_CC;
 
-double UnitBlock::_u = 0;
-Vec2 UnitBlock::_pf = Vec2();
-
 UnitBlock::UnitBlock()
 {
 }
 
 
-UnitBlock * UnitBlock::create(short x, short y, cocos2d::Color4B color, cocos2d::Color4B borderColor)
+UnitBlock * UnitBlock::create(double u, cocos2d::Vec2 pf, short x, short y, cocos2d::Color4B color, cocos2d::Color4B borderColor)
 {
 	UnitBlock* block = new(std::nothrow)UnitBlock();
-	if (block && block->init(x, y, color, borderColor))
+	if (block && block->init(u, pf, x, y, color, borderColor))
 	{
 		block->autorelease();
 		return block;
@@ -27,13 +24,15 @@ UnitBlock * UnitBlock::create(short x, short y, cocos2d::Color4B color, cocos2d:
 	}
 }
 
-bool UnitBlock::init(short x, short y, cocos2d::Color4B color, cocos2d::Color4B borderColor)
+bool UnitBlock::init(double u, cocos2d::Vec2 pf, short x, short y, cocos2d::Color4B color, cocos2d::Color4B borderColor)
 {
 	if (!Node::init())
 	{
 		return false;
 	}
 
+	this->_u = u;
+	this->_pf = pf;
 	this->_x = x;
 	this->_y = y;
 	drawData.color = cocos2d::Color4F(color);

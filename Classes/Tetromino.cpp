@@ -34,13 +34,15 @@ bool Tetromino::initWithBlocks(const Tetromino& old, std::forward_list<BoardPos>
 		return false;
 	}
 
+	this->u = old.u;
+	this->pf = old.pf;
 	this->gridMatrixPoint = old.gridMatrixPoint;
 	this->color = old.color;
 	this->borderColor = old.borderColor;
 
 	for (auto pos : blocksPos)
 	{
-		auto block = UnitBlock::create(pos.x, pos.y, this->color, this->borderColor);
+		auto block = UnitBlock::create(u, pf, pos.x, pos.y, this->color, this->borderColor);
 
 		unitBlocksVec.push_back(block);
 		this->addChild(block);
@@ -50,10 +52,10 @@ bool Tetromino::initWithBlocks(const Tetromino& old, std::forward_list<BoardPos>
 }
 
 
-Tetromino * Tetromino::create(RotationQ::Rnode* rotationQ, cocos2d::Color4B _color, cocos2d::Color4B _borderColor, BoardPos gridMatrixPoint)
+Tetromino * Tetromino::create(double u, cocos2d::Vec2 pf, RotationQ::Rnode* rotationQ, cocos2d::Color4B _color, cocos2d::Color4B _borderColor, BoardPos gridMatrixPoint)
 {
 	Tetromino* pRet = new(std::nothrow)Tetromino();
-	if (pRet && pRet->init(rotationQ, _color, _borderColor, gridMatrixPoint))
+	if (pRet && pRet->init(u, pf, rotationQ, _color, _borderColor, gridMatrixPoint))
 	{
 		pRet->autorelease();
 		return pRet;
@@ -67,7 +69,7 @@ Tetromino * Tetromino::create(RotationQ::Rnode* rotationQ, cocos2d::Color4B _col
 }
 
 
-bool Tetromino::init(RotationQ::Rnode* rotationQ, cocos2d::Color4B _color, cocos2d::Color4B _borderColor, BoardPos gridMatrixPoint)
+bool Tetromino::init(double u, cocos2d::Vec2 pf, RotationQ::Rnode* rotationQ, cocos2d::Color4B _color, cocos2d::Color4B _borderColor, BoardPos gridMatrixPoint)
 {
 	if (!Node::init())
 	{
@@ -78,6 +80,8 @@ bool Tetromino::init(RotationQ::Rnode* rotationQ, cocos2d::Color4B _color, cocos
 	this->gridMatrixPoint = gridMatrixPoint;
 
 	// set template
+	this->u = u;
+	this->pf = pf;
 	this->rotationQ = rotationQ;
 	this->color = _color;
 	this->borderColor = _borderColor;
@@ -89,7 +93,7 @@ bool Tetromino::init(RotationQ::Rnode* rotationQ, cocos2d::Color4B _color, cocos
 		// adjust according to gridmatrix 
 		pos += gridMatrixPoint;
 
-		auto block = UnitBlock::create(pos.x, pos.y, this->color, this->borderColor);
+		auto block = UnitBlock::create(u, pf, pos.x, pos.y, this->color, this->borderColor);
 
 		unitBlocksVec.push_back(block);
 		this->addChild(block);

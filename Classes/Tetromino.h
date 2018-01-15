@@ -20,8 +20,8 @@ public:
 	virtual ~Tetromino();
 	static Tetromino* createWithBlocks(const Tetromino& old, std::forward_list<BoardPos> blocksPos);
 	bool initWithBlocks(const Tetromino& old, std::forward_list<BoardPos> blocksPos);
-	static Tetromino* create(RotationQ::Rnode* rotationQ, cocos2d::Color4B _color, cocos2d::Color4B _borderColor, BoardPos gridMatrixPoint = t_const::SPAWN_POSITION);
-	bool init(RotationQ::Rnode* rotationQ, cocos2d::Color4B _color, cocos2d::Color4B _borderColor, BoardPos gridMatrixPoint);
+	static Tetromino* create(double u, cocos2d::Vec2 pf, RotationQ::Rnode* rotationQ, cocos2d::Color4B _color, cocos2d::Color4B _borderColor, BoardPos gridMatrixPoint = t_const::SPAWN_POSITION);
+	bool init(double u, cocos2d::Vec2 pf, RotationQ::Rnode* rotationQ, cocos2d::Color4B _color, cocos2d::Color4B _borderColor, BoardPos gridMatrixPoint);
 
 	bool moveLeft(const SolidBlocks& solidBlocks);
 	bool moveRight(const SolidBlocks& solidBlocks);
@@ -37,6 +37,8 @@ public:
 	const std::vector<UnitBlock*>& getUnitBlocksVec() const { return unitBlocksVec; }
 
 private:
+	double u;
+	cocos2d::Vec2 pf;
 	std::vector<UnitBlock*> unitBlocksVec;
 	BoardPos gridMatrixPoint;	// top left point of gridmatrix
 	cocos2d::Color4B color;
