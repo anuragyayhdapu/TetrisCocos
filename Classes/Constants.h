@@ -27,3 +27,7 @@ namespace t_const
 		// number of rotation states = 4
 		// number of rotation templates = 7
 }
+
+enum TetrisEvent {
+	INCREMENT_RAND_ITERATOR, GAMEOVER
+};

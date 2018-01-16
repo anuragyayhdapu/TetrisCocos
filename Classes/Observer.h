@@ -1,9 +1,12 @@
 #pragma once
 
+#include "Constants.h"
+
+class Board;
+
 class Observer
 {
 public:
 	virtual ~Observer() {}
-	virtual void onNotifyMoveIterator() = 0;
-	virtual void onNotifyGameEnd() = 0;
+	virtual void onNotify(const Board& board, TetrisEvent _event) = 0;
 };

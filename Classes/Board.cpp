@@ -2,7 +2,8 @@
 
 USING_NS_CC;
 
-Board::Board()
+Board::Board(std::list<short>::iterator& iter) :
+	randListIter(iter)
 {
 }
 
@@ -10,10 +11,10 @@ Board::~Board()
 {
 }
 
-Board * Board::createBoard(double u, Vec2 leftTopPoint)
+Board * Board::createBoard(double u, Vec2 leftTopPoint, std::list<short>::iterator& randListIter)
 {
-	Board* board = new(std::nothrow)Board();
-	if (board && board->init(u, leftTopPoint))
+	Board* board = new(std::nothrow)Board(randListIter);
+	if (board && board->init(u, leftTopPoint, randListIter))
 	{
 		board->autorelease();
 		return board;
@@ -26,7 +27,7 @@ Board * Board::createBoard(double u, Vec2 leftTopPoint)
 	}
 }
 
-bool Board::init(double u, Vec2 leftTopPoint)
+bool Board::init(double u, Vec2 leftTopPoint, std::list<short>::iterator& randListIter)
 {
 	if (!Node::init())
 	{
@@ -163,7 +164,7 @@ void Board::movingBlockGravityDrop()
 // add movable block to solidBlocks and generate new Block
 void Board::generateBlock()
 {
-	int randNum = rand() % TetrominoTemplate::size;
+	auto randNum = *randListIter;
 	auto rotation = TetrominoTemplate::rotationTemplates->at(randNum)->getInitialRotation();
 	auto color = TetrominoTemplate::colorTemplates->at(randNum);
 	auto borderColor = TetrominoTemplate::borderColorTemplates->at(randNum);
@@ -246,6 +247,7 @@ void Board::lineClearShedular(float dt)
 	}
 	else
 	{
+		notify(*this, TetrisEvent::INCREMENT_RAND_ITERATOR);
 		generateBlock();
 		schedule(schedule_selector(Board::moveSchedular), moveDelaySeconds);
 	}

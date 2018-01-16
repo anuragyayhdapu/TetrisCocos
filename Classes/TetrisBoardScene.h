@@ -4,15 +4,16 @@
 #include "GameScene.h"
 #include "Observer.h"
 #include "Board.h"
+#include "Constants.h"
 #include <list>
 
-class TetrisBoardScene : public GameScene
+class TetrisBoardScene : public GameScene, public Observer
 {
 public:
 	virtual bool init();
 	CREATE_FUNC(TetrisBoardScene);
 	
-	void moveListIterator();
+	void onNotify(const Board& board, TetrisEvent _event);
 
 private:
 

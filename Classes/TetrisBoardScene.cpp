@@ -31,14 +31,30 @@ bool TetrisBoardScene::init()
 
 	// add board
 	board = Board::createBoard(_u, _pf, randListIter);
+	board->registerObserver(this);
 	this->addChild(board);
 
 	return true;
 }
 
-void TetrisBoardScene::moveListIterator()
-{
 
+void TetrisBoardScene::onNotify(const Board & board, TetrisEvent _event)
+{
+	switch (_event)
+	{
+	case INCREMENT_RAND_ITERATOR:
+
+		++randListIter;
+		randList.push_back(rand() % TetrominoTemplate::size);
+		randList.pop_front();
+
+		break;
+	case GAMEOVER:
+		// display game over scene
+		break;
+	default:
+		break;
+	}
 }
 
 
