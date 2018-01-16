@@ -13,7 +13,7 @@ bool TetrisBoardScene::init()
 	}
 
 	auto visibleSize = Director::getInstance()->getVisibleSize();
-	visibleSize.width /= 1.5;
+	//visibleSize.width /= 1.5;
 	this->calcSceneDrawingData(_u, _pf, visibleSize);
 
 	// set up keyboard event listner
@@ -21,21 +21,25 @@ bool TetrisBoardScene::init()
 	eventListner->onKeyPressed = CC_CALLBACK_2(TetrisBoardScene::onKeyPressed, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(eventListner, this);
 
-
+	// initialize with four values
 	srand(time(NULL));
+	for (short i = 0; i < 4; i++)
+	{
+		randList.push_back(rand() % TetrominoTemplate::size);
+	}
+	randListIter = randList.begin();
 
 	// add board
-	// for now, testing with one board
-	board = Board::createBoard(_u, _pf);
+	board = Board::createBoard(_u, _pf, randListIter);
 	this->addChild(board);
-
-	auto secondBoard = Board::createBoard(_u, Vec2(_pf.x + (visibleSize.width / 1.5), _pf.y));
-	this->addChild(secondBoard);
 
 	return true;
 }
 
+void TetrisBoardScene::moveListIterator()
+{
 
+}
 
 
 void TetrisBoardScene::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event * event)
