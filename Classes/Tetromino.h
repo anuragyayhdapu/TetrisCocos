@@ -33,6 +33,7 @@ public:
 
 	void removeBlock(BoardPos pos);
 	bool empty() { return unitBlocksVec.empty(); }
+	void draw(cocos2d::DrawNode* drawNode);
 
 	const std::vector<UnitBlock*>& getUnitBlocksVec() const { return unitBlocksVec; }
 

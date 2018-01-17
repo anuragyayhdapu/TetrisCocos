@@ -44,7 +44,7 @@ public:
 	BoardPos currPos() { return BoardPos(_x, _y); }
 	short getX() { return _x; }
 	short getY() { return _y; }
-	const DrawData& getDrawingData() const { return drawData; }
+	void draw(cocos2d::DrawNode* drawNode);
 
 private:
 	short _x, _y; // position of block in term of number of units

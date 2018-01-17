@@ -34,6 +34,10 @@ bool TetrisBoardScene::init()
 	board->registerObserver(this);
 	this->addChild(board);
 
+	windowDrawNode = DrawNode::create();
+	this->addChild(windowDrawNode);
+	this->drawWindow();
+
 	return true;
 }
 
@@ -47,6 +51,7 @@ void TetrisBoardScene::onNotify(const Board & board, TetrisEvent _event)
 		++randListIter;
 		randList.push_back(rand() % TetrominoTemplate::size);
 		randList.pop_front();
+		redrawWindow();
 
 		break;
 	case GAMEOVER:
@@ -54,6 +59,39 @@ void TetrisBoardScene::onNotify(const Board & board, TetrisEvent _event)
 		break;
 	default:
 		break;
+	}
+}
+
+
+void TetrisBoardScene::drawWindow()
+{
+	auto drawNode = DrawNode::create();
+	this->addChild(drawNode);
+
+	drawNode->drawRect(
+		Vec2(_pf.x + _u * (t_const::WINDOW_LEFT) - _u / 2, _pf.y - _u * (t_const::WINDOW_TOP)),
+		Vec2(_pf.x + _u * (t_const::WINDOW_RIGHT), _pf.y - _u * (t_const::WINDOW_BOTTOM)),
+		Color4F::ORANGE
+	);
+	redrawWindow();
+}
+
+void TetrisBoardScene::redrawWindow()
+{
+	windowDrawNode->clear();
+	int i = 0;
+	for (auto iter = ++randList.begin(); iter != randList.end(); ++iter)
+	{
+		auto tet = Tetromino::create(_u, _pf,
+			TetrominoTemplate::rotationTemplates->at(*iter)->getInitialRotation(),
+			TetrominoTemplate::colorTemplates->at(*iter),
+			TetrominoTemplate::borderColorTemplates->at(*iter),
+			BoardPos(t_const::WINDOW_LEFT + 1, (t_const::NUM_OF_UNIT_BLOCKS_IN_TETROMINO * i) + t_const::WINDOW_TOP + 1)
+		);
+
+		tet->draw(windowDrawNode);
+
+		++i;
 	}
 }
 

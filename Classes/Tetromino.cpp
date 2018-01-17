@@ -239,3 +239,12 @@ void Tetromino::removeBlock(BoardPos pos)
 		}
 	}
 }
+
+
+void Tetromino::draw(cocos2d::DrawNode * drawNode)
+{
+	for (auto block : unitBlocksVec)
+	{
+		block->draw(drawNode);
+	}
+}

@@ -21,7 +21,10 @@ private:
 	cocos2d::Vec2 _pf;	// first middle point of a unit block in grid (point_first)
 	Board* board;
 	std::list<short> randList;					// randomly generated list to get next tetromino
-	std::list<short>::iterator randListIter;	// randList iterator given to board 
+	std::list<short>::iterator randListIter;	// randList iterators given to board 
+	cocos2d::DrawNode* windowDrawNode;
 
+	void drawWindow();
+	void redrawWindow();
 	virtual void onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);
 };

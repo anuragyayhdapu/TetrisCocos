@@ -12,10 +12,18 @@ namespace t_const
 	const int BUCKET_WIDTH = 10;
 	const int BUCKET_HEIGHT = 23;
 	const int BUCKET_LEFT = 5;
-	const int BUCKET_RIGHT = 5 + 10;
+	const int BUCKET_RIGHT = BUCKET_LEFT + BUCKET_WIDTH;
 	const int BUCKET_TOP = 0;
 	const int BUCKET_TOP_GAP = 3;
-	const int BUCKET_BOTTOM = 0 + 23;
+	const int BUCKET_BOTTOM = BUCKET_TOP + BUCKET_HEIGHT;
+
+	const int WINDOW_WIDTH = 5;
+	const int WINDOW_HEIGHT = 12;
+	const int WINDOW_TOP = 1;
+	const int WINDOW_LEFT_GAP = 3;
+	const int WINDOW_LEFT = BUCKET_RIGHT + WINDOW_LEFT_GAP;
+	const int WINDOW_RIGHT = WINDOW_LEFT + WINDOW_WIDTH;
+	const int WINDOW_BOTTOM = WINDOW_TOP + WINDOW_HEIGHT;
 
 
 	const BoardPos SPAWN_POSITION(10, 0);

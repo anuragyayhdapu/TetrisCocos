@@ -24,7 +24,7 @@ private:
 	cocos2d::Vec2 _pf;	 // first middle point of a unit block in grid (point_first)
 	Tetromino * movableBlock;	// only one movable block at a time
 	SolidBlocks* solidBlocks;	// immovable blocks laying down over bed
-	cocos2d::DrawNode *movingTetDrawNode, *solidTetDrawNode;
+	cocos2d::DrawNode *movingTetDrawNode, *solidTetDrawNode, *bucketDrawNode;
 	int moveDelaySeconds;
 	std::list<short>::iterator& randListIter;	// randList iterator given to generate next tetromino
 
@@ -32,7 +32,7 @@ private:
 	void freezeMovableBlock();
 	void drawMovingTetromino();
 	void drawSolidTetromino();
-	static void drawingHelper(const Tetromino* tetromino, cocos2d::DrawNode* drwaNode);
+	void drawBucketInnerGrid(cocos2d::Color4B color = cocos2d::Color4B::BLACK);
 
 	// schedulars
 	void moveSchedular(float dt);

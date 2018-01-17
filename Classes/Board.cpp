@@ -44,13 +44,9 @@ bool Board::init(double u, Vec2 leftTopPoint, std::list<short>::iterator& randLi
 	// bucket inner grid
 	DrawNode *tempDrawNode = DrawNode::create();
 	this->addChild(tempDrawNode);
-	for (double i = t_const::BUCKET_LEFT; i < t_const::BUCKET_RIGHT; ++i)
-	{
-		for (double j = t_const::BUCKET_TOP; j < t_const::BUCKET_BOTTOM; ++j)
-		{
-			tempDrawNode->drawPoint(Vec2(i * _u + _pf.x, _pf.y - j * _u), 2, Color4F::MAGENTA);
-		}
-	}
+	bucketDrawNode = DrawNode::create();
+	this->addChild(bucketDrawNode);
+	drawBucketInnerGrid();
 
 	// add drawNodes
 	movingTetDrawNode = DrawNode::create();
@@ -173,6 +169,7 @@ void Board::generateBlock()
 	this->addChild(newBlock);
 	movableBlock = newBlock;
 	drawMovingTetromino();
+	drawBucketInnerGrid(color);
 }
 
 
@@ -192,7 +189,7 @@ void Board::freezeMovableBlock()
 void Board::drawMovingTetromino()
 {
 	movingTetDrawNode->clear();
-	drawingHelper(movableBlock, movingTetDrawNode);
+	movableBlock->draw(movingTetDrawNode);
 }
 
 
@@ -201,19 +198,19 @@ void Board::drawSolidTetromino()
 	solidTetDrawNode->clear();
 	for (auto tetromino : solidBlocks->getSolidTetrominos())
 	{
-		drawingHelper(tetromino, solidTetDrawNode);
+		tetromino->draw(solidTetDrawNode);
 	}
 }
 
 
-void Board::drawingHelper(const Tetromino* tetromino, DrawNode* drwaNode)
+void Board::drawBucketInnerGrid(cocos2d::Color4B color)
 {
-	for (auto block : tetromino->getUnitBlocksVec())
+	for (double i = t_const::BUCKET_LEFT; i < t_const::BUCKET_RIGHT; ++i)
 	{
-		auto dd = block->getDrawingData();
-		drwaNode->drawSolidRect(dd.origin, dd.destination, dd.color);
-		drwaNode->drawRect(dd.origin, dd.destination, cocos2d::Color4F::BLACK);
-		drwaNode->drawPoint(dd.midPoint, 5.0f, cocos2d::Color4F::BLACK);
+		for (double j = t_const::BUCKET_TOP; j < t_const::BUCKET_BOTTOM; ++j)
+		{
+			bucketDrawNode->drawPoint(Vec2(i * _u + _pf.x, _pf.y - j * _u), 2, cocos2d::Color4F(color));
+		}
 	}
 }
 
