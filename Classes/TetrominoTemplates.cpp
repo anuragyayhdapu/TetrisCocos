@@ -17,10 +17,10 @@ std::array<RotationQ*, TetrominoTemplate::size> * TetrominoTemplate::rotationTem
 	rotationTemplates->at(0) = new RotationQ(l_top, l_right, l_bottom, l_left);
 
 	// J
-	Face j_top = new std::array<BoardPos, 4>{ xy(1, 0), xy(1, 1), xy(1, 2), xy(0, 2) };
-	Face j_right = new std::array<BoardPos, 4>{ xy(2, 1), xy(1, 1), xy(0, 1), xy(0, 0) };
-	Face j_bottom = new std::array<BoardPos, 4>{ xy(1, 2), xy(1, 1), xy(1, 0), xy(2, 0) };
-	Face j_left = new std::array<BoardPos, 4>{ xy(2, 1), xy(2, 0), xy(1, 0), xy(0, 0) };
+	Face j_top = new std::array<BoardPos, 4>{ xy(2, 0), xy(2, 1), xy(2, 2), xy(1, 2) };
+	Face j_right = new std::array<BoardPos, 4>{ xy(3, 1), xy(2, 1), xy(1, 1), xy(1, 0) };
+	Face j_bottom = new std::array<BoardPos, 4>{ xy(2, 2), xy(2, 1), xy(2, 0), xy(3, 0) };
+	Face j_left = new std::array<BoardPos, 4>{ xy(3, 1), xy(3, 0), xy(2, 0), xy(1, 0) };
 	rotationTemplates->at(1) = new RotationQ(j_top, j_right, j_bottom, j_left);
 
 	// T
