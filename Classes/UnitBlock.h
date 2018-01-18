@@ -26,6 +26,7 @@ public:
 
 	UnitBlock();
 	//virtual ~UnitBlock();
+	static UnitBlock* create(const UnitBlock& block) { return create(block._u, block._pf, block._x, block._y, cocos2d::Color4B(block.drawData.color), cocos2d::Color4B(block.drawData.borderColor)); }
 	static UnitBlock* create(double u, cocos2d::Vec2 pf, short x, short y, cocos2d::Color4B color, cocos2d::Color4B borderColor);
 	bool init(double u, cocos2d::Vec2 pf, short x, short y, cocos2d::Color4B color, cocos2d::Color4B borderColor);
 
@@ -42,9 +43,11 @@ public:
 	void moveAt(BoardPos pos);
 
 	BoardPos currPos() { return BoardPos(_x, _y); }
+	void setPos(BoardPos pos ) { _x = pos.x, _y = pos.y; }
 	short getX() { return _x; }
 	short getY() { return _y; }
 	void draw(cocos2d::DrawNode* drawNode);
+	void drawHollow(cocos2d::DrawNode* drawNode);
 
 private:
 	short _x, _y; // position of block in term of number of units

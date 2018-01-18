@@ -4,6 +4,7 @@
 #include "Tetromino.h"
 #include "SolidBlocks.h"
 #include "Subject.h"
+#include <forward_list>
 
 class Board : public cocos2d::Node, public Subject
 {
@@ -22,10 +23,11 @@ public:
 private:
 	double _u;			 // size of one unit block
 	cocos2d::Vec2 _pf;	 // first middle point of a unit block in grid (point_first)
-	Tetromino * movableBlock;	// only one movable block at a time
-	SolidBlocks* solidBlocks;	// immovable blocks laying down over bed
-	cocos2d::DrawNode *movingTetDrawNode, *solidTetDrawNode, *bucketDrawNode;
-	int moveDelaySeconds;
+	Tetromino *movableTetromino;	// only one movable block at a time
+	std::forward_list<UnitBlock*> ghostPieces;
+	SolidBlocks *solidBlocks;	// immovable blocks laying down over bed
+	cocos2d::DrawNode *movingTetDrawNode, *solidTetDrawNode, *bucketDrawNode, *ghostDrawNode;
+	int moveDelaySeconds, testDelaySeconds;
 	std::list<short>::iterator& randListIter;	// randList iterator given to generate next tetromino
 
 	void generateBlock();
@@ -33,6 +35,8 @@ private:
 	void drawMovingTetromino();
 	void drawSolidTetromino();
 	void drawBucketInnerGrid(cocos2d::Color4B color = cocos2d::Color4B::BLACK);
+	void createGhostPiece();
+	void updateGhostPiece();
 
 	// schedulars
 	void moveSchedular(float dt);

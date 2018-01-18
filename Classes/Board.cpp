@@ -39,6 +39,7 @@ bool Board::init(double u, Vec2 leftTopPoint, std::list<short>::iterator& randLi
 
 	// add update function to move movable tetris blocks
 	moveDelaySeconds = 1.0f; // TODO: later change dynamically based on level
+	testDelaySeconds = 0.9f;
 	schedule(schedule_selector(Board::moveSchedular), moveDelaySeconds);
 
 	// bucket inner grid
@@ -49,10 +50,13 @@ bool Board::init(double u, Vec2 leftTopPoint, std::list<short>::iterator& randLi
 	drawBucketInnerGrid();
 
 	// add drawNodes
+	ghostDrawNode = DrawNode::create();
+	this->addChild(ghostDrawNode);
 	movingTetDrawNode = DrawNode::create();
 	this->addChild(movingTetDrawNode);
 	solidTetDrawNode = DrawNode::create();
 	this->addChild(solidTetDrawNode);
+	
 
 	// bucket walls
 	// left wall
@@ -83,13 +87,13 @@ bool Board::init(double u, Vec2 leftTopPoint, std::list<short>::iterator& randLi
 		}
 	}*/
 
-	// add movable Tetromino
-	movableBlock = nullptr;
-	this->generateBlock();
-
 	// add solidBlocks
 	solidBlocks = SolidBlocks::create();
 	this->addChild(solidBlocks);
+
+	// add movable Tetromino
+	movableTetromino = nullptr;
+	this->generateBlock();
 
 	return true;
 }
@@ -97,9 +101,9 @@ bool Board::init(double u, Vec2 leftTopPoint, std::list<short>::iterator& randLi
 
 void Board::movingBlockDown()
 {
-	if (movableBlock != nullptr)
+	if (movableTetromino != nullptr)
 	{
-		if (!movableBlock->moveDown(*solidBlocks))
+		if (!movableTetromino->moveDown(*solidBlocks))
 		{
 			freezeMovableBlock();
 		}
@@ -113,11 +117,12 @@ void Board::movingBlockDown()
 
 void Board::movingBlockLeft()
 {
-	if (movableBlock != nullptr)
+	if (movableTetromino != nullptr)
 	{
-		if (movableBlock->moveLeft(*solidBlocks))
+		if (movableTetromino->moveLeft(*solidBlocks))
 		{
 			drawMovingTetromino();
+			updateGhostPiece();
 		}
 	}
 }
@@ -125,11 +130,12 @@ void Board::movingBlockLeft()
 
 void Board::movingBlockRight()
 {
-	if (movableBlock != nullptr)
+	if (movableTetromino != nullptr)
 	{
-		if (movableBlock->moveRight(*solidBlocks))
+		if (movableTetromino->moveRight(*solidBlocks))
 		{
 			drawMovingTetromino();
+			updateGhostPiece();
 		}
 	}
 }
@@ -137,11 +143,12 @@ void Board::movingBlockRight()
 
 void Board::movingBlockRotate()
 {
-	if (movableBlock != nullptr)
+	if (movableTetromino != nullptr)
 	{
-		if (movableBlock->rotateLeft(*solidBlocks))
+		if (movableTetromino->rotateLeft(*solidBlocks))
 		{
 			drawMovingTetromino();
+			updateGhostPiece();
 		}
 	}
 }
@@ -149,7 +156,7 @@ void Board::movingBlockRotate()
 
 void Board::movingBlockGravityDrop()
 {
-	if (movableBlock != nullptr)
+	if (movableTetromino != nullptr)
 	{
 		// configure for hard drop
 
@@ -167,8 +174,9 @@ void Board::generateBlock()
 
 	auto newBlock = Tetromino::create(_u, _pf, rotation, color, borderColor);
 	this->addChild(newBlock);
-	movableBlock = newBlock;
+	movableTetromino = newBlock;
 	drawMovingTetromino();
+	createGhostPiece();
 	drawBucketInnerGrid(color);
 }
 
@@ -176,20 +184,21 @@ void Board::generateBlock()
 // helper function
 void Board::freezeMovableBlock()
 {
-	auto temp = movableBlock;
-	movableBlock = nullptr;		// setting movable block to nullptr freezes keyboard inputs & moveDown shedular
+	ghostDrawNode->clear();
+	auto temp = movableTetromino;
+	movableTetromino = nullptr;		// setting movable block to nullptr freezes keyboard inputs & moveDown shedular
 	solidBlocks->add(temp);
 	drawSolidTetromino();
 	movingTetDrawNode->clear();
 	unschedule(schedule_selector(Board::moveSchedular));
-	schedule(schedule_selector(Board::lineClearShedular), moveDelaySeconds);
+	schedule(schedule_selector(Board::lineClearShedular), testDelaySeconds);
 }
 
 
 void Board::drawMovingTetromino()
 {
 	movingTetDrawNode->clear();
-	movableBlock->draw(movingTetDrawNode);
+	movableTetromino->draw(movingTetDrawNode);
 }
 
 
@@ -214,13 +223,62 @@ void Board::drawBucketInnerGrid(cocos2d::Color4B color)
 	}
 }
 
+void Board::createGhostPiece()
+{
+	// remove old
+	ghostDrawNode->clear();
+	for (auto block : ghostPieces)
+		this->removeChild(block);
+	ghostPieces.clear();
+
+	// get unitBlocksVec from movableTetromino
+	for (auto block : movableTetromino->getUnitBlocksVec())
+	{
+		auto gBlock = UnitBlock::create(*block);
+		this->addChild(gBlock);
+		ghostPieces.push_front(gBlock);
+	}
+
+	// update 
+	updateGhostPiece();
+}
+
+void Board::updateGhostPiece()
+{
+	// update position
+	int i = 0;
+	for (auto block : ghostPieces)
+	{
+		block->setPos(movableTetromino->getUnitBlocksVec().at(i)->currPos());
+		++i;
+	}
+
+	// check move down, till move down is not possible
+	while ([&]() -> bool {
+		for (auto block : ghostPieces)
+			if (block->checkMoveDown(*solidBlocks) == false)
+				return false;
+
+		return true;
+	}())
+	{
+		for (auto block : ghostPieces)
+			block->moveDown();
+	}
+
+	// draw ghost
+	ghostDrawNode->clear();
+	for (auto block : ghostPieces)
+		block->drawHollow(ghostDrawNode);
+}
+
 
 // shedulars
 void Board::moveSchedular(float dt)
 {
-	if (movableBlock != nullptr)
+	if (movableTetromino != nullptr)
 	{
-		if (!movableBlock->moveDown(*solidBlocks))
+		if (!movableTetromino->moveDown(*solidBlocks))
 		{
 			freezeMovableBlock();
 		}
@@ -240,7 +298,7 @@ void Board::lineClearShedular(float dt)
 	if (numOfLinesCleared > 0)
 	{
 		drawSolidTetromino();
-		schedule(schedule_selector(Board::dropHangingBlocksShedular), moveDelaySeconds);
+		schedule(schedule_selector(Board::dropHangingBlocksShedular), testDelaySeconds);
 	}
 	else
 	{
@@ -257,5 +315,5 @@ void Board::dropHangingBlocksShedular(float dt)
 	solidBlocks->dropHangingBlocks();
 	drawSolidTetromino();
 	unschedule(schedule_selector(Board::dropHangingBlocksShedular));
-	schedule(schedule_selector(Board::lineClearShedular), moveDelaySeconds);
+	schedule(schedule_selector(Board::lineClearShedular), testDelaySeconds);
 }

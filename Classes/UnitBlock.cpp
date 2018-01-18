@@ -136,3 +136,9 @@ void UnitBlock::draw(cocos2d::DrawNode * drawNode)
 	drawNode->drawRect(drawData.origin, drawData.destination, cocos2d::Color4F::BLACK);
 	drawNode->drawPoint(drawData.midPoint, 5.0f, cocos2d::Color4F::BLACK);
 }
+
+void UnitBlock::drawHollow(cocos2d::DrawNode * drawNode)
+{
+	drawNode->drawRect(drawData.origin, drawData.destination, drawData.color);
+	drawNode->drawPoint(drawData.midPoint, 5.0f, drawData.color);
+}
