@@ -31,8 +31,8 @@ bool GameOverScene::init()
 
 void GameOverScene::GoToTetrisBoardScene(cocos2d::Ref *pSender)
 {
-	auto scene = TetrisBoardScene::createTetrisBoardScene();
-	Director::getInstance()->replaceScene(scene);
+	/*auto scene = TetrisBoardScene::createTetrisBoardScene();
+	Director::getInstance()->replaceScene(scene);*/
 }
 
 

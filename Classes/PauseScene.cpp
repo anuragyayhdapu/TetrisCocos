@@ -45,7 +45,7 @@ void PauseScene::GoToMainMenuScene(cocos2d::Ref *pSender)
 
 void PauseScene::Retry(cocos2d::Ref *pSender)
 {
-	auto scene = TetrisBoardScene::createTetrisBoardScene();
+	/*auto scene = TetrisBoardScene::createTetrisBoardScene();
 	Director::getInstance()->popScene();
-	Director::getInstance()->replaceScene(scene);
+	Director::getInstance()->replaceScene(scene);*/
 }

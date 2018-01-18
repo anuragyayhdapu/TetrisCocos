@@ -30,6 +30,6 @@ bool MainMenuScene::init()
 
 void MainMenuScene::GoToTetrisBoardScene(Ref *pSender)
 {
-	auto scene = TetrisBoardScene::createTetrisBoardScene();
-	Director::getInstance()->replaceScene(scene);
+	/*auto scene = TetrisBoardScene::createTetrisBoardScene();
+	Director::getInstance()->replaceScene(scene);*/
 }
