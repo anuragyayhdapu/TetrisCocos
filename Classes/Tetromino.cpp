@@ -174,6 +174,19 @@ bool Tetromino::checkMoveDown(const SolidBlocks& solidBlocks) const
 }
 
 
+// checks collision with solid blocks at current position of tetromino
+bool Tetromino::checkMoveAt(const SolidBlocks & solidBlocks) const
+{
+	for (auto block : unitBlocksVec)
+	{
+		if (!UnitBlock::checkMoveAt(block->currPos(), solidBlocks))
+			return false;
+	}
+
+	return true;
+}
+
+
 void Tetromino::rotate()
 {
 	// since each no.of.blocks(side) = no.of.blocks(unitBlocksVec)

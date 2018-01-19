@@ -273,6 +273,20 @@ void Board::updateGhostPiece()
 }
 
 
+bool Board::checkGameOver()
+{
+	if (movableTetromino->checkMoveAt(*solidBlocks) == false)
+	{
+		// end game procedures here
+		movableTetromino = nullptr;
+
+		return true;
+	}
+
+	return false;
+}
+
+
 // shedulars
 void Board::moveSchedular(float dt)
 {
@@ -304,7 +318,14 @@ void Board::lineClearShedular(float dt)
 	{
 		notify(*this, TetrisEvent::INCREMENT_RAND_ITERATOR);
 		generateBlock();
-		schedule(schedule_selector(Board::moveSchedular), moveDelaySeconds);
+		if (checkGameOver() == false)
+		{
+			schedule(schedule_selector(Board::moveSchedular), moveDelaySeconds);
+		}
+		else
+		{
+			notify(*this, TetrisEvent::GAMEOVER);
+		}
 	}
 
 }

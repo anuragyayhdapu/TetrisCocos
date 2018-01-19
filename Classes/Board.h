@@ -37,6 +37,7 @@ private:
 	void drawBucketInnerGrid(cocos2d::Color4B color = cocos2d::Color4B::BLACK);
 	void createGhostPiece();
 	void updateGhostPiece();
+	bool checkGameOver();
 
 	// schedulars
 	void moveSchedular(float dt);

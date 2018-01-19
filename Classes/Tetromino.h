@@ -27,6 +27,7 @@ public:
 	bool moveRight(const SolidBlocks& solidBlocks);
 	bool moveDown(const SolidBlocks& solidBlocks);
 	bool checkMoveDown(const SolidBlocks& solidBlocks) const;
+	bool checkMoveAt(const SolidBlocks& solidBlocks) const;		// checks collision with solid blocks at cureent position of tetromino
 
 	bool rotateRight(const SolidBlocks& solidBlocks);
 	bool rotateLeft(const SolidBlocks& solidBlocks);

@@ -56,6 +56,8 @@ void TetrisBoardScene::onNotify(const Board & board, TetrisEvent _event)
 		break;
 	case GAMEOVER:
 		// display game over scene
+
+		// save game score
 		break;
 	default:
 		break;
