@@ -130,7 +130,7 @@ void TetrisBoardScene::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, coc
 
 	case EventKeyboard::KeyCode::KEY_SPACE:
 
-		// configure hard drop later
+		board->movingBlockGravityDrop();
 
 		break;
 

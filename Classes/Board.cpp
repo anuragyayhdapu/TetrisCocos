@@ -158,8 +158,11 @@ void Board::movingBlockGravityDrop()
 {
 	if (movableTetromino != nullptr)
 	{
-		// configure for hard drop
-
+		while (movableTetromino->checkMoveDown(*solidBlocks))
+		{
+			movableTetromino->moveDown(*solidBlocks);
+		}
+		freezeMovableBlock();
 	}
 }
 
@@ -253,7 +256,7 @@ void Board::updateGhostPiece()
 		++i;
 	}
 
-	// check move down, till move down is not possible
+	// move down, till move down is not possible
 	while ([&]() -> bool {
 		for (auto block : ghostPieces)
 			if (block->checkMoveDown(*solidBlocks) == false)
