@@ -42,4 +42,7 @@ public:
 	int clearLines();
 
 	const std::list<Tetromino*>& getSolidTetrominos() const { return solidTetrominos; }
+
+	// clear bucket and solidTetrominos
+	void clear();
 };

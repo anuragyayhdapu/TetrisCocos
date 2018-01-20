@@ -192,3 +192,16 @@ void SolidBlocks::divideTetromino(Tetromino* old, short y)
 		old->removeBlock(pos);
 	}
 }
+
+
+void SolidBlocks::clear()
+{
+	// clear bucket
+	for (size_t i = 0; i < t_const::BUCKET_HEIGHT; i++)
+		for (size_t j = 0; j < t_const::BUCKET_WIDTH; j++)
+			bucket[i][j] = nullptr;
+
+	solidTetrominos.clear();
+
+	this->removeAllChildren();
+}

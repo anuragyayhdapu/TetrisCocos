@@ -20,6 +20,9 @@ public:
 	void movingBlockRotate();
 	void movingBlockGravityDrop();
 
+	void start();
+	void stop();
+
 private:
 	double _u;			 // size of one unit block
 	cocos2d::Vec2 _pf;	 // first middle point of a unit block in grid (point_first)

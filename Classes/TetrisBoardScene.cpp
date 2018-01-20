@@ -33,6 +33,7 @@ bool TetrisBoardScene::init()
 	board = Board::createBoard(_u, _pf, randListIter);
 	board->registerObserver(this);
 	this->addChild(board);
+	board->start();
 
 	windowDrawNode = DrawNode::create();
 	this->addChild(windowDrawNode);
