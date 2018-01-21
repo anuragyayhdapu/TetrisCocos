@@ -23,8 +23,10 @@ private:
 	std::list<short> randList;					// randomly generated list to get next tetromino
 	std::list<short>::iterator randListIter;	// randList iterators given to board 
 	cocos2d::DrawNode* windowDrawNode;
+	cocos2d::Layer *countDownLayer;
 
 	void drawWindow();
 	void redrawWindow();
 	virtual void onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);
+	void start();
 };

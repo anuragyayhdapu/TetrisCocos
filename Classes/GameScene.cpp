@@ -30,15 +30,41 @@ void GameScene::calcSceneDrawingData(double & u, cocos2d::Vec2 & pf, cocos2d::Si
 	pf = Vec2(pl.x + u / 2, pl.y - u / 2);
 }
 
+void GameScene::countDown(Size size, Layer* layer)
+{
+	layer = LayerColor::create(Color4B(0, 0, 0, 128), size.width, size.height);
+	layer->setPosition(Vec2(0, 0));
+	this->addChild(layer);
+	scheduleOnce(CC_SCHEDULE_SELECTOR(GameScene::count3), 1.0f);
+
+	layer->setColor(Color3B::BLUE);
+}
+
+void GameScene::count3(float dt)
+{
+	scheduleOnce(CC_SCHEDULE_SELECTOR(GameScene::count2), 1.0f);
+}
+
+void GameScene::count2(float dt)
+{
+	scheduleOnce(CC_SCHEDULE_SELECTOR(GameScene::count1), 1.0f);
+}
+
+void GameScene::count1(float dt)
+{
+	start();
+}
+
+
 bool GameScene::init()
 {
 	// super init
-    if ( !Scene::init() )
-    {
-        return false;
-    }
+	if (!Scene::init())
+	{
+		return false;
+	}
 
-    return true;
+	return true;
 }
 
 
