@@ -30,29 +30,39 @@ void GameScene::calcSceneDrawingData(double & u, cocos2d::Vec2 & pf, cocos2d::Si
 	pf = Vec2(pl.x + u / 2, pl.y - u / 2);
 }
 
-void GameScene::countDown(Size size, Layer* layer)
+void GameScene::countDown(Size size)
 {
-	layer = LayerColor::create(Color4B(0, 0, 0, 128), size.width, size.height);
-	layer->setPosition(Vec2(0, 0));
-	this->addChild(layer);
-	scheduleOnce(CC_SCHEDULE_SELECTOR(GameScene::count3), 1.0f);
+	ctLayer = LayerColor::create(Color4B(0, 0, 0, 128), size.width, size.height);
+	ctLayer->setPosition(Vec2(0, 0));
+	this->addChild(GameScene::ctLayer);
+	//scheduleOnce(CC_SCHEDULE_SELECTOR(GameScene::count3), 1.0f);
 
-	layer->setColor(Color3B::BLUE);
-}
+	ctLayer->setColor(Color3B::BLACK);
 
-void GameScene::count3(float dt)
-{
-	scheduleOnce(CC_SCHEDULE_SELECTOR(GameScene::count2), 1.0f);
-}
+	cocos2d::Vector<cocos2d::FiniteTimeAction*> actions;
+	actions.pushBack(CallFunc::create([] {
+		cocos2d::log("3...");
+	}));
+	actions.pushBack(DelayTime::create(1.0));
+	actions.pushBack(CallFunc::create([] {
+		cocos2d::log("2...");
+	}));
+	actions.pushBack(DelayTime::create(1.0));
+	actions.pushBack(CallFunc::create([] {
+		cocos2d::log("1...");
+	}));
+	actions.pushBack(DelayTime::create(1.0));
+	actions.pushBack(CallFunc::create([] {
+		cocos2d::log("Go...");
+	}));
+	actions.pushBack(DelayTime::create(1.0));
+	actions.pushBack(CallFunc::create([&] {
+		this->removeChild(ctLayer);
+		this->start();
+	}));
 
-void GameScene::count2(float dt)
-{
-	scheduleOnce(CC_SCHEDULE_SELECTOR(GameScene::count1), 1.0f);
-}
-
-void GameScene::count1(float dt)
-{
-	start();
+	auto sequence = Sequence::create(actions);
+	this->runAction(sequence);
 }
 
 

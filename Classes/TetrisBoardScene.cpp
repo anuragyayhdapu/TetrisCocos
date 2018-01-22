@@ -4,6 +4,8 @@
 
 USING_NS_CC;
 
+Layer *GameScene::ctLayer;
+
 bool TetrisBoardScene::init()
 {
 	// super init
@@ -39,7 +41,7 @@ bool TetrisBoardScene::init()
 	this->drawWindow();
 
 	countDownLayer = nullptr;
-	countDown(visibleSize, countDownLayer);
+	countDown(visibleSize);
 
 	return true;
 }
