@@ -33,6 +33,10 @@ private:
 	int moveDelaySeconds, testDelaySeconds;
 	std::list<short>::iterator& randListIter;	// randList iterator given to generate next tetromino
 
+	unsigned int score, highScore;
+	int level;
+	short totalLinesClear, lineClearCount;
+
 	void generateBlock();
 	void freezeMovableBlock();
 	void drawMovingTetromino();
@@ -41,6 +45,7 @@ private:
 	void createGhostPiece();
 	void updateGhostPiece();
 	bool checkGameOver();
+	void updateScore();
 
 	// schedulars
 	void moveSchedular(float dt);

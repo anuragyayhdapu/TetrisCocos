@@ -35,9 +35,6 @@ void GameScene::countDown(Size size)
 	ctLayer = LayerColor::create(Color4B(0, 0, 0, 128), size.width, size.height);
 	ctLayer->setPosition(Vec2(0, 0));
 	this->addChild(GameScene::ctLayer);
-	//scheduleOnce(CC_SCHEDULE_SELECTOR(GameScene::count3), 1.0f);
-
-	ctLayer->setColor(Color3B::BLACK);
 
 	cocos2d::Vector<cocos2d::FiniteTimeAction*> actions;
 	actions.pushBack(CallFunc::create([] {

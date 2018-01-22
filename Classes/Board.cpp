@@ -81,6 +81,11 @@ bool Board::init(double u, Vec2 leftTopPoint, std::list<short>::iterator& randLi
 		}
 	}*/
 
+	// get score values from db
+	score = highScore = 0;
+	level = 1;
+	totalLinesClear = lineClearCount = 0;
+
 	return true;
 }
 
@@ -105,15 +110,14 @@ void Board::start()
 
 void Board::stop()
 {
-	unschedule(CC_SCHEDULE_SELECTOR(Board::moveSchedular));
-	unschedule(CC_SCHEDULE_SELECTOR(Board::lineClearShedular));
-	unschedule(CC_SCHEDULE_SELECTOR(Board::dropHangingBlocksShedular));
-
+	unscheduleAllCallbacks();
 	movableTetromino = nullptr;
 	solidBlocks->clear();
+
+	// save score and high score to db
+	cocos2d::log(std::to_string(score).c_str());
+	cocos2d::log(std::to_string(highScore).c_str());
 }
-
-
 
 
 void Board::movingBlockDown()
@@ -297,13 +301,33 @@ bool Board::checkGameOver()
 {
 	if (movableTetromino->checkMoveAt(*solidBlocks) == false)
 	{
-		notify(*this, TetrisEvent::GAMEOVER);		
+		notify(*this, TetrisEvent::GAMEOVER);
 		stop();
 
 		return true;
 	}
 
 	return false;
+}
+
+void Board::updateScore()
+{
+	// increase level
+	if (lineClearCount >= t_const::LEVEL_CHANGE_LINE_CLEAR_COUNT)
+	{
+		++level;
+		lineClearCount = 0;
+	}
+
+	score += (totalLinesClear * level * t_const::ONE_LINE_CLEAR_SCORE);
+	totalLinesClear = 0;
+
+	if (score > highScore)
+		highScore = score;
+
+
+	cocos2d::log((std::to_string(score)).c_str());
+	cocos2d::log((std::to_string(highScore)).c_str());
 }
 
 
@@ -327,6 +351,8 @@ void Board::moveSchedular(float dt)
 void Board::lineClearShedular(float dt)
 {
 	auto numOfLinesCleared = solidBlocks->clearLines();
+	lineClearCount += numOfLinesCleared;
+	totalLinesClear += numOfLinesCleared;
 	unschedule(CC_SCHEDULE_SELECTOR(Board::lineClearShedular));
 
 	if (numOfLinesCleared > 0)
@@ -336,6 +362,9 @@ void Board::lineClearShedular(float dt)
 	}
 	else
 	{
+		if (totalLinesClear > 0)
+			updateScore();
+
 		notify(*this, TetrisEvent::INCREMENT_RAND_ITERATOR);
 		generateBlock();
 		if (checkGameOver() == false)

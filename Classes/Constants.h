@@ -25,6 +25,8 @@ namespace t_const
 	const int WINDOW_RIGHT = WINDOW_LEFT + WINDOW_WIDTH;
 	const int WINDOW_BOTTOM = WINDOW_TOP + WINDOW_HEIGHT;
 
+	const int ONE_LINE_CLEAR_SCORE = 10;
+	const int LEVEL_CHANGE_LINE_CLEAR_COUNT = 5;
 
 	const BoardPos SPAWN_POSITION(10, 0);
 
