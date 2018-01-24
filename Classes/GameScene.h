@@ -15,4 +15,6 @@ public:
 
 	void countDown(cocos2d::Size size);
 	virtual void start() = 0;
+	virtual void initFromDB() = 0;
+	virtual void saveToDB(unsigned int, int) = 0;
 };

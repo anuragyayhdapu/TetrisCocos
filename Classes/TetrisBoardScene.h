@@ -6,6 +6,8 @@
 #include "Board.h"
 #include "Constants.h"
 #include <list>
+//#include "sqlite3\include\sqlite3.h"
+#include <sqlite3.h>
 
 class TetrisBoardScene : public GameScene, public Observer
 {
@@ -16,7 +18,8 @@ public:
 	void onNotify(const Board& board, TetrisEvent _event);
 
 private:
-
+	sqlite3 * db;
+	unsigned int highScore;
 	double _u;			// size of one unit block
 	cocos2d::Vec2 _pf;	// first middle point of a unit block in grid (point_first)
 	Board* board;
@@ -29,4 +32,7 @@ private:
 	void redrawWindow();
 	virtual void onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);
 	void start();
+
+	void initFromDB();
+	void saveToDB(unsigned int highscore, int level);
 };

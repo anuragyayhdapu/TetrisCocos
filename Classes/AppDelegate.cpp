@@ -1,6 +1,7 @@
 #include "AppDelegate.h"
 #include "MainMenuScene.h"
 #include "TetrisBoardScene.h"
+#include <sqlite3.h>
 
 // #define USE_AUDIO_ENGINE 1
 // #define USE_SIMPLE_AUDIO_ENGINE 1
@@ -23,6 +24,15 @@ static cocos2d::Size designResolutionSize = cocos2d::Size(480, 320);
 static cocos2d::Size smallResolutionSize = cocos2d::Size(480, 320);
 static cocos2d::Size mediumResolutionSize = cocos2d::Size(1024, 768);
 static cocos2d::Size largeResolutionSize = cocos2d::Size(2048, 1536);
+
+static void initializeDatabase();
+int callback(void *count, int argc, char **argv, char **azColName) 
+{
+	// increment count
+	(*((int*)count))++;
+
+	return 0;
+}
 
 AppDelegate::AppDelegate()
 {
@@ -99,6 +109,9 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
     register_all_packages();
 
+	// initialize database
+	initializeDatabase();
+
     // create a scene. it's an autorelease object
 	//auto scene = MainMenuScene::createScene();
 	auto scene = TetrisBoardScene::create();
@@ -131,4 +144,78 @@ void AppDelegate::applicationWillEnterForeground() {
     SimpleAudioEngine::getInstance()->resumeBackgroundMusic();
     SimpleAudioEngine::getInstance()->resumeAllEffects();
 #endif
+}
+
+
+void initializeDatabase()
+{
+	sqlite3 * db;
+	char *errorMsg;
+
+	// open db, create if doesn't exist
+	if (sqlite3_open("single_player_db", &db))
+	{
+		cocos2d::log("can't open single_player_db database");
+		cocos2d::log(sqlite3_errmsg(db));
+	}
+	else
+	{
+		cocos2d::log("db opend/created succefully");
+
+		// create table if doesn't exist
+		char *query = "create table if not exists single_player_table(" \
+			"name text primary key not null," \
+			"score int," \
+			"max_level int );";
+
+		int rc = sqlite3_exec(db, query, NULL, 0, &errorMsg);
+		if (rc != SQLITE_OK)
+		{
+			cocos2d::log("(create table if doesn't exist) sql error");
+			cocos2d::log(errorMsg);
+			sqlite3_free(errorMsg);
+		}
+		else
+		{
+			cocos2d::log("table present/created succefully");
+
+			// create entry for player if not exist
+			query = "select score from single_player_table where name = 'player'";
+			int count = 0;
+			rc = sqlite3_exec(db, query, callback, (void*)&count, &errorMsg);
+			if (rc != SQLITE_OK)
+			{
+				cocos2d::log("(create entry for player if not exist) sql error");
+				cocos2d::log(errorMsg);
+				sqlite3_free(errorMsg);
+			}
+			else
+			{
+				if (count == 0)
+				{
+					// create row
+					query = "insert into single_player_table (name, score, max_level) " \
+						"values ('player', 0, 1 );";
+					rc = sqlite3_exec(db, query, NULL, 0, &errorMsg);
+					if (rc != SQLITE_OK)
+					{
+						cocos2d::log("(init single_player_table) sql error");
+						cocos2d::log(errorMsg);
+						sqlite3_free(errorMsg);
+					}
+					else
+					{
+						cocos2d::log("single_player_table successfully initialized");
+					}
+				}
+				else if (count == 1)
+				{
+					//  well and good
+					cocos2d::log("player recored present in table");
+				}
+			}
+		}
+
+	}
+	sqlite3_close(db);
 }

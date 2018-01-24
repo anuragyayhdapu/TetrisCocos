@@ -11,10 +11,10 @@ Board::~Board()
 {
 }
 
-Board * Board::createBoard(double u, Vec2 leftTopPoint, std::list<short>::iterator& randListIter)
+Board * Board::createBoard(double u, Vec2 leftTopPoint, std::list<short>::iterator& randListIter, unsigned int highScore, int level)
 {
 	Board* board = new(std::nothrow)Board(randListIter);
-	if (board && board->init(u, leftTopPoint, randListIter))
+	if (board && board->init(u, leftTopPoint, randListIter, highScore, level))
 	{
 		board->autorelease();
 		return board;
@@ -27,7 +27,7 @@ Board * Board::createBoard(double u, Vec2 leftTopPoint, std::list<short>::iterat
 	}
 }
 
-bool Board::init(double u, Vec2 leftTopPoint, std::list<short>::iterator& randListIter)
+bool Board::init(double u, Vec2 leftTopPoint, std::list<short>::iterator& randListIter, unsigned int highScore, int level)
 {
 	if (!Node::init())
 	{
@@ -36,7 +36,11 @@ bool Board::init(double u, Vec2 leftTopPoint, std::list<short>::iterator& randLi
 
 	this->_pf = leftTopPoint;
 	this->_u = u;
+	this->highScore = highScore;
+	this->level = level;
 
+	score = 0;
+	totalLinesClear = lineClearCount = 0;
 	moveDelaySeconds = 1.0f; // TODO: later change dynamically based on level
 	testDelaySeconds = 0.9f;
 
@@ -81,11 +85,6 @@ bool Board::init(double u, Vec2 leftTopPoint, std::list<short>::iterator& randLi
 		}
 	}*/
 
-	// get score values from db
-	score = highScore = 0;
-	level = 1;
-	totalLinesClear = lineClearCount = 0;
-
 	return true;
 }
 
@@ -113,10 +112,6 @@ void Board::stop()
 	unscheduleAllCallbacks();
 	movableTetromino = nullptr;
 	solidBlocks->clear();
-
-	// save score and high score to db
-	cocos2d::log(std::to_string(score).c_str());
-	cocos2d::log(std::to_string(highScore).c_str());
 }
 
 
@@ -310,6 +305,7 @@ bool Board::checkGameOver()
 	return false;
 }
 
+
 void Board::updateScore()
 {
 	// increase level
@@ -325,7 +321,7 @@ void Board::updateScore()
 	if (score > highScore)
 		highScore = score;
 
-
+	// draw score
 	cocos2d::log((std::to_string(score)).c_str());
 	cocos2d::log((std::to_string(highScore)).c_str());
 }
