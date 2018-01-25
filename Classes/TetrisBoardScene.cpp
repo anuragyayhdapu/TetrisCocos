@@ -118,13 +118,11 @@ void TetrisBoardScene::saveToDB()
 		// add data to single_player_table
 		std::string query = "update sp set score = ";
 		query.append(std::to_string(highScore));
-		query.append(" and max_level = ");
+		query.append(", max_level = ");
 		query.append(std::to_string(maxLevel));
 		query.append(" where name = 'player' ;");
 
-		const char *cstr = query.c_str();
-
-		int rc = sqlite3_exec(db, cstr, NULL, 0, &errorMsg);
+		int rc = sqlite3_exec(db, query.c_str(), NULL, 0, &errorMsg);
 		if (rc != SQLITE_OK)
 		{
 			cocos2d::log("can't update db");
