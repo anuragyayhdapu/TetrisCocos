@@ -20,6 +20,7 @@ public:
 private:
 	sqlite3 * db;
 	unsigned int highScore;
+	int maxLevel;
 	double _u;			// size of one unit block
 	cocos2d::Vec2 _pf;	// first middle point of a unit block in grid (point_first)
 	Board* board;
@@ -34,5 +35,5 @@ private:
 	void start();
 
 	void initFromDB();
-	void saveToDB(unsigned int highscore, int level);
+	void saveToDB();
 };

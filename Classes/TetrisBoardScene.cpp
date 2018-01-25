@@ -73,7 +73,7 @@ void TetrisBoardScene::initFromDB()
 	char *errorMsg;
 
 	// open db
-	if (sqlite3_open("single_player_db", &db))
+	if (sqlite3_open("tetris.db", &db))
 	{
 		cocos2d::log("can't open single_player_db database");
 		cocos2d::log(sqlite3_errmsg(db));
@@ -83,7 +83,7 @@ void TetrisBoardScene::initFromDB()
 		cocos2d::log("single_player_db opend...");
 
 		// get data from single_player_table
-		char *query = "select score from single_player_table where name = 'player';";
+		char *query = "select score from sp where name = 'player';";
 
 		int rc = sqlite3_exec(db, query, callback2, (void*)&highScore, &errorMsg);
 		if (rc != SQLITE_OK)
@@ -102,12 +102,12 @@ void TetrisBoardScene::initFromDB()
 }
 
 
-void TetrisBoardScene::saveToDB(unsigned int highscore, int level)
+void TetrisBoardScene::saveToDB()
 {
 	char *errorMsg;
 
 	// save highScore to db
-	if (sqlite3_open("single_player_db", &db))
+	if (sqlite3_open("tetris.db", &db))
 	{
 		cocos2d::log("can't open db");
 		cocos2d::log(sqlite3_errmsg(db));
@@ -116,13 +116,15 @@ void TetrisBoardScene::saveToDB(unsigned int highscore, int level)
 	{
 		cocos2d::log("db opend...");
 		// add data to single_player_table
-		std::string query = "update single_player_table set score = ";
-		query.append(std::to_string(highScore).c_str());
-		query.append(" and level = ");
-		query.append(std::to_string(level).c_str());
+		std::string query = "update sp set score = ";
+		query.append(std::to_string(highScore));
+		query.append(" and max_level = ");
+		query.append(std::to_string(maxLevel));
 		query.append(" where name = 'player' ;");
 
-		int rc = sqlite3_exec(db, query.c_str(), NULL, 0, &errorMsg);
+		const char *cstr = query.c_str();
+
+		int rc = sqlite3_exec(db, cstr, NULL, 0, &errorMsg);
 		if (rc != SQLITE_OK)
 		{
 			cocos2d::log("can't update db");
@@ -135,9 +137,6 @@ void TetrisBoardScene::saveToDB(unsigned int highscore, int level)
 		}
 	}
 	sqlite3_close(db);
-
-	cocos2d::log("save this to db:");
-	cocos2d::log(std::to_string(highScore).c_str());
 }
 
 
@@ -159,7 +158,9 @@ void TetrisBoardScene::onNotify(const Board & board, TetrisEvent _event)
 		// save game highScore
 		if (board.getScore() >= board.getHighScore())
 		{
-			saveToDB(board.getScore(), board.getLevel());
+			this->highScore = board.getScore();
+			this->maxLevel = board.getLevel();
+			saveToDB();
 		}
 		break;
 	default:
