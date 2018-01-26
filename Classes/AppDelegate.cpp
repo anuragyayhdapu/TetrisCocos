@@ -1,6 +1,7 @@
 #include "AppDelegate.h"
 #include "MainMenuScene.h"
 #include "TetrisBoardScene.h"
+#include "TetrisFont.h"
 #include <sqlite3.h>
 
 // #define USE_AUDIO_ENGINE 1
@@ -26,6 +27,7 @@ static cocos2d::Size mediumResolutionSize = cocos2d::Size(1024, 768);
 static cocos2d::Size largeResolutionSize = cocos2d::Size(2048, 1536);
 
 static void initializeDatabase();
+void initializeTextUnitBlock();
 int callback(void *count, int argc, char **argv, char **azColName)
 {
 	// increment count
@@ -109,8 +111,8 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
 	register_all_packages();
 
-	// initialize database
 	initializeDatabase();
+	initializeTextUnitBlock();
 
 	// create a scene. it's an autorelease object
 	//auto scene = MainMenuScene::createScene();
@@ -219,4 +221,24 @@ void initializeDatabase()
 
 	}
 	sqlite3_close(db);
+}
+
+
+void initializeTextUnitBlock()
+{
+	auto height = Director::getInstance()->getVisibleSize().height;
+	auto width = Director::getInstance()->getVisibleSize().width;
+	float box;
+
+	if (width < height)
+	{
+		box = width;
+	}
+	else
+	{
+		box = height;
+	}
+
+	// let's say standard unit text size is about 10% of box
+	TetrisFont::u = 0.1 * box;
 }
