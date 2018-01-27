@@ -1,5 +1,6 @@
 #include "TetrominoTemplates.h"
 #include "Constants.h"
+#include <fstream>
 
 // Rotation inspired from SRS-Simple Rotation System (http://tetris.wikia.com/wiki/SRS)
 
@@ -93,4 +94,50 @@ std::array<cocos2d::Color4B, TetrominoTemplate::size> * TetrominoTemplate::borde
 	};
 
 	return borderColorTemplates;
+}();
+
+
+std::map<char, std::list<std::string>> *
+TetrominoTemplate::fontTemplates = []() {
+
+	std::map<char, std::list<std::string>> * fontTemplates = new std::map<char, std::list<std::string>>();
+
+	// open file tetrisFontTemplate
+	std::ifstream fontFile;
+	fontFile.open("C:/_folder/Projects/TetrisCocos/Resources/TetrisFontTemplate.txt");
+
+	if (fontFile.is_open())
+	{
+		std::string line;
+
+		while (true)
+		{
+			// read one character, that's key to the map
+			getline(fontFile, line);
+			char key = line.at(0);
+
+			// read next five lines, and add to 2-d matrix
+			std::list<std::string> value;
+			for (int i = 0; i < 5; ++i)
+			{
+				getline(fontFile, line);
+				value.push_back(line);
+			}
+			fontTemplates->insert(std::pair<char, std::list<std::string>>(key, value));
+
+			// skip one space
+			getline(fontFile, line);
+			if (line.empty())
+				break;
+		}
+	}
+	fontFile.close();
+
+	auto val = fontTemplates->at('t');
+	for (auto l : val)
+	{
+		cocos2d::log(l.c_str());
+	}
+
+	return fontTemplates;
 }();
