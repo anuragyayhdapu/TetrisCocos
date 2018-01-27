@@ -104,7 +104,7 @@ TetrominoTemplate::fontTemplates = []() {
 
 	// open file tetrisFontTemplate
 	std::ifstream fontFile;
-	fontFile.open("C:/_folder/Projects/TetrisCocos/Resources/TetrisFontTemplate.txt");
+	fontFile.open("../Resources/TetrisFontTemplate.txt");
 
 	if (fontFile.is_open())
 	{
@@ -132,12 +132,6 @@ TetrominoTemplate::fontTemplates = []() {
 		}
 	}
 	fontFile.close();
-
-	auto val = fontTemplates->at('t');
-	for (auto l : val)
-	{
-		cocos2d::log(l.c_str());
-	}
 
 	return fontTemplates;
 }();
