@@ -2,6 +2,7 @@
 #include "Constants.h"
 #include <algorithm>
 #include <cstdlib>
+#include "TetrisFont.h"
 
 USING_NS_CC;
 
@@ -45,6 +46,11 @@ bool TetrisBoardScene::init()
 
 	countDownLayer = nullptr;
 	countDown(visibleSize);
+
+	auto testDrawNode = DrawNode::create();
+	this->addChild(testDrawNode);
+	auto testFont = TetrisFont::create("tetris", Color3B::GREEN, Vec2(0, 0), 1);
+	testFont->write(testDrawNode);
 
 	return true;
 }

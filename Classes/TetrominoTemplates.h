@@ -14,5 +14,5 @@ public:
 	static std::array<RotationQ*, size> * rotationTemplates;
 	static std::array<cocos2d::Color4B, size> * colorTemplates;
 	static std::array<cocos2d::Color4B, size> * borderColorTemplates;
-	static std::map<char, std::list<std::string>> * fontTemplates;
+	static std::map<char, std::vector<std::string>> * fontTemplates;
 };	

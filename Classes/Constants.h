@@ -32,6 +32,9 @@ namespace t_const
 
 	const short GRID_MATRIX_SIZE = 4;
 
+	const short FONT_WIDTH = 5;
+	const short FONT_HEIGHT = 5;
+
 	// things that are fixed for now, and probably will never change:
 		// number of blocks in any tetromino = 4
 		// number of rotation states = 4

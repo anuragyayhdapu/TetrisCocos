@@ -97,10 +97,10 @@ std::array<cocos2d::Color4B, TetrominoTemplate::size> * TetrominoTemplate::borde
 }();
 
 
-std::map<char, std::list<std::string>> *
+std::map<char, std::vector<std::string>> *
 TetrominoTemplate::fontTemplates = []() {
 
-	std::map<char, std::list<std::string>> * fontTemplates = new std::map<char, std::list<std::string>>();
+	std::map<char, std::vector<std::string>> * fontTemplates = new std::map<char, std::vector<std::string>>();
 
 	// open file tetrisFontTemplate
 	std::ifstream fontFile;
@@ -110,25 +110,19 @@ TetrominoTemplate::fontTemplates = []() {
 	{
 		std::string line;
 
-		while (true)
+		while (std::getline(fontFile, line))
 		{
 			// read one character, that's key to the map
-			getline(fontFile, line);
 			char key = line.at(0);
 
 			// read next five lines, and add to 2-d matrix
-			std::list<std::string> value;
-			for (int i = 0; i < 5; ++i)
+			std::vector<std::string> value;
+			for (int i = 0; i < t_const::FONT_WIDTH; ++i)
 			{
 				getline(fontFile, line);
 				value.push_back(line);
 			}
-			fontTemplates->insert(std::pair<char, std::list<std::string>>(key, value));
-
-			// skip one space
-			getline(fontFile, line);
-			if (line.empty())
-				break;
+			fontTemplates->insert(std::pair<char, std::vector<std::string>>(key, value));
 		}
 	}
 	fontFile.close();
