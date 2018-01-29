@@ -20,9 +20,9 @@ private:
 	std::string text;
 	float size;	//this text size
 	cocos2d::Color3B color;
-	cocos2d::Vec2 midPt, leftPt, rightPt;
+	cocos2d::Vec2 /*midPt, */leftPt/*, rightPt*/;
 	std::forward_list<DrawData> fontBlocksDD;
 
-	void calcBoundingBoxPoints();
+	//void calcBoundingBoxPoints();
 	void createFontBlocks();
 };

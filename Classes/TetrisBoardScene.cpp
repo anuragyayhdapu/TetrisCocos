@@ -49,7 +49,7 @@ bool TetrisBoardScene::init()
 
 	auto testDrawNode = DrawNode::create();
 	this->addChild(testDrawNode);
-	auto testFont = TetrisFont::create("tetris", Color3B::GREEN, Vec2(0, 0), 1);
+	auto testFont = TetrisFont::create("tetris", Color3B::GREEN, Vec2(0, visibleSize.height), 1);
 	testFont->write(testDrawNode);
 
 	return true;

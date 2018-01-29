@@ -117,7 +117,7 @@ TetrominoTemplate::fontTemplates = []() {
 
 			// read next five lines, and add to 2-d matrix
 			std::vector<std::string> value;
-			for (int i = 0; i < t_const::FONT_WIDTH; ++i)
+			for (int i = 0; i < t_const::FONT_HEIGHT; ++i)
 			{
 				getline(fontFile, line);
 				value.push_back(line);

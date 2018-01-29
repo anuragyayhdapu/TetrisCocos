@@ -239,6 +239,6 @@ void initializeTextUnitBlock()
 		box = height;
 	}
 
-	// let's say standard unit text size is about 10% of box
-	TetrisFont::u = 0.1 * box;
+	// let's say standard unit text size is about 2% of box
+	TetrisFont::u = 0.02 * box;
 }
