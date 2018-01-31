@@ -45,11 +45,11 @@ bool TetrisBoardScene::init()
 	this->drawWindow();
 
 	countDownLayer = nullptr;
-	countDown(visibleSize);
+	//countDown(visibleSize);
 
 	auto testDrawNode = DrawNode::create();
 	this->addChild(testDrawNode);
-	auto testFont = TetrisFont::create("tetris", Color3B::GREEN, Vec2(0, visibleSize.height), 1);
+	auto testFont = TetrisFont::create("abcdefghijklmnopqrs", Color4F::GREEN, Vec2(0, visibleSize.height), 2.5, FontColorPattern::RANDOM_BLOCK);
 	testFont->write(testDrawNode);
 
 	return true;

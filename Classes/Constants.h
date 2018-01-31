@@ -44,3 +44,7 @@ namespace t_const
 enum TetrisEvent {
 	INCREMENT_RAND_ITERATOR, GAMEOVER
 };
+
+enum FontColorPattern {
+	FULL, RANDOM_WORD, RANDOM_BLOCK
+};

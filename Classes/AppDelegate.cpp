@@ -240,5 +240,5 @@ void initializeTextUnitBlock()
 	}
 
 	// let's say standard unit text size is about 2% of box
-	TetrisFont::u = 0.02 * box;
+	TetrisFont::u = 0.01 * box;
 }

@@ -13,10 +13,10 @@ TetrisFont::~TetrisFont()
 
 float TetrisFont::u;
 
-TetrisFont * TetrisFont::create(std::string text, cocos2d::Color3B color, cocos2d::Vec2 position, short size)
+TetrisFont * TetrisFont::create(std::string text, cocos2d::Color4F color, cocos2d::Vec2 position, short size, FontColorPattern pattern)
 {
 	TetrisFont* ptr = new(std::nothrow)TetrisFont();
-	if (ptr && ptr->init(text, color, position, size))
+	if (ptr && ptr->init(text, color, position, size, pattern))
 	{
 		ptr->autorelease();
 	}
@@ -29,7 +29,7 @@ TetrisFont * TetrisFont::create(std::string text, cocos2d::Color3B color, cocos2
 }
 
 
-bool TetrisFont::init(std::string text, cocos2d::Color3B color, cocos2d::Vec2 position, short size)
+bool TetrisFont::init(std::string text, cocos2d::Color4F color, cocos2d::Vec2 position, short size, FontColorPattern pattern)
 {
 	if (!Node::init())
 	{
@@ -41,7 +41,9 @@ bool TetrisFont::init(std::string text, cocos2d::Color3B color, cocos2d::Vec2 po
 	this->color = color;
 	//midPt = position;
 	leftPt = position;
-	//calcBoundingBoxPoints();
+	this->colorPattern = pattern;
+
+	srand(time(NULL));
 	createFontBlocks();
 
 	return true;
@@ -62,16 +64,20 @@ bool TetrisFont::init(std::string text, cocos2d::Color3B color, cocos2d::Vec2 po
 //	//midPt.y -= (3 * size);
 //}
 
+
 void TetrisFont::createFontBlocks()
 {
 	cocos2d::Vec2 charLeftPt = leftPt;
 
 	for (int k = 0; k < text.length(); ++k)
 	{
+		if (colorPattern == FontColorPattern::RANDOM_WORD)
+		{
+			this->color = cocos2d::Color4F(TetrominoTemplate::colorTemplates->at(rand() % TetrominoTemplate::size));
+		}
+
 		auto c = text.at(k);
 		auto font = TetrominoTemplate::fontTemplates->at(c);
-
-		
 
 		// for spacing between words
 		if (c == ' ')
@@ -86,19 +92,21 @@ void TetrisFont::createFontBlocks()
 			{
 				if (font.at(i).at(j) == '1')
 				{
+					if (colorPattern == FontColorPattern::RANDOM_BLOCK)
+					{
+						this->color = cocos2d::Color4F(TetrominoTemplate::colorTemplates->at(rand() % TetrominoTemplate::size));
+					}
+
 					cocos2d::Vec2 blockLeftPt;
 					blockLeftPt.x = charLeftPt.x + (j * size);
 					blockLeftPt.y = charLeftPt.y - (i * size);
 
 					// create a drawing data obj
 					DrawData dd;
-					cocos2d::Vec2 origin(blockLeftPt);
-					cocos2d::Vec2 destination(origin.x + size, origin.y - size);
-					cocos2d::Vec2 midPoint(origin.x + size / 2, origin.y - size / 2);
-					dd.origin = origin;
-					dd.destination = destination;
-					dd.midPoint = midPoint;
-					dd.color = cocos2d::Color4F(this->color);
+					dd.origin = cocos2d::Vec2(blockLeftPt);
+					dd.destination = cocos2d::Vec2(dd.origin.x + size, dd.origin.y - size);
+					dd.midPoint = cocos2d::Vec2(dd.origin.x + size / 2, dd.origin.y - size / 2);
+					dd.color = this->color;
 					dd.borderColor = cocos2d::Color4F::BLACK;
 
 					fontBlocksDD.push_front(dd);
@@ -116,6 +124,6 @@ void TetrisFont::write(cocos2d::DrawNode * drawNode)
 	for (auto dd : fontBlocksDD)
 	{
 		drawNode->drawSolidRect(dd.origin, dd.destination, dd.color);
-		drawNode->drawRect(dd.origin, dd.destination, dd.borderColor);
+		//drawNode->drawRect(dd.origin, dd.destination, dd.borderColor);
 	}
 }
