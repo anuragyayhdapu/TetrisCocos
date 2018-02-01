@@ -38,6 +38,6 @@ void GameOverScene::GoToTetrisBoardScene(cocos2d::Ref *pSender)
 
 void GameOverScene::GoToMainMenuScene(cocos2d::Ref *pSender)
 {
-	auto scene = MainMenuScene::createScene();
-	Director::getInstance()->replaceScene(scene);
+	/*auto scene = MainMenuScene::createScene();
+	Director::getInstance()->replaceScene(scene);*/
 }

@@ -45,12 +45,7 @@ bool TetrisBoardScene::init()
 	this->drawWindow();
 
 	countDownLayer = nullptr;
-	//countDown(visibleSize);
-
-	auto testDrawNode = DrawNode::create();
-	this->addChild(testDrawNode);
-	auto testFont = TetrisFont::create("abcdefghijklmnopqrs", Color4F::GREEN, Vec2(0, visibleSize.height), 2.5, FontColorPattern::RANDOM_BLOCK);
-	testFont->write(testDrawNode);
+	countDown(visibleSize);
 
 	return true;
 }

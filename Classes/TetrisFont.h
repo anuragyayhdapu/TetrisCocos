@@ -10,8 +10,10 @@ class TetrisFont : public cocos2d::Node
 public:
 	TetrisFont();
 	virtual ~TetrisFont();
-	static TetrisFont* create(std::string text, cocos2d::Color4F color, cocos2d::Vec2 position, short size, FontColorPattern pattern);
-	bool init(std::string text, cocos2d::Color4F color, cocos2d::Vec2 position, short size, FontColorPattern pattern);
+	static TetrisFont* create(std::string text, cocos2d::Color4F color, cocos2d::Vec2 position, float size,
+		FontColorPattern, FontAlign align = FontAlign::LEFT);
+	bool init(std::string text, cocos2d::Color4F color, cocos2d::Vec2 position, float size, 
+		FontColorPattern, FontAlign);
 
 	void write(cocos2d::DrawNode* drawNode);
 

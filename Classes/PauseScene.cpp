@@ -37,9 +37,9 @@ void PauseScene::Resume(cocos2d::Ref *pSender)
 
 void PauseScene::GoToMainMenuScene(cocos2d::Ref *pSender)
 {
-	auto scene = MainMenuScene::createScene();
+	/*auto scene = MainMenuScene::createScene();
 	Director::getInstance()->popScene();
-	Director::getInstance()->replaceScene(scene);
+	Director::getInstance()->replaceScene(scene);*/
 }
 
 

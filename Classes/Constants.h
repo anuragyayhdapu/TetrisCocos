@@ -48,3 +48,7 @@ enum TetrisEvent {
 enum FontColorPattern {
 	FULL, RANDOM_WORD, RANDOM_BLOCK
 };
+
+enum FontAlign {
+	LEFT, MIDDLE, RIGHT
+};

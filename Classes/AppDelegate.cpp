@@ -115,8 +115,8 @@ bool AppDelegate::applicationDidFinishLaunching() {
 	initializeTextUnitBlock();
 
 	// create a scene. it's an autorelease object
-	//auto scene = MainMenuScene::createScene();
-	auto scene = TetrisBoardScene::create();
+	auto scene = MainMenuScene::create();
+	//auto scene = TetrisBoardScene::create();
 
 	// run
 	director->runWithScene(scene);

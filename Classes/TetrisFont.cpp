@@ -13,10 +13,11 @@ TetrisFont::~TetrisFont()
 
 float TetrisFont::u;
 
-TetrisFont * TetrisFont::create(std::string text, cocos2d::Color4F color, cocos2d::Vec2 position, short size, FontColorPattern pattern)
+TetrisFont * TetrisFont::create(std::string text, cocos2d::Color4F color, cocos2d::Vec2 position, float size,
+	FontColorPattern pattern, FontAlign align)
 {
 	TetrisFont* ptr = new(std::nothrow)TetrisFont();
-	if (ptr && ptr->init(text, color, position, size, pattern))
+	if (ptr && ptr->init(text, color, position, size, pattern, align))
 	{
 		ptr->autorelease();
 	}
@@ -29,7 +30,8 @@ TetrisFont * TetrisFont::create(std::string text, cocos2d::Color4F color, cocos2
 }
 
 
-bool TetrisFont::init(std::string text, cocos2d::Color4F color, cocos2d::Vec2 position, short size, FontColorPattern pattern)
+bool TetrisFont::init(std::string text, cocos2d::Color4F color, cocos2d::Vec2 position, float size,
+	FontColorPattern pattern, FontAlign align)
 {
 	if (!Node::init())
 	{
@@ -39,9 +41,22 @@ bool TetrisFont::init(std::string text, cocos2d::Color4F color, cocos2d::Vec2 po
 	this->text = text;
 	this->size = u * size;
 	this->color = color;
-	//midPt = position;
-	leftPt = position;
 	this->colorPattern = pattern;
+	this->leftPt.y = position.y;
+
+	switch (align)
+	{
+	case MIDDLE:
+		leftPt.x = position.x - (this->size * ((t_const::FONT_WIDTH + 1) * this->text.length() / 2));
+		break;
+	case RIGHT:
+		leftPt.x = position.x - (this->size * (t_const::FONT_WIDTH + 1) * this->text.length());
+		break;
+	case LEFT:
+	default:
+		leftPt.x = position.x;
+		break;
+	}
 
 	srand(time(NULL));
 	createFontBlocks();
@@ -69,7 +84,7 @@ void TetrisFont::createFontBlocks()
 {
 	cocos2d::Vec2 charLeftPt = leftPt;
 
-	for (int k = 0; k < text.length(); ++k)
+	for (size_t k = 0; k < text.length(); ++k)
 	{
 		if (colorPattern == FontColorPattern::RANDOM_WORD)
 		{
@@ -77,14 +92,14 @@ void TetrisFont::createFontBlocks()
 		}
 
 		auto c = text.at(k);
-		auto font = TetrominoTemplate::fontTemplates->at(c);
-
 		// for spacing between words
 		if (c == ' ')
 		{
-			charLeftPt.x += (2 * size);
+			charLeftPt.x += size * (t_const::FONT_WIDTH + 1);
 			continue;
 		}
+		auto font = TetrominoTemplate::fontTemplates->at(c);
+
 
 		for (int i = 0; i < t_const::FONT_HEIGHT; ++i)
 		{
