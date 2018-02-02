@@ -43,22 +43,25 @@ bool TetrisFont::init(std::string text, cocos2d::Color4F color, cocos2d::Vec2 po
 	this->color = color;
 	this->colorPattern = pattern;
 	this->leftPt.y = position.y;
+	this->rightPt.y = position.y - (this->size * t_const::FONT_HEIGHT);
 
 	switch (align)
 	{
 	case MIDDLE:
 		leftPt.x = position.x - (this->size * ((t_const::FONT_WIDTH + 1) * this->text.length() / 2));
+		rightPt.x = leftPt.x + position.x;
 		break;
 	case RIGHT:
 		leftPt.x = position.x - (this->size * (t_const::FONT_WIDTH + 1) * this->text.length());
+		rightPt.x = position.x;
 		break;
 	case LEFT:
 	default:
 		leftPt.x = position.x;
+		rightPt.x = position.x + (this->size * (t_const::FONT_WIDTH + 1) * this->text.length());
 		break;
 	}
 
-	srand(time(NULL));
 	createFontBlocks();
 
 	return true;
@@ -141,4 +144,16 @@ void TetrisFont::write(cocos2d::DrawNode * drawNode)
 		drawNode->drawSolidRect(dd.origin, dd.destination, dd.color);
 		//drawNode->drawRect(dd.origin, dd.destination, dd.borderColor);
 	}
+}
+
+
+bool TetrisFont::insideBoundingBox(cocos2d::Vec2 pos)
+{
+	if (pos.x >= leftPt.x && pos.x <= rightPt.x
+		&& pos.y <= leftPt.y && pos.y >= rightPt.y)
+	{
+		return true;
+	}
+
+	return false;
 }

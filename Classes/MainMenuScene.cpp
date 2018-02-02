@@ -1,6 +1,5 @@
 #include "MainMenuScene.h"
 #include "TetrisBoardScene.h"
-#include "TetrisFont.h"
 
 USING_NS_CC;
 
@@ -20,22 +19,40 @@ bool MainMenuScene::init()
 	this->addChild(fontDrawNode);
 	auto heading = TetrisFont::create("tetris", Color4F::BLUE, Vec2(visibleSize.width / 2, visibleSize.height * 0.8), 3.5,
 		FontColorPattern::RANDOM_BLOCK, FontAlign::MIDDLE);
-	auto startBtn = TetrisFont::create("play", Color4F::BLUE, Vec2(visibleSize.width / 2, visibleSize.height * 0.53), 2.5,
-		FontColorPattern::RANDOM_WORD, FontAlign::MIDDLE);	
-	auto quitBtn = TetrisFont::create("quit", Color4F::BLUE, Vec2(visibleSize.width / 2, visibleSize.height * 0.35), 2.5,
-		FontColorPattern::RANDOM_WORD, FontAlign::MIDDLE);
+	auto heading2 = TetrisFont::create("cocos", Color4F::BLUE, Vec2(visibleSize.width / 2, visibleSize.height * 0.60), 2.5,
+		FontColorPattern::RANDOM_BLOCK, FontAlign::MIDDLE);	
+	startBtn = TetrisFont::create(">", Color4F::RED, Vec2(visibleSize.width / 2, visibleSize.height * 0.30), 3.5,
+		FontColorPattern::RANDOM_BLOCK, FontAlign::MIDDLE);
 
 	heading->write(fontDrawNode);
+	heading2->write(fontDrawNode);
 	startBtn->write(fontDrawNode);
-	quitBtn->write(fontDrawNode);
 
-    
+	// touch listners
+	auto touchListener = EventListenerTouchOneByOne::create();
+	touchListener->onTouchBegan = CC_CALLBACK_2(MainMenuScene::onTouchBegan, this);
+
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
     return true;
 }
 
 
 void MainMenuScene::GoToTetrisBoardScene(Ref *pSender)
 {
-	/*auto scene = TetrisBoardScene::createTetrisBoardScene();
-	Director::getInstance()->replaceScene(scene);*/
+	auto scene = TetrisBoardScene::create();
+	Director::getInstance()->replaceScene(scene);
+}
+
+
+bool MainMenuScene::onTouchBegan(Touch* touch, Event* _event)
+{
+	// get bounding box of play button
+	if (startBtn->insideBoundingBox(touch->getLocation()))
+	{
+		cocos2d::log("inside play btn");
+		// and move to play screen if touched
+		GoToTetrisBoardScene(this);
+	}
+
+	return true;
 }

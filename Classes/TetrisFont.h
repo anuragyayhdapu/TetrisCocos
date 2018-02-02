@@ -16,6 +16,7 @@ public:
 		FontColorPattern, FontAlign);
 
 	void write(cocos2d::DrawNode* drawNode);
+	bool insideBoundingBox(cocos2d::Vec2 pos);
 
 	static float u;	// text unit block size
 
@@ -23,10 +24,9 @@ private:
 	std::string text;
 	float size;	//this text size
 	cocos2d::Color4F color;
-	cocos2d::Vec2 /*midPt, */leftPt/*, rightPt*/;
+	cocos2d::Vec2 leftPt, rightPt;
 	std::forward_list<DrawData> fontBlocksDD;
 	FontColorPattern colorPattern;
 
-	//void calcBoundingBoxPoints();
 	void createFontBlocks();
 };
