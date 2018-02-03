@@ -49,7 +49,7 @@ bool TetrisFont::init(std::string text, cocos2d::Color4F color, cocos2d::Vec2 po
 	{
 	case MIDDLE:
 		leftPt.x = position.x - (this->size * ((t_const::FONT_WIDTH + 1) * this->text.length() / 2));
-		rightPt.x = leftPt.x + position.x;
+		rightPt.x = position.x + (position.x - leftPt.x);
 		break;
 	case RIGHT:
 		leftPt.x = position.x - (this->size * (t_const::FONT_WIDTH + 1) * this->text.length());
@@ -62,6 +62,9 @@ bool TetrisFont::init(std::string text, cocos2d::Color4F color, cocos2d::Vec2 po
 		break;
 	}
 
+	auto drawNode = cocos2d::DrawNode::create();
+	drawNode->drawRect(leftPt, rightPt, cocos2d::Color4F::ORANGE);
+	this->addChild(drawNode);
 	createFontBlocks();
 
 	return true;

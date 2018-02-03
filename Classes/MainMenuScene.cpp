@@ -27,6 +27,7 @@ bool MainMenuScene::init()
 	heading->write(fontDrawNode);
 	heading2->write(fontDrawNode);
 	startBtn->write(fontDrawNode);
+	this->addChild(startBtn);
 
 	// touch listners
 	auto touchListener = EventListenerTouchOneByOne::create();
