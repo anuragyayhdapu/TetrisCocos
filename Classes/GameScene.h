@@ -1,11 +1,14 @@
 #pragma once
 
 #include "cocos2d.h"
+#include "TetrisFont.h"
 
 class GameScene : public cocos2d::Scene
 {
 private:
 	static cocos2d::Layer* ctLayer;
+	static TetrisFont *ctFont;
+	static cocos2d::DrawNode* ctDrawNode;
 
 public:
 	virtual bool init();

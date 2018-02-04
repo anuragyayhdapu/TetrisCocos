@@ -6,7 +6,6 @@
 
 USING_NS_CC;
 
-Layer *GameScene::ctLayer;
 
 bool TetrisBoardScene::init()
 {

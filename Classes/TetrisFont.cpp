@@ -62,9 +62,9 @@ bool TetrisFont::init(std::string text, cocos2d::Color4F color, cocos2d::Vec2 po
 		break;
 	}
 
-	auto drawNode = cocos2d::DrawNode::create();
+	/*auto drawNode = cocos2d::DrawNode::create();
 	drawNode->drawRect(leftPt, rightPt, cocos2d::Color4F::ORANGE);
-	this->addChild(drawNode);
+	this->addChild(drawNode);*/
 	createFontBlocks();
 
 	return true;
@@ -145,8 +145,18 @@ void TetrisFont::write(cocos2d::DrawNode * drawNode)
 	for (auto dd : fontBlocksDD)
 	{
 		drawNode->drawSolidRect(dd.origin, dd.destination, dd.color);
-		//drawNode->drawRect(dd.origin, dd.destination, dd.borderColor);
+		drawNode->drawRect(dd.origin, dd.destination, dd.borderColor);
 	}
+}
+
+void TetrisFont::reWrite(std::string newText, cocos2d::DrawNode * drawNode)
+{
+	drawNode->clear();
+	fontBlocksDD.clear();
+
+	this->text = newText;
+	createFontBlocks();
+	write(drawNode);
 }
 
 

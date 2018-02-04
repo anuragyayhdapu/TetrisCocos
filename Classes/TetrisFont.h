@@ -16,6 +16,7 @@ public:
 		FontColorPattern, FontAlign);
 
 	void write(cocos2d::DrawNode* drawNode);
+	void reWrite(std::string newText, cocos2d::DrawNode* drawNode);
 	bool insideBoundingBox(cocos2d::Vec2 pos);
 
 	static float u;	// text unit block size
