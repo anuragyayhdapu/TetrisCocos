@@ -312,14 +312,19 @@ void Board::updateScore()
 	if (lineClearCount >= t_const::LEVEL_CHANGE_LINE_CLEAR_COUNT)
 	{
 		++level;
+		notify(*this, TetrisEvent::LEVEL_UP);
 		lineClearCount = 0;
 	}
 
 	score += (totalLinesClear * level * t_const::ONE_LINE_CLEAR_SCORE);
+	notify(*this, TetrisEvent::SCORE_UP);
 	totalLinesClear = 0;
 
 	if (score > highScore)
+	{
 		highScore = score;
+		notify(*this, TetrisEvent::HIGH_SCORE_UP);
+	}
 
 	// draw score
 	cocos2d::log((std::to_string(score)).c_str());

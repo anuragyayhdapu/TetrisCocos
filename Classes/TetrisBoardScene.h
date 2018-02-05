@@ -5,6 +5,7 @@
 #include "Observer.h"
 #include "Board.h"
 #include "Constants.h"
+#include "TetrisFont.h"
 #include <list>
 //#include "sqlite3\include\sqlite3.h"
 #include <sqlite3.h>
@@ -28,7 +29,10 @@ private:
 	std::list<short>::iterator randListIter;	// randList iterators given to board 
 	cocos2d::DrawNode* windowDrawNode;
 	cocos2d::Layer *countDownLayer;
+	TetrisFont *scoreTxt, *hScoreTxt, *lvlTxt, *scoreNum, *hScoreNum, *lvlNum;
+	cocos2d::DrawNode *txtDrawNode, *scoreNumDrawNode, *hScoreNumDrawNode, *lvlNumDrawNode;
 
+	void drawFonts(cocos2d::Size visibleSize);
 	void drawWindow();
 	void redrawWindow();
 	virtual void onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);

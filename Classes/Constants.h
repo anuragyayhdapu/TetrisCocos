@@ -42,7 +42,8 @@ namespace t_const
 }
 
 enum TetrisEvent {
-	INCREMENT_RAND_ITERATOR, GAMEOVER
+	INCREMENT_RAND_ITERATOR, GAMEOVER, 
+	LEVEL_UP, HIGH_SCORE_UP, SCORE_UP
 };
 
 enum FontColorPattern {

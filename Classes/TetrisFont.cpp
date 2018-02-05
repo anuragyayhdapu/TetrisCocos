@@ -149,6 +149,16 @@ void TetrisFont::write(cocos2d::DrawNode * drawNode)
 	}
 }
 
+
+void TetrisFont::writeSolid(cocos2d::DrawNode * drawNode)
+{
+	for (auto dd : fontBlocksDD)
+	{
+		drawNode->drawSolidRect(dd.origin, dd.destination, dd.color);
+	}
+}
+
+
 void TetrisFont::reWrite(std::string newText, cocos2d::DrawNode * drawNode)
 {
 	drawNode->clear();

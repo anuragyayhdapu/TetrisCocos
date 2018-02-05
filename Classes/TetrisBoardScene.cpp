@@ -42,9 +42,12 @@ bool TetrisBoardScene::init()
 	windowDrawNode = DrawNode::create();
 	this->addChild(windowDrawNode);
 	this->drawWindow();
+	drawFonts(visibleSize);
 
 	countDownLayer = nullptr;
 	countDown(visibleSize);
+
+
 
 	return true;
 }
@@ -160,10 +163,61 @@ void TetrisBoardScene::onNotify(const Board & board, TetrisEvent _event)
 			this->maxLevel = board.getLevel();
 			saveToDB();
 		}
+
+		break;
+	case LEVEL_UP:
+		lvlNum->reWrite(std::to_string(board.getLevel()), lvlNumDrawNode);
+		break;
+	case HIGH_SCORE_UP:
+		hScoreNum->reWrite(std::to_string(board.getHighScore()), hScoreNumDrawNode);
+		break;
+	case SCORE_UP:
+		scoreNum->reWrite(std::to_string(board.getScore()), scoreNumDrawNode);
 		break;
 	default:
 		break;
 	}
+
+}
+
+
+void TetrisBoardScene::drawFonts(Size visibleSize)
+{
+	txtDrawNode = DrawNode::create();
+	scoreNumDrawNode = DrawNode::create();
+	hScoreNumDrawNode = DrawNode::create();
+	lvlNumDrawNode = DrawNode::create();
+	this->addChild(txtDrawNode);
+	this->addChild(scoreNumDrawNode);
+	this->addChild(hScoreNumDrawNode);
+	this->addChild(lvlNumDrawNode);
+
+	scoreTxt = TetrisFont::create("score", cocos2d::Color4F::GRAY,
+		Vec2(_pf.x + _u * (t_const::WINDOW_RIGHT - 1), 0.4 * visibleSize.height), 0.5f, FontColorPattern::FULL, FontAlign::RIGHT);
+	hScoreTxt = TetrisFont::create("h score", cocos2d::Color4F::GRAY,
+		Vec2(_pf.x + _u * (t_const::WINDOW_RIGHT - 1), 0.3 * visibleSize.height), 0.5f, FontColorPattern::FULL, FontAlign::RIGHT);
+	lvlTxt = TetrisFont::create("level", cocos2d::Color4F::GRAY,
+		Vec2(_pf.x + _u * (t_const::WINDOW_RIGHT - 1), 0.2 * visibleSize.height), 0.5f, FontColorPattern::FULL, FontAlign::RIGHT);
+
+	scoreNum = TetrisFont::create(".", cocos2d::Color4F::GRAY,
+		Vec2(_pf.x + _u * (t_const::WINDOW_RIGHT), 0.4 * visibleSize.height), 0.6f, FontColorPattern::RANDOM_BLOCK, FontAlign::LEFT);
+	auto hsTxt = ".";
+	if (this->highScore > 0)
+		auto hsTxt = std::to_string(this->highScore);
+	hScoreNum = TetrisFont::create(hsTxt, cocos2d::Color4F::GRAY,
+		Vec2(_pf.x + _u * (t_const::WINDOW_RIGHT), 0.3 * visibleSize.height), 0.6f, FontColorPattern::RANDOM_BLOCK, FontAlign::LEFT);
+	lvlNum = TetrisFont::create(std::to_string(this->maxLevel), cocos2d::Color4F::GRAY,
+		Vec2(_pf.x + _u * (t_const::WINDOW_RIGHT), 0.2 * visibleSize.height), 0.6f, FontColorPattern::RANDOM_BLOCK, FontAlign::LEFT);
+
+	this->addChild(scoreNum);
+	this->addChild(hScoreNum);
+	this->addChild(lvlNum);
+	scoreTxt->writeSolid(txtDrawNode);
+	hScoreTxt->writeSolid(txtDrawNode);
+	lvlTxt->writeSolid(txtDrawNode);
+	scoreNum->writeSolid(scoreNumDrawNode);
+	hScoreNum->writeSolid(hScoreNumDrawNode);
+	lvlNum->writeSolid(lvlNumDrawNode);
 }
 
 
