@@ -50,6 +50,10 @@ enum FontColorPattern {
 	FULL, RANDOM_WORD, RANDOM_BLOCK
 };
 
+enum FontDrawPattern {
+	SOLID, BORDERED
+};
+
 enum FontAlign {
 	LEFT, MIDDLE, RIGHT
 };

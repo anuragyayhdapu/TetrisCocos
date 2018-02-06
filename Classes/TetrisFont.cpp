@@ -14,10 +14,10 @@ TetrisFont::~TetrisFont()
 float TetrisFont::u;
 
 TetrisFont * TetrisFont::create(std::string text, cocos2d::Color4F color, cocos2d::Vec2 position, float size,
-	FontColorPattern pattern, FontAlign align)
+	FontColorPattern pattern, FontDrawPattern drawPattern, FontAlign align)
 {
 	TetrisFont* ptr = new(std::nothrow)TetrisFont();
-	if (ptr && ptr->init(text, color, position, size, pattern, align))
+	if (ptr && ptr->init(text, color, position, size, pattern, drawPattern, align))
 	{
 		ptr->autorelease();
 	}
@@ -31,7 +31,7 @@ TetrisFont * TetrisFont::create(std::string text, cocos2d::Color4F color, cocos2
 
 
 bool TetrisFont::init(std::string text, cocos2d::Color4F color, cocos2d::Vec2 position, float size,
-	FontColorPattern pattern, FontAlign align)
+	FontColorPattern pattern, FontDrawPattern drawPattern, FontAlign align)
 {
 	if (!Node::init())
 	{
@@ -42,6 +42,7 @@ bool TetrisFont::init(std::string text, cocos2d::Color4F color, cocos2d::Vec2 po
 	this->size = u * size;
 	this->color = color;
 	this->colorPattern = pattern;
+	this->drawPattern = drawPattern;
 	this->leftPt.y = position.y;
 	this->rightPt.y = position.y - (this->size * t_const::FONT_HEIGHT);
 
@@ -145,16 +146,17 @@ void TetrisFont::write(cocos2d::DrawNode * drawNode)
 	for (auto dd : fontBlocksDD)
 	{
 		drawNode->drawSolidRect(dd.origin, dd.destination, dd.color);
-		drawNode->drawRect(dd.origin, dd.destination, dd.borderColor);
-	}
-}
 
-
-void TetrisFont::writeSolid(cocos2d::DrawNode * drawNode)
-{
-	for (auto dd : fontBlocksDD)
-	{
-		drawNode->drawSolidRect(dd.origin, dd.destination, dd.color);
+		switch (drawPattern)
+		{
+		case SOLID:
+			break;
+		case BORDERED:
+			drawNode->drawRect(dd.origin, dd.destination, dd.borderColor);
+			break;
+		default:
+			break;
+		}
 	}
 }
 

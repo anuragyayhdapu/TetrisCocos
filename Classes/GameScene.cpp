@@ -47,7 +47,7 @@ void GameScene::countDown(Size size)
 	this->addChild(ctDrawNode, 0, DRAW_NODE);
 
 	auto visibleSize = Director::getInstance()->getVisibleSize();
-	ctFont = TetrisFont::create("3", Color4F::BLUE, Vec2(visibleSize.width * 0.45, visibleSize.height * 0.6), 5, FontColorPattern::RANDOM_BLOCK, FontAlign::MIDDLE);
+	ctFont = TetrisFont::create("3", Color4F::BLUE, Vec2(visibleSize.width * 0.45, visibleSize.height * 0.6), 5, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, FontAlign::MIDDLE);
 	this->addChild(ctFont, 0, TETRIS_FONT);
 
 	cocos2d::Vector<cocos2d::FiniteTimeAction*> actions;

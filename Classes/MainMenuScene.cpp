@@ -6,23 +6,23 @@ USING_NS_CC;
 bool MainMenuScene::init()
 {
 	// super init
-    if ( !Scene::init() )
-    {
-        return false;
-    }
-    
-    auto visibleSize = Director::getInstance()->getVisibleSize();
-    Vec2 origin = Director::getInstance()->getVisibleOrigin();
+	if (!Scene::init())
+	{
+		return false;
+	}
+
+	auto visibleSize = Director::getInstance()->getVisibleSize();
+	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
 
 	auto fontDrawNode = DrawNode::create();
 	this->addChild(fontDrawNode);
 	auto heading = TetrisFont::create("tetris", Color4F::BLUE, Vec2(visibleSize.width / 2, visibleSize.height * 0.8), 3.5,
-		FontColorPattern::RANDOM_BLOCK, FontAlign::MIDDLE);
+		FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, FontAlign::MIDDLE);
 	auto heading2 = TetrisFont::create("cocos", Color4F::BLUE, Vec2(visibleSize.width / 2, visibleSize.height * 0.60), 2.5,
-		FontColorPattern::RANDOM_BLOCK, FontAlign::MIDDLE);	
+		FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, FontAlign::MIDDLE);
 	startBtn = TetrisFont::create(">", Color4F::RED, Vec2(visibleSize.width / 2, visibleSize.height * 0.30), 3.5,
-		FontColorPattern::RANDOM_BLOCK, FontAlign::MIDDLE);
+		FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, FontAlign::MIDDLE);
 
 	heading->write(fontDrawNode);
 	heading2->write(fontDrawNode);
@@ -34,7 +34,7 @@ bool MainMenuScene::init()
 	touchListener->onTouchBegan = CC_CALLBACK_2(MainMenuScene::onTouchBegan, this);
 
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
-    return true;
+	return true;
 }
 
 

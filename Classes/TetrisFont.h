@@ -11,12 +11,11 @@ public:
 	TetrisFont();
 	virtual ~TetrisFont();
 	static TetrisFont* create(std::string text, cocos2d::Color4F color, cocos2d::Vec2 position, float size,
-		FontColorPattern, FontAlign align = FontAlign::LEFT);
-	bool init(std::string text, cocos2d::Color4F color, cocos2d::Vec2 position, float size, 
-		FontColorPattern, FontAlign);
+		FontColorPattern, FontDrawPattern = FontDrawPattern::BORDERED, FontAlign align = FontAlign::LEFT);
+	bool init(std::string text, cocos2d::Color4F color, cocos2d::Vec2 position, float size,
+		FontColorPattern, FontDrawPattern, FontAlign);
 
 	void write(cocos2d::DrawNode* drawNode);
-	void writeSolid(cocos2d::DrawNode * drawNode);
 	void reWrite(std::string newText, cocos2d::DrawNode* drawNode);
 	bool insideBoundingBox(cocos2d::Vec2 pos);
 
@@ -29,6 +28,7 @@ private:
 	cocos2d::Vec2 leftPt, rightPt;
 	std::forward_list<DrawData> fontBlocksDD;
 	FontColorPattern colorPattern;
+	FontDrawPattern drawPattern;
 
 	void createFontBlocks();
 };
