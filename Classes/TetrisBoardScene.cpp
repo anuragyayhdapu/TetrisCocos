@@ -206,7 +206,7 @@ void TetrisBoardScene::drawFonts(Size visibleSize)
 		hsTxt = std::to_string(this->highScore);
 	hScoreNum = TetrisFont::create(hsTxt, cocos2d::Color4F::GRAY,
 		Vec2(_pf.x + _u * (t_const::WINDOW_RIGHT), 0.3 * visibleSize.height), 0.6f, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, FontAlign::LEFT);
-	lvlNum = TetrisFont::create(std::to_string(this->maxLevel), cocos2d::Color4F::GRAY,
+	lvlNum = TetrisFont::create("1", cocos2d::Color4F::GRAY,
 		Vec2(_pf.x + _u * (t_const::WINDOW_RIGHT), 0.2 * visibleSize.height), 0.6f, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, FontAlign::LEFT);
 
 	this->addChild(scoreNum);

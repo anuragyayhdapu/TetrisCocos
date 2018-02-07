@@ -22,6 +22,8 @@ private:
 	cocos2d::Vec2 leftPt;
 	cocos2d::Vec2 rightPt;
 	float width;
-
 	cocos2d::DrawNode *btnDrawNode, *fontDrawNode;
+	bool alreadyDrawn, alreadyClear;
+
+	bool onMouseMove(cocos2d::EventMouse* _event);
 };

@@ -21,7 +21,7 @@ bool MainMenuScene::init()
 		FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, FontAlign::MIDDLE);
 	auto heading2 = TetrisFont::create("cocos", Color4F::BLUE, Vec2(visibleSize.width / 2, visibleSize.height * 0.60), 2.5,
 		FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, FontAlign::MIDDLE);
-	startBtn = TetrisButton::create(">", Color4F::RED, Vec2(visibleSize.width / 2, visibleSize.height * 0.30), 3.5, FontAlign::MIDDLE, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, 1);
+	startBtn = TetrisButton::create(">", Color4F::RED, Vec2(visibleSize.width / 2, visibleSize.height * 0.30), 3.5, FontAlign::MIDDLE, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, 3);
 
 	heading->write(fontDrawNode);
 	heading2->write(fontDrawNode);

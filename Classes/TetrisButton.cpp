@@ -2,7 +2,9 @@
 
 TetrisButton::TetrisButton(cocos2d::Color4F borderColor)
 	:
-	borderColor(borderColor)
+	borderColor(borderColor),
+	alreadyClear(true),
+	alreadyDrawn(false)
 {
 }
 
@@ -38,20 +40,28 @@ bool TetrisButton::init(std::string text, cocos2d::Vec2 position, float size, Fo
 	this->addChild(font);
 	font->write(fontDrawNode);
 
+	// give padding around text
 	unsigned int diff;
 	if (width <= text.size())
-		diff = 0;
+		diff = 1;
 	else
 		diff = width - text.size();
 
-
-	// give 2 size padding around text
 	this->leftPt = font->getLeftPt();
 	this->rightPt = font->getRightPt();
 
+	float offset = (size * TetrisFont::u * diff);
+	leftPt.x -= offset;
+	leftPt.y += size * TetrisFont::u;
+	rightPt.x += offset;
+	rightPt.y -= size * TetrisFont::u;
+
 	btnDrawNode = cocos2d::DrawNode::create();
-	btnDrawNode->drawRect(leftPt, rightPt, cocos2d::Color4F::ORANGE);
 	this->addChild(btnDrawNode);
+
+	auto mouseListner = cocos2d::EventListenerMouse::create();
+	mouseListner->onMouseMove = CC_CALLBACK_1(TetrisButton::onMouseMove, this);
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(mouseListner, this);
 
 	return true;
 }
@@ -66,4 +76,28 @@ bool TetrisButton::insideBoundingBox(cocos2d::Vec2 pos)
 	}
 
 	return false;
+}
+
+bool TetrisButton::onMouseMove(cocos2d::EventMouse * mouseEvent)
+{
+	if (insideBoundingBox(cocos2d::Vec2(mouseEvent->getCursorX(), mouseEvent->getCursorY())))
+	{
+		if (!alreadyDrawn)
+		{
+			btnDrawNode->drawRect(leftPt, rightPt, cocos2d::Color4F::ORANGE);
+			alreadyDrawn = true;
+			alreadyClear = false;
+		}
+	}
+	else
+	{
+		if (!alreadyClear)
+		{
+			btnDrawNode->clear();
+			alreadyClear = true;
+			alreadyDrawn = false;
+		}
+	}
+
+	return true;
 }
