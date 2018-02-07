@@ -1,20 +1,17 @@
 #pragma once
 
 #include "cocos2d.h"
+#include "TetrisFont.h"
 
-class PauseScene : public cocos2d::Layer
+class PauseScene : public cocos2d::Scene
 {
 public:
-    static cocos2d::Scene* createScene();
-
-    virtual bool init();
-
+	virtual bool init();
+	CREATE_FUNC(PauseScene);
 	void Resume(cocos2d::Ref * pSender);
-
 	void GoToMainMenuScene(cocos2d::Ref * pSender);
-
 	void Retry(cocos2d::Ref * pSender);
-    
-    // implement the "static create()" method manually
-    CREATE_FUNC(PauseScene);
+
+private:
+	TetrisFont *resumeBtn, *retryBtn, *quitBtn;
 };

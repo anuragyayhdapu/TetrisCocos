@@ -2,6 +2,7 @@
 
 #include "cocos2d.h"
 #include "TetrisFont.h"
+#include "TetrisButton.h"
 
 class MainMenuScene : public cocos2d::Scene
 {
@@ -11,6 +12,6 @@ public:
 	void GoToTetrisBoardScene(Ref * pSender);
 
 private:
-	TetrisFont *startBtn;
+	TetrisButton *startBtn;
 	bool onTouchBegan(cocos2d::Touch * touch, cocos2d::Event * _event);
 };

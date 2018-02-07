@@ -2,8 +2,18 @@
 #include "Constants.h"
 #include "TetrominoTemplates.h"
 
+float TetrisFont::u;
 
-TetrisFont::TetrisFont()
+TetrisFont::TetrisFont(std::string text, cocos2d::Color4F color, float size, FontColorPattern colorPattern, FontDrawPattern drawPattern, FontAlign align, cocos2d::Vec2 leftPt, cocos2d::Vec2 rightPt)
+	:
+	text(text),
+	color(color),
+	size(TetrisFont::u * size),
+	colorPattern(colorPattern),
+	drawPattern(drawPattern),
+	align(align),
+	leftPt(leftPt),
+	rightPt(rightPt)
 {
 }
 
@@ -11,13 +21,10 @@ TetrisFont::~TetrisFont()
 {
 }
 
-float TetrisFont::u;
-
-TetrisFont * TetrisFont::create(std::string text, cocos2d::Color4F color, cocos2d::Vec2 position, float size,
-	FontColorPattern pattern, FontDrawPattern drawPattern, FontAlign align)
+TetrisFont * TetrisFont::create(std::string text, cocos2d::Color4F color, cocos2d::Vec2 position, float size, FontColorPattern pattern, FontDrawPattern drawPattern, FontAlign align)
 {
-	TetrisFont* ptr = new(std::nothrow)TetrisFont();
-	if (ptr && ptr->init(text, color, position, size, pattern, drawPattern, align))
+	TetrisFont* ptr = new(std::nothrow)TetrisFont(text, color, size, pattern, drawPattern, align);
+	if (ptr && ptr->init(position))
 	{
 		ptr->autorelease();
 	}
@@ -30,61 +37,42 @@ TetrisFont * TetrisFont::create(std::string text, cocos2d::Color4F color, cocos2
 }
 
 
-bool TetrisFont::init(std::string text, cocos2d::Color4F color, cocos2d::Vec2 position, float size,
-	FontColorPattern pattern, FontDrawPattern drawPattern, FontAlign align)
+bool TetrisFont::init(cocos2d::Vec2 position)
 {
 	if (!Node::init())
 	{
 		return false;
 	}
-
-	this->text = text;
-	this->size = u * size;
-	this->color = color;
-	this->colorPattern = pattern;
-	this->drawPattern = drawPattern;
-	this->leftPt.y = position.y;
-	this->rightPt.y = position.y - (this->size * t_const::FONT_HEIGHT);
-
-	switch (align)
-	{
-	case MIDDLE:
-		leftPt.x = position.x - (this->size * ((t_const::FONT_WIDTH + 1) * this->text.length() / 2));
-		rightPt.x = position.x + (position.x - leftPt.x);
-		break;
-	case RIGHT:
-		leftPt.x = position.x - (this->size * (t_const::FONT_WIDTH + 1) * this->text.length());
-		rightPt.x = position.x;
-		break;
-	case LEFT:
-	default:
-		leftPt.x = position.x;
-		rightPt.x = position.x + (this->size * (t_const::FONT_WIDTH + 1) * this->text.length());
-		break;
-	}
-
-	/*auto drawNode = cocos2d::DrawNode::create();
-	drawNode->drawRect(leftPt, rightPt, cocos2d::Color4F::ORANGE);
-	this->addChild(drawNode);*/
+	
+	setBoundingPoints(position);
 	createFontBlocks();
 
 	return true;
 }
 
 
-//void TetrisFont::calcBoundingBoxPoints()
-//{
-//	// top left
-//	leftPt.x = midPt.x - ((text.length() / 2) * size);
-//	leftPt.y = midPt.y;
-//
-//	// bottom right // watchout for magic numbers
-//	rightPt.x = midPt.x + ((text.length() / 2) * size);
-//	rightPt.y = midPt.y - (t_const::FONT_HEIGHT * size);
-//
-//	// adjust midPoint
-//	//midPt.y -= (3 * size);
-//}
+void TetrisFont::setBoundingPoints(cocos2d::Vec2 position)
+{
+	leftPt.y = position.y;
+	rightPt.y = position.y - (size * t_const::FONT_HEIGHT);
+
+	switch (align)
+	{
+	case MIDDLE:
+		leftPt.x = position.x - (size * ((t_const::FONT_WIDTH + 1) * text.length() / 2));
+		rightPt.x = position.x + (position.x - leftPt.x);
+		break;
+	case RIGHT:
+		leftPt.x = position.x - (size * (t_const::FONT_WIDTH + 1) * text.length());
+		rightPt.x = position.x;
+		break;
+	case LEFT:
+	default:
+		leftPt.x = position.x;
+		rightPt.x = position.x + (size * (t_const::FONT_WIDTH + 1) * text.length());
+		break;
+	}
+}
 
 
 void TetrisFont::createFontBlocks()
@@ -169,16 +157,4 @@ void TetrisFont::reWrite(std::string newText, cocos2d::DrawNode * drawNode)
 	this->text = newText;
 	createFontBlocks();
 	write(drawNode);
-}
-
-
-bool TetrisFont::insideBoundingBox(cocos2d::Vec2 pos)
-{
-	if (pos.x >= leftPt.x && pos.x <= rightPt.x
-		&& pos.y <= leftPt.y && pos.y >= rightPt.y)
-	{
-		return true;
-	}
-
-	return false;
 }

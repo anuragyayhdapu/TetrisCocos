@@ -4,20 +4,11 @@
 
 USING_NS_CC;
 
-Scene* PauseScene::createScene()
-{
-	auto scene = Scene::create();
-	auto layer = PauseScene::create();
-	scene->addChild(layer);
-
-    return scene;
-}
-
 
 bool PauseScene::init()
 {
 	// super init
-    if ( !Layer::init() )
+    if ( !Scene::init() )
     {
         return false;
     }

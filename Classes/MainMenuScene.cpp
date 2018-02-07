@@ -21,12 +21,10 @@ bool MainMenuScene::init()
 		FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, FontAlign::MIDDLE);
 	auto heading2 = TetrisFont::create("cocos", Color4F::BLUE, Vec2(visibleSize.width / 2, visibleSize.height * 0.60), 2.5,
 		FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, FontAlign::MIDDLE);
-	startBtn = TetrisFont::create(">", Color4F::RED, Vec2(visibleSize.width / 2, visibleSize.height * 0.30), 3.5,
-		FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, FontAlign::MIDDLE);
+	startBtn = TetrisButton::create(">", Color4F::RED, Vec2(visibleSize.width / 2, visibleSize.height * 0.30), 3.5, FontAlign::MIDDLE, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, 1);
 
 	heading->write(fontDrawNode);
 	heading2->write(fontDrawNode);
-	startBtn->write(fontDrawNode);
 	this->addChild(startBtn);
 
 	// touch listners
@@ -47,11 +45,8 @@ void MainMenuScene::GoToTetrisBoardScene(Ref *pSender)
 
 bool MainMenuScene::onTouchBegan(Touch* touch, Event* _event)
 {
-	// get bounding box of play button
 	if (startBtn->insideBoundingBox(touch->getLocation()))
 	{
-		cocos2d::log("inside play btn");
-		// and move to play screen if touched
 		GoToTetrisBoardScene(this);
 	}
 

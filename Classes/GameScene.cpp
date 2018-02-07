@@ -101,7 +101,7 @@ bool GameScene::init()
 
 void GameScene::GoToPauseScene(cocos2d::Ref *pSender)
 {
-	auto scene = PauseScene::createScene();
+	auto scene = PauseScene::create();
 	Director::getInstance()->pushScene(scene);
 }
 
