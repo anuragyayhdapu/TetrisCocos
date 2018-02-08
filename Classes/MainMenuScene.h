@@ -13,5 +13,6 @@ public:
 
 private:
 	TetrisButton *startBtn;
-	bool onTouchBegan(cocos2d::Touch * touch, cocos2d::Event * _event);
+	/*bool onTouchBegan(cocos2d::Touch * touch, cocos2d::Event * _event);
+	bool onTouchEnded(cocos2d::Touch * touch, cocos2d::Event * _event);*/
 };

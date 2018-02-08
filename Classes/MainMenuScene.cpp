@@ -1,5 +1,6 @@
 #include "MainMenuScene.h"
 #include "TetrisBoardScene.h"
+#include <functional>
 
 USING_NS_CC;
 
@@ -26,12 +27,13 @@ bool MainMenuScene::init()
 	heading->write(fontDrawNode);
 	heading2->write(fontDrawNode);
 	this->addChild(startBtn);
+	//startBtn->callbackFunc = std::bind(GoToTetrisBoardScene, this);
 
 	// touch listners
-	auto touchListener = EventListenerTouchOneByOne::create();
-	touchListener->onTouchBegan = CC_CALLBACK_2(MainMenuScene::onTouchBegan, this);
+	/*auto touchListener = EventListenerTouchOneByOne::create();
+	touchListener->onTouchEnded = CC_CALLBACK_2(MainMenuScene::onTouchBegan, this);*/
 
-	_eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
+	//_eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
 	return true;
 }
 
@@ -43,12 +45,13 @@ void MainMenuScene::GoToTetrisBoardScene(Ref *pSender)
 }
 
 
-bool MainMenuScene::onTouchBegan(Touch* touch, Event* _event)
-{
-	if (startBtn->insideBoundingBox(touch->getLocation()))
-	{
-		GoToTetrisBoardScene(this);
-	}
-
-	return true;
-}
+//bool MainMenuScene::onTouchBegan(Touch* touch, Event* _event)
+//{
+//	if (startBtn->insideBoundingBox(touch->getLocation()))
+//	{
+//		//GoToTetrisBoardScene(this);
+//		return true;
+//	}
+//
+//	return false;
+//}

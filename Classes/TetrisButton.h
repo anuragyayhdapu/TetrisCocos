@@ -14,7 +14,8 @@ public:
 	bool init(std::string text, cocos2d::Vec2 position, float size, FontColorPattern, FontDrawPattern, FontAlign, unsigned int width);
 
 	bool TetrisButton::insideBoundingBox(cocos2d::Vec2 pos);
-
+	void(*callbackFunc) (cocos2d::Ref*);
+	//cocos2d::ui::Widget::ccWidgetClickCallback callbackFunc;
 
 private:
 	TetrisFont * font;
@@ -26,4 +27,6 @@ private:
 	bool alreadyDrawn, alreadyClear;
 
 	bool onMouseMove(cocos2d::EventMouse* _event);
+	bool onTouchBegan(cocos2d::Touch * touch, cocos2d::Event * _event);
+	bool onTouchEnded(cocos2d::Touch * touch, cocos2d::Event * _event);
 };
