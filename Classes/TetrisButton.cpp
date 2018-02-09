@@ -2,8 +2,9 @@
 
 USING_NS_CC;
 
-TetrisButton::TetrisButton(cocos2d::Color4F borderColor)
+TetrisButton::TetrisButton(std::function<void(cocos2d::Ref*)> _btnCallbackFunc, cocos2d::Color4F borderColor)
 	:
+	btnCallbackFunc(_btnCallbackFunc),
 	borderColor(borderColor),
 	alreadyClear(true),
 	alreadyDrawn(false)
@@ -14,9 +15,9 @@ TetrisButton::~TetrisButton()
 {
 }
 
-TetrisButton * TetrisButton::create(std::string text, cocos2d::Color4F color, cocos2d::Vec2 position, float size, FontAlign align, FontColorPattern colorPattern, FontDrawPattern drawPattern, float width)
+TetrisButton * TetrisButton::create(std::function<void(cocos2d::Ref*)> _btnCallbackFunc, std::string text, cocos2d::Color4F color, cocos2d::Vec2 position, float size, FontAlign align, FontColorPattern colorPattern, FontDrawPattern drawPattern, float width)
 {
-	TetrisButton* ptr = new(std::nothrow)TetrisButton(color);
+	TetrisButton* ptr = new(std::nothrow)TetrisButton(_btnCallbackFunc, color);
 	if (ptr && ptr->init(text, position, size, colorPattern, drawPattern, align, width))
 	{
 		ptr->autorelease();
@@ -69,22 +70,6 @@ bool TetrisButton::init(std::string text, cocos2d::Vec2 position, float size, Fo
 	touchListener->onTouchBegan = CC_CALLBACK_2(TetrisButton::onTouchBegan, this);
 	touchListener->onTouchEnded = CC_CALLBACK_2(TetrisButton::onTouchEnded, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
-
-
-	/*this->addTouchEventListener([&](Ref* sender, Widget::TouchEventType type) {
-		switch (type)
-		{
-		case cocos2d::ui::Widget::TouchEventType::BEGAN:
-			break;
-		case cocos2d::ui::Widget::TouchEventType::ENDED:
-			cocos2d::log("Button Clicked");
-			break;
-		default:
-			break;
-		}
-	});*/
-
-	
 
 	return true;
 }
@@ -140,7 +125,7 @@ bool TetrisButton::onTouchEnded(cocos2d::Touch * touch, cocos2d::Event * _event)
 	if (insideBoundingBox(touch->getLocation()))
 	{
 		cocos2d::log("Button Click stoped");
-		//this->callBackFunc;
+		this->btnCallbackFunc(this->getParent());
 		return true;
 	}
 	else
