@@ -69,12 +69,12 @@ void GameScene::countDown(Size size)
 		font->reWrite("1", drawNode);
 	}));
 	actions.pushBack(DelayTime::create(1.0));
-	actions.pushBack(CallFunc::create([&] {
+	/*actions.pushBack(CallFunc::create([&] {
 		auto font = this->getChildByTag<TetrisFont*>(TETRIS_FONT);
 		auto drawNode = this->getChildByTag<DrawNode*>(DRAW_NODE);
 		font->reWrite("go", drawNode);
 	}));
-	actions.pushBack(DelayTime::create(1.0));
+	actions.pushBack(DelayTime::create(1.0));*/
 	actions.pushBack(CallFunc::create([&] {
 		this->removeChild(ctDrawNode);
 		this->removeChild(ctFont);
@@ -99,6 +99,20 @@ bool GameScene::init()
 }
 
 
+void GameScene::addButtons()
+{
+	auto visibleSize = Director::getInstance()->getVisibleSize();
+
+	auto pauseCallBack = std::bind(&GameScene::GoToPauseScene, this, std::placeholders::_1);
+	pauseBtn = TetrisButton::create(pauseCallBack, "p", Color4F::RED, Vec2(visibleSize.width * 0.20, visibleSize.height * 0.95), 1.5, FontAlign::RIGHT, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID);
+	this->addChild(pauseBtn);
+
+	auto stopCallBack = std::bind(&GameScene::GoToGameOverScene, this, std::placeholders::_1);
+	pauseBtn = TetrisButton::create(stopCallBack, "x", Color4F::RED, Vec2(visibleSize.width * 0.10, visibleSize.height * 0.95), 1.5, FontAlign::RIGHT, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID);
+	this->addChild(pauseBtn);
+}
+
+
 void GameScene::GoToPauseScene(cocos2d::Ref *pSender)
 {
 	auto scene = PauseScene::create();
@@ -108,6 +122,6 @@ void GameScene::GoToPauseScene(cocos2d::Ref *pSender)
 
 void GameScene::GoToGameOverScene(cocos2d::Ref *pSender)
 {
-	auto scene = GameOverScene::createScene();
+	auto scene = GameOverScene::create();
 	Director::getInstance()->replaceScene(scene);
 }

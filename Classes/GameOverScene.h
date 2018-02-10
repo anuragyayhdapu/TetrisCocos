@@ -1,18 +1,18 @@
 #pragma once
 
 #include "cocos2d.h"
+#include "TetrisButton.h"
 
-class GameOverScene : public cocos2d::Layer
+class GameOverScene : public cocos2d::Scene
 {
 public:
-    static cocos2d::Scene* createScene();
+	CREATE_FUNC(GameOverScene);
+	virtual bool init();
 
-    virtual bool init();
+	void retry(cocos2d::Ref *pSender);
+	void goToMainMenu(cocos2d::Ref *pSender);
+	void quit(cocos2d::Ref *pSender);
 
-	void GoToTetrisBoardScene(cocos2d::Ref * pSender);
-
-	void GoToMainMenuScene(cocos2d::Ref * pSender);
-    
-    // implement the "static create()" method manually
-    CREATE_FUNC(GameOverScene);
+private:
+	TetrisButton *retryBtn, *mainMenuBtn, *quitBtn;
 };

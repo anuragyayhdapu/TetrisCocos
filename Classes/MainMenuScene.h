@@ -9,10 +9,8 @@ class MainMenuScene : public cocos2d::Scene
 public:
     virtual bool init();
     CREATE_FUNC(MainMenuScene);
-	void GoToTetrisBoardScene(Ref * pSender);
+	void GoToSinglePlayerScene(Ref * pSender);
 
 private:
-	TetrisButton *startBtn;
-	/*bool onTouchBegan(cocos2d::Touch * touch, cocos2d::Event * _event);
-	bool onTouchEnded(cocos2d::Touch * touch, cocos2d::Event * _event);*/
+	TetrisButton *spStartBtn;
 };

@@ -14,29 +14,61 @@ bool PauseScene::init()
     }
     
     auto visibleSize = Director::getInstance()->getVisibleSize();
-    Vec2 origin = Director::getInstance()->getVisibleOrigin();
     
+	auto txtDrawNode = DrawNode::create();
+	this->addChild(txtDrawNode);
+	auto headingTxt = TetrisFont::create("paused", cocos2d::Color4F::GRAY, Vec2(visibleSize.width * 0.5, 0.9 * visibleSize.height), 2.2f, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, FontAlign::MIDDLE);
+	headingTxt->write(txtDrawNode);
+
+	// TODO: show current score, high score, and level info
+
+	// resume button
+	auto resumeCallback = std::bind(&PauseScene::resume, this, std::placeholders::_1);
+	resumeBtn = TetrisButton::create(resumeCallback, "resume", Color4F::RED, Vec2(visibleSize.width * 0.5, visibleSize.height * 0.65), 1.5, FontAlign::MIDDLE, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, 7);
+	this->addChild(resumeBtn);
+
+	// retry button
+	auto retryCallback = std::bind(&PauseScene::retry, this, std::placeholders::_1);
+	retryBtn = TetrisButton::create(retryCallback, "retry", Color4F::RED, Vec2(visibleSize.width * 0.5, visibleSize.height * 0.50), 1.5, FontAlign::MIDDLE, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, 7);
+	this->addChild(retryBtn);
+
+	// go to main menu button
+	auto mainMenuCallback = std::bind(&PauseScene::goToMainMenu, this, std::placeholders::_1);
+	mainMenuBtn = TetrisButton::create(mainMenuCallback, "menu", Color4F::RED, Vec2(visibleSize.width * 0.5, visibleSize.height * 0.35), 1.5, FontAlign::MIDDLE, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, 7);
+	this->addChild(mainMenuBtn);
+
+	// quit button
+	auto quitCallback = std::bind(&PauseScene::quit, this, std::placeholders::_1);
+	quitBtn = TetrisButton::create(quitCallback, "quit", Color4F::RED, Vec2(visibleSize.width * 0.5, visibleSize.height * 0.20), 1.5, FontAlign::MIDDLE, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, 7);
+	this->addChild(quitBtn);
+
     return true;
 }
 
 
-void PauseScene::Resume(cocos2d::Ref *pSender)
+void PauseScene::resume(cocos2d::Ref *pSender)
 {
 	Director::getInstance()->popScene();
 }
 
 
-void PauseScene::GoToMainMenuScene(cocos2d::Ref *pSender)
+void PauseScene::retry(cocos2d::Ref *pSender)
 {
-	/*auto scene = MainMenuScene::createScene();
-	Director::getInstance()->popScene();
-	Director::getInstance()->replaceScene(scene);*/
+	// TODO: remove hardcoded after testing
+	auto scene = TetrisBoardScene::create();
+	Director::getInstance()->replaceScene(scene);
 }
 
 
-void PauseScene::Retry(cocos2d::Ref *pSender)
+void PauseScene::goToMainMenu(cocos2d::Ref *pSender)
 {
-	/*auto scene = TetrisBoardScene::createTetrisBoardScene();
 	Director::getInstance()->popScene();
-	Director::getInstance()->replaceScene(scene);*/
+	auto scene = MainMenuScene::create();
+	Director::getInstance()->replaceScene(scene);
+}
+
+
+void PauseScene::quit(cocos2d::Ref *pSender)
+{
+	Director::getInstance()->end();
 }

@@ -47,14 +47,13 @@ bool TetrisBoardScene::init()
 	countDownLayer = nullptr;
 	countDown(visibleSize);
 
-
-
 	return true;
 }
 
 
 void TetrisBoardScene::start()
 {
+	this->addButtons();
 	this->removeChild(countDownLayer);
 	board->start();
 }
@@ -154,8 +153,6 @@ void TetrisBoardScene::onNotify(const Board & board, TetrisEvent _event)
 
 		break;
 	case GAMEOVER:
-		// display game over scene
-
 		// save game highScore
 		if (board.getScore() >= board.getHighScore())
 		{
@@ -163,6 +160,9 @@ void TetrisBoardScene::onNotify(const Board & board, TetrisEvent _event)
 			this->maxLevel = board.getLevel();
 			saveToDB();
 		}
+
+		// display game over scene
+		this->GoToGameOverScene(this);
 
 		break;
 	case LEVEL_UP:

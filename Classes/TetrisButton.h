@@ -7,6 +7,7 @@
 class TetrisButton : public cocos2d::Node
 {
 public:
+	TetrisButton() {  }
 	TetrisButton(std::function<void(cocos2d::Ref*)> _btnCallbackFunc, cocos2d::Color4F borderColor);
 	virtual ~TetrisButton();
 

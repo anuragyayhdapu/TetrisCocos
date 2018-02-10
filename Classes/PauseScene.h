@@ -1,17 +1,18 @@
 #pragma once
 
 #include "cocos2d.h"
-#include "TetrisFont.h"
+#include "TetrisButton.h"
 
 class PauseScene : public cocos2d::Scene
 {
 public:
 	virtual bool init();
 	CREATE_FUNC(PauseScene);
-	void Resume(cocos2d::Ref * pSender);
-	void GoToMainMenuScene(cocos2d::Ref * pSender);
-	void Retry(cocos2d::Ref * pSender);
+	void resume(cocos2d::Ref * pSender);
+	void retry(cocos2d::Ref *pSender);
+	void goToMainMenu(cocos2d::Ref * pSender);
+	void quit(cocos2d::Ref * pSender);
 
 private:
-	TetrisFont *resumeBtn, *retryBtn, *quitBtn;
+	TetrisButton *resumeBtn, *retryBtn, *mainMenuBtn, *quitBtn;
 };
