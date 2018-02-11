@@ -30,7 +30,7 @@ private:
 	std::forward_list<UnitBlock*> ghostPieces;
 	SolidBlocks *solidBlocks;	// immovable blocks laying down over bed
 	cocos2d::DrawNode *movingTetDrawNode, *solidTetDrawNode, *bucketDrawNode, *ghostDrawNode;
-	int moveDelaySeconds, testDelaySeconds;
+	float moveDelaySeconds, tempDt;
 	std::list<short>::iterator& randListIter;	// randList iterator given to generate next tetromino
 
 	unsigned int score, highScore;
@@ -51,6 +51,7 @@ private:
 	void moveSchedular(float dt);
 	void lineClearShedular(float dt);
 	void dropHangingBlocksShedular(float dt);
+	bool toUpdate(float dt);
 
 public:
 	unsigned int getScore() const { return score; }

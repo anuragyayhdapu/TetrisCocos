@@ -3,7 +3,9 @@
 USING_NS_CC;
 
 Board::Board(std::list<short>::iterator& iter) :
-	randListIter(iter)
+	randListIter(iter),
+	moveDelaySeconds(t_const::START_SPEED),
+	tempDt(0.0f)
 {
 }
 
@@ -41,8 +43,6 @@ bool Board::init(double u, Vec2 leftTopPoint, std::list<short>::iterator& randLi
 
 	score = 0;
 	totalLinesClear = lineClearCount = 0;
-	moveDelaySeconds = 1.0f; // TODO: later change dynamically based on level
-	testDelaySeconds = 0.9f;
 
 	// add drawNodes
 	DrawNode *tempDrawNode = DrawNode::create();
@@ -103,7 +103,7 @@ void Board::start()
 	this->generateBlock();
 
 	// add update function to move movable tetris blocks
-	schedule(CC_SCHEDULE_SELECTOR(Board::moveSchedular), moveDelaySeconds);
+	schedule(CC_SCHEDULE_SELECTOR(Board::moveSchedular));
 }
 
 
@@ -210,7 +210,7 @@ void Board::freezeMovableBlock()
 	drawSolidTetromino();
 	movingTetDrawNode->clear();
 	unschedule(CC_SCHEDULE_SELECTOR(Board::moveSchedular));
-	schedule(CC_SCHEDULE_SELECTOR(Board::lineClearShedular), testDelaySeconds);
+	schedule(CC_SCHEDULE_SELECTOR(Board::lineClearShedular));
 }
 
 
@@ -314,6 +314,9 @@ void Board::updateScore()
 		++level;
 		notify(*this, TetrisEvent::LEVEL_UP);
 		lineClearCount = 0;
+
+		// increase speed
+		moveDelaySeconds *= t_const::SPEED_DECREASE;
 	}
 
 	score += (totalLinesClear * level * t_const::ONE_LINE_CLEAR_SCORE);
@@ -335,15 +338,20 @@ void Board::updateScore()
 // shedulars
 void Board::moveSchedular(float dt)
 {
-	if (movableTetromino != nullptr)
+	if (toUpdate(dt))
 	{
-		if (!movableTetromino->moveDown(*solidBlocks))
+		tempDt = 0.0f;
+
+		if (movableTetromino != nullptr)
 		{
-			freezeMovableBlock();
-		}
-		else
-		{
-			drawMovingTetromino();
+			if (!movableTetromino->moveDown(*solidBlocks))
+			{
+				freezeMovableBlock();
+			}
+			else
+			{
+				drawMovingTetromino();
+			}
 		}
 	}
 }
@@ -351,36 +359,54 @@ void Board::moveSchedular(float dt)
 
 void Board::lineClearShedular(float dt)
 {
-	auto numOfLinesCleared = solidBlocks->clearLines();
-	lineClearCount += numOfLinesCleared;
-	totalLinesClear += numOfLinesCleared;
-	unschedule(CC_SCHEDULE_SELECTOR(Board::lineClearShedular));
-
-	if (numOfLinesCleared > 0)
+	if (toUpdate(dt))
 	{
-		drawSolidTetromino();
-		schedule(CC_SCHEDULE_SELECTOR(Board::dropHangingBlocksShedular), testDelaySeconds);
-	}
-	else
-	{
-		if (totalLinesClear > 0)
-			updateScore();
+		tempDt = 0.0f;
 
-		notify(*this, TetrisEvent::INCREMENT_RAND_ITERATOR);
-		generateBlock();
-		if (checkGameOver() == false)
+		auto numOfLinesCleared = solidBlocks->clearLines();
+		lineClearCount += numOfLinesCleared;
+		totalLinesClear += numOfLinesCleared;
+		unschedule(CC_SCHEDULE_SELECTOR(Board::lineClearShedular));
+
+		if (numOfLinesCleared > 0)
 		{
-			schedule(CC_SCHEDULE_SELECTOR(Board::moveSchedular), moveDelaySeconds);
+			drawSolidTetromino();
+			schedule(CC_SCHEDULE_SELECTOR(Board::dropHangingBlocksShedular));
+		}
+		else
+		{
+			if (totalLinesClear > 0)
+				updateScore();
+
+			notify(*this, TetrisEvent::INCREMENT_RAND_ITERATOR);
+			generateBlock();
+			if (checkGameOver() == false)
+			{
+				schedule(CC_SCHEDULE_SELECTOR(Board::moveSchedular));
+			}
 		}
 	}
-
 }
 
 
 void Board::dropHangingBlocksShedular(float dt)
 {
-	solidBlocks->dropHangingBlocks();
-	drawSolidTetromino();
-	unschedule(CC_SCHEDULE_SELECTOR(Board::dropHangingBlocksShedular));
-	schedule(CC_SCHEDULE_SELECTOR(Board::lineClearShedular), testDelaySeconds);
+	if (toUpdate(dt))
+	{
+		tempDt = 0.0f;
+
+		solidBlocks->dropHangingBlocks();
+		drawSolidTetromino();
+		unschedule(CC_SCHEDULE_SELECTOR(Board::dropHangingBlocksShedular));
+		schedule(CC_SCHEDULE_SELECTOR(Board::lineClearShedular));
+	}
+}
+
+
+bool Board::toUpdate(float dt)
+{
+	if ((tempDt += dt) >= moveDelaySeconds)
+		return true;
+
+	return false;
 }
