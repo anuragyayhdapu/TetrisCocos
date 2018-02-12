@@ -8,41 +8,73 @@ USING_NS_CC;
 bool PauseScene::init()
 {
 	// super init
-    if ( !Scene::init() )
-    {
-        return false;
-    }
-    
-    auto visibleSize = Director::getInstance()->getVisibleSize();
-    
+	if (!Scene::init())
+	{
+		return false;
+	}
+
+	auto visibleSize = Director::getInstance()->getVisibleSize();
+
 	auto txtDrawNode = DrawNode::create();
 	this->addChild(txtDrawNode);
 	auto headingTxt = TetrisFont::create("paused", cocos2d::Color4F::GRAY, Vec2(visibleSize.width * 0.5, 0.9 * visibleSize.height), 2.2f, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, FontAlign::MIDDLE);
 	headingTxt->write(txtDrawNode);
 
-	// TODO: show current score, high score, and level info
+	this->addButtons();
 
-	// resume button
-	auto resumeCallback = std::bind(&PauseScene::resume, this, std::placeholders::_1);
-	resumeBtn = TetrisButton::create(resumeCallback, "resume", Color4F::RED, Vec2(visibleSize.width * 0.5, visibleSize.height * 0.65), 1.5, FontAlign::MIDDLE, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, 7);
-	this->addChild(resumeBtn);
+	return true;
+}
 
-	// retry button
-	auto retryCallback = std::bind(&PauseScene::retry, this, std::placeholders::_1);
-	retryBtn = TetrisButton::create(retryCallback, "retry", Color4F::RED, Vec2(visibleSize.width * 0.5, visibleSize.height * 0.50), 1.5, FontAlign::MIDDLE, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, 7);
-	this->addChild(retryBtn);
+PauseScene * PauseScene::create(std::string score, std::string highScore, std::string lvl)
+{
+	auto pauseScene = new(std::nothrow)PauseScene();
+	if (pauseScene && pauseScene->init(score, highScore, lvl))
+	{
+		pauseScene->autorelease();
+	}
+	else
+	{
+		delete pauseScene;
+		pauseScene = nullptr;
+	}
+	return pauseScene;
+}
 
-	// go to main menu button
-	auto mainMenuCallback = std::bind(&PauseScene::goToMainMenu, this, std::placeholders::_1);
-	mainMenuBtn = TetrisButton::create(mainMenuCallback, "menu", Color4F::RED, Vec2(visibleSize.width * 0.5, visibleSize.height * 0.35), 1.5, FontAlign::MIDDLE, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, 7);
-	this->addChild(mainMenuBtn);
+bool PauseScene::init(std::string score, std::string highScore, std::string lvl)
+{
+	if (!init())
+	{
+		return false;
+	}
 
-	// quit button
-	auto quitCallback = std::bind(&PauseScene::quit, this, std::placeholders::_1);
-	quitBtn = TetrisButton::create(quitCallback, "quit", Color4F::RED, Vec2(visibleSize.width * 0.5, visibleSize.height * 0.20), 1.5, FontAlign::MIDDLE, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, 7);
-	this->addChild(quitBtn);
+	std::string text;
+	text.append("score ");
+	size_t i = 0;
+	while (i++ < score.length())
+		text.append(" ");
+	text.append(" level ");
+	i = 0;
+	while (i++ < lvl.length())
+		text.append(" ");
 
-    return true;
+	std::string nums;
+	nums.append("      "); // 5
+	nums.append(score);
+	nums.append("       "); // 5
+	nums.append(lvl);
+
+	auto visibleSize = Director::getInstance()->getVisibleSize();
+
+	auto txtDrawNode = DrawNode::create();
+	this->addChild(txtDrawNode);
+
+	auto scoreTxt = TetrisFont::create(text, cocos2d::Color4F::GRAY, Vec2(visibleSize.width * 0.5, 0.65 * visibleSize.height), 0.5f, FontColorPattern::FULL, FontDrawPattern::SOLID, FontAlign::MIDDLE);
+	auto scoreNums = TetrisFont::create(nums, cocos2d::Color4F::GRAY, Vec2(visibleSize.width * 0.5, 0.65 * visibleSize.height), 0.5f, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, FontAlign::MIDDLE);
+
+	scoreTxt->write(txtDrawNode);
+	scoreNums->write(txtDrawNode);
+
+	return true;
 }
 
 
@@ -67,8 +99,23 @@ void PauseScene::goToMainMenu(cocos2d::Ref *pSender)
 	Director::getInstance()->replaceScene(scene);
 }
 
-
-void PauseScene::quit(cocos2d::Ref *pSender)
+void PauseScene::addButtons()
 {
-	Director::getInstance()->end();
+	auto visibleSize = Director::getInstance()->getVisibleSize();
+
+	// resume button
+	auto resumeCallback = std::bind(&PauseScene::resume, this, std::placeholders::_1);
+	resumeBtn = TetrisButton::create(resumeCallback, "resume", Color4F::RED, Vec2(visibleSize.width * 0.5, visibleSize.height * 0.50), 1.5, FontAlign::MIDDLE, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, 7);
+	this->addChild(resumeBtn);
+
+	// retry button
+	auto retryCallback = std::bind(&PauseScene::retry, this, std::placeholders::_1);
+	retryBtn = TetrisButton::create(retryCallback, "retry", Color4F::RED, Vec2(visibleSize.width * 0.5, visibleSize.height * 0.35), 1.5, FontAlign::MIDDLE, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, 7);
+	this->addChild(retryBtn);
+
+	// go to main menu button
+	auto mainMenuCallback = std::bind(&PauseScene::goToMainMenu, this, std::placeholders::_1);
+	mainMenuBtn = TetrisButton::create(mainMenuCallback, "menu", Color4F::RED, Vec2(visibleSize.width * 0.5, visibleSize.height * 0.20), 1.5, FontAlign::MIDDLE, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, 7);
+	this->addChild(mainMenuBtn);
+
 }

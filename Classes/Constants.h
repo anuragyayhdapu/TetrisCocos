@@ -28,7 +28,7 @@ namespace t_const
 	const int ONE_LINE_CLEAR_SCORE = 10;
 	const int LEVEL_CHANGE_LINE_CLEAR_COUNT = 5;
 	const float START_SPEED = 1.0f;
-	const float SPEED_DECREASE = 0.3;
+	const float SPEED_DECREASE = 0.7f;
 
 	const BoardPos SPAWN_POSITION(10, 0);
 

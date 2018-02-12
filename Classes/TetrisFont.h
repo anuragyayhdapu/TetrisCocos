@@ -22,6 +22,7 @@ public:
 
 	cocos2d::Vec2 getLeftPt() { return leftPt; }
 	cocos2d::Vec2 getRightPt() { return rightPt; }
+	std::string getText() { return text; }
 
 private:
 	std::string text;

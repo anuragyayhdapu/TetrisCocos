@@ -115,13 +115,17 @@ void GameScene::addButtons()
 
 void GameScene::GoToPauseScene(cocos2d::Ref *pSender)
 {
-	auto scene = PauseScene::create();
+	auto prevScene = static_cast<TetrisBoardScene*>(pSender);
+
+	auto scene = PauseScene::create(prevScene->getScore(), prevScene->getHighScore(), prevScene->getLevel());
 	Director::getInstance()->pushScene(scene);
 }
 
 
 void GameScene::GoToGameOverScene(cocos2d::Ref *pSender)
 {
-	auto scene = GameOverScene::create();
+	auto prevScene = static_cast<TetrisBoardScene*>(pSender);
+
+	auto scene = GameOverScene::create(prevScene->getScore(), prevScene->getHighScore(), prevScene->getLevel());
 	Director::getInstance()->replaceScene(scene);
 }

@@ -17,6 +17,9 @@ public:
 	CREATE_FUNC(TetrisBoardScene);
 	
 	void onNotify(const Board& board, TetrisEvent _event);
+	std::string getScore() { return scoreNum->getText(); }
+	std::string getHighScore() { return hScoreNum->getText(); }
+	std::string getLevel() { return lvlNum->getText(); }
 
 private:
 	sqlite3 * db;

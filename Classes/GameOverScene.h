@@ -9,10 +9,14 @@ public:
 	CREATE_FUNC(GameOverScene);
 	virtual bool init();
 
+	static GameOverScene* create(std::string score, std::string highScore, std::string lvl);
+	virtual bool init(std::string score, std::string highScore, std::string lvl);
+
 	void retry(cocos2d::Ref *pSender);
 	void goToMainMenu(cocos2d::Ref *pSender);
 	void quit(cocos2d::Ref *pSender);
 
 private:
 	TetrisButton *retryBtn, *mainMenuBtn, *quitBtn;
+	void drawButtons();
 };
