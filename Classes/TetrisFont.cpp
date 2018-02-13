@@ -119,7 +119,7 @@ void TetrisFont::createFontBlocks()
 					dd.color = this->color;
 					dd.borderColor = cocos2d::Color4F::BLACK;
 
-					fontBlocksDD.push_front(dd);
+					fontBlocksDD.push_back(dd);
 				}
 			}
 		}
@@ -157,4 +157,11 @@ void TetrisFont::reWrite(std::string newText, cocos2d::DrawNode * drawNode)
 	this->text = newText;
 	createFontBlocks();
 	write(drawNode);
+}
+
+
+void TetrisFont::drawBlock(cocos2d::DrawNode* drawNode, size_t index, cocos2d::Color4F color)
+{
+	auto dd = fontBlocksDD.at(index);
+	drawNode->drawSolidRect(dd.origin, dd.destination, color);
 }

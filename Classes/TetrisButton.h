@@ -15,6 +15,9 @@ public:
 
 	bool init(std::string text, cocos2d::Vec2 position, float size, FontColorPattern, FontDrawPattern, FontAlign, unsigned int width);
 
+	void startAnimate();
+	void stopAnimate();
+
 private:
 	TetrisFont * font;
 	cocos2d::Color4F borderColor;
@@ -29,4 +32,6 @@ private:
 	bool onMouseMove(cocos2d::EventMouse* _event);
 	bool onTouchBegan(cocos2d::Touch * touch, cocos2d::Event * _event);
 	bool onTouchEnded(cocos2d::Touch * touch, cocos2d::Event * _event);
+
+	void animate(float dt);
 };

@@ -51,16 +51,16 @@ bool PauseScene::init(std::string score, std::string highScore, std::string lvl)
 	text.append("score ");
 	size_t i = 0;
 	while (i++ < score.length())
-		text.append(" ");
-	text.append(" level ");
+		text.append("  ");
+	text.append("  level ");
 	i = 0;
 	while (i++ < lvl.length())
-		text.append(" ");
+		text.append("  ");
 
 	std::string nums;
-	nums.append("      "); // 5
+	nums.append("   ");
 	nums.append(score);
-	nums.append("       "); // 5
+	nums.append("    ");
 	nums.append(lvl);
 
 	auto visibleSize = Director::getInstance()->getVisibleSize();
@@ -68,8 +68,8 @@ bool PauseScene::init(std::string score, std::string highScore, std::string lvl)
 	auto txtDrawNode = DrawNode::create();
 	this->addChild(txtDrawNode);
 
-	auto scoreTxt = TetrisFont::create(text, cocos2d::Color4F::GRAY, Vec2(visibleSize.width * 0.5, 0.65 * visibleSize.height), 0.5f, FontColorPattern::FULL, FontDrawPattern::SOLID, FontAlign::MIDDLE);
-	auto scoreNums = TetrisFont::create(nums, cocos2d::Color4F::GRAY, Vec2(visibleSize.width * 0.5, 0.65 * visibleSize.height), 0.5f, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, FontAlign::MIDDLE);
+	auto scoreTxt = TetrisFont::create(text, cocos2d::Color4F::GRAY, Vec2(visibleSize.width * 0.5, 0.63 * visibleSize.height), 0.5f, FontColorPattern::FULL, FontDrawPattern::SOLID, FontAlign::MIDDLE);
+	auto scoreNums = TetrisFont::create(nums, cocos2d::Color4F::GRAY, Vec2(visibleSize.width * 0.5, 0.65 * visibleSize.height), 1.0f, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, FontAlign::MIDDLE);
 
 	scoreTxt->write(txtDrawNode);
 	scoreNums->write(txtDrawNode);

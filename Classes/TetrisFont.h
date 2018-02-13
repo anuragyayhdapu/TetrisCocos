@@ -1,7 +1,7 @@
 #pragma once
 
 #include "cocos2d.h"
-#include <forward_list>
+#include <vector>
 #include "DrawData.h"
 #include "Constants.h"
 
@@ -17,19 +17,20 @@ public:
 
 	void write(cocos2d::DrawNode* drawNode);
 	void reWrite(std::string newText, cocos2d::DrawNode* drawNode);
+	void drawBlock(cocos2d::DrawNode* drawNode, size_t index, cocos2d::Color4F color);
 
 	static float u;	// text unit block size
 
 	cocos2d::Vec2 getLeftPt() { return leftPt; }
 	cocos2d::Vec2 getRightPt() { return rightPt; }
 	std::string getText() { return text; }
+	std::vector<DrawData> fontBlocksDD;
 
 private:
 	std::string text;
 	float size;	//this text size
 	cocos2d::Color4F color;
 	cocos2d::Vec2 leftPt, rightPt;
-	std::forward_list<DrawData> fontBlocksDD;
 	FontColorPattern colorPattern;
 	FontDrawPattern drawPattern;
 	FontAlign align;

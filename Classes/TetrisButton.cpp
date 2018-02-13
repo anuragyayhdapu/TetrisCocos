@@ -1,4 +1,5 @@
 #include "TetrisButton.h"
+#include "TetrominoTemplates.h"
 
 USING_NS_CC;
 
@@ -71,6 +72,8 @@ bool TetrisButton::init(std::string text, cocos2d::Vec2 position, float size, Fo
 	touchListener->onTouchEnded = CC_CALLBACK_2(TetrisButton::onTouchEnded, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
 
+	startAnimate();
+
 	return true;
 }
 
@@ -92,6 +95,7 @@ bool TetrisButton::onMouseMove(cocos2d::EventMouse * mouseEvent)
 	{
 		if (!alreadyDrawn)
 		{
+			stopAnimate();
 			btnDrawNode->drawRect(leftPt, rightPt, cocos2d::Color4F::ORANGE);
 			alreadyDrawn = true;
 			alreadyClear = false;
@@ -101,6 +105,7 @@ bool TetrisButton::onMouseMove(cocos2d::EventMouse * mouseEvent)
 	{
 		if (!alreadyClear)
 		{
+			startAnimate();
 			btnDrawNode->clear();
 			alreadyClear = true;
 			alreadyDrawn = false;
@@ -133,4 +138,29 @@ bool TetrisButton::onTouchEnded(cocos2d::Touch * touch, cocos2d::Event * _event)
 		cocos2d::log("went outside");
 	}
 	return false;
+}
+
+
+void TetrisButton::startAnimate()
+{
+	schedule(CC_SCHEDULE_SELECTOR(TetrisButton::animate));
+}
+
+
+void TetrisButton::stopAnimate()
+{
+	unschedule(CC_SCHEDULE_SELECTOR(TetrisButton::animate));
+}
+
+
+void TetrisButton::animate(float dt)
+{
+	// get random color
+	auto color = cocos2d::Color4F(TetrominoTemplate::colorTemplates->at(rand() % TetrominoTemplate::size));
+
+	// get random position
+	auto pos = rand() % font->fontBlocksDD.size();
+
+	// draw 
+	font->drawBlock(fontDrawNode, pos, color);
 }
