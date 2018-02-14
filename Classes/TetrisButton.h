@@ -3,6 +3,7 @@
 #include "cocos2d.h"
 #include "TetrisFont.h"
 #include<functional>
+#include <vector>
 
 class TetrisButton : public cocos2d::Node
 {
@@ -17,6 +18,8 @@ public:
 
 	void startAnimate();
 	void stopAnimate();
+	void reWrite(std::string text);
+	bool nonInteractive;
 
 private:
 	TetrisFont * font;
@@ -24,7 +27,7 @@ private:
 	cocos2d::Vec2 leftPt;
 	cocos2d::Vec2 rightPt;
 	float width;
-	cocos2d::DrawNode *btnDrawNode, *fontDrawNode;
+	cocos2d::DrawNode *btnDrawNode, *p, *s, **curr;	// primary and secondary fontDrawing nodes
 	bool alreadyDrawn, alreadyClear;
 	std::function<void(cocos2d::Ref*)> btnCallbackFunc;
 
@@ -34,4 +37,8 @@ private:
 	bool onTouchEnded(cocos2d::Touch * touch, cocos2d::Event * _event);
 
 	void animate(float dt);
+
+	std::vector<int>::iterator rIter;
+	std::vector<int> randList;
+	void createRandList();
 };

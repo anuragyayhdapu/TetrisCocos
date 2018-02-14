@@ -7,8 +7,7 @@
 USING_NS_CC;
 
 Layer *GameScene::ctLayer;
-TetrisFont *GameScene::ctFont;
-cocos2d::DrawNode *GameScene::ctDrawNode;
+TetrisButton *GameScene::ctFont;
 
 #define DRAW_NODE 1
 #define TETRIS_FONT 2
@@ -43,40 +42,24 @@ void GameScene::countDown(Size size)
 	ctLayer->setPosition(Vec2(0, 0));
 	this->addChild(ctLayer);
 
-	ctDrawNode = DrawNode::create();
-	this->addChild(ctDrawNode, 0, DRAW_NODE);
-
 	auto visibleSize = Director::getInstance()->getVisibleSize();
-	ctFont = TetrisFont::create("3", Color4F::BLUE, Vec2(visibleSize.width * 0.45, visibleSize.height * 0.6), 5, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, FontAlign::MIDDLE);
+	ctFont = TetrisButton::create([] (cocos2d::Ref*){}, "3", Color4F::BLUE, Vec2(visibleSize.width * 0.45, visibleSize.height * 0.6), 5, FontAlign::MIDDLE, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID);
+	ctFont->nonInteractive = true;
 	this->addChild(ctFont, 0, TETRIS_FONT);
 
 	cocos2d::Vector<cocos2d::FiniteTimeAction*> actions;
+	actions.pushBack(DelayTime::create(1.0));
 	actions.pushBack(CallFunc::create([&] {
-		auto font = this->getChildByTag<TetrisFont*>(TETRIS_FONT);
-		auto drawNode = this->getChildByTag<DrawNode*>(DRAW_NODE);
-		font->write(drawNode);
+		auto btn = this->getChildByTag<TetrisButton*>(TETRIS_FONT);
+		btn->reWrite("2");
 	}));
 	actions.pushBack(DelayTime::create(1.0));
 	actions.pushBack(CallFunc::create([&] {
-		auto font = this->getChildByTag<TetrisFont*>(TETRIS_FONT);
-		auto drawNode = this->getChildByTag<DrawNode*>(DRAW_NODE);
-		font->reWrite("2", drawNode);
+		auto btn = this->getChildByTag<TetrisButton*>(TETRIS_FONT);
+		btn->reWrite("1");
 	}));
 	actions.pushBack(DelayTime::create(1.0));
 	actions.pushBack(CallFunc::create([&] {
-		auto font = this->getChildByTag<TetrisFont*>(TETRIS_FONT);
-		auto drawNode = this->getChildByTag<DrawNode*>(DRAW_NODE);
-		font->reWrite("1", drawNode);
-	}));
-	actions.pushBack(DelayTime::create(1.0));
-	/*actions.pushBack(CallFunc::create([&] {
-		auto font = this->getChildByTag<TetrisFont*>(TETRIS_FONT);
-		auto drawNode = this->getChildByTag<DrawNode*>(DRAW_NODE);
-		font->reWrite("go", drawNode);
-	}));
-	actions.pushBack(DelayTime::create(1.0));*/
-	actions.pushBack(CallFunc::create([&] {
-		this->removeChild(ctDrawNode);
 		this->removeChild(ctFont);
 		this->removeChild(ctLayer);
 		this->start();

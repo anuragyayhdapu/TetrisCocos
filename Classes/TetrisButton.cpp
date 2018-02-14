@@ -8,7 +8,9 @@ TetrisButton::TetrisButton(std::function<void(cocos2d::Ref*)> _btnCallbackFunc, 
 	btnCallbackFunc(_btnCallbackFunc),
 	borderColor(borderColor),
 	alreadyClear(true),
-	alreadyDrawn(false)
+	alreadyDrawn(false),
+	curr(&s),
+	nonInteractive(false)
 {
 }
 
@@ -38,11 +40,17 @@ bool TetrisButton::init(std::string text, cocos2d::Vec2 position, float size, Fo
 		return false;
 	}
 
-	fontDrawNode = cocos2d::DrawNode::create();
-	this->addChild(fontDrawNode);
+	// draw using primary
+	p = cocos2d::DrawNode::create();
+	this->addChild(p);
 	this->font = TetrisFont::create(text, this->borderColor, position, size, colorPattern, drawPattern, align);
 	this->addChild(font);
-	font->write(fontDrawNode);
+	font->write(p);
+
+	// initialize rand animate list
+	s = cocos2d::DrawNode::create();
+	this->addChild(s);
+	createRandList();
 
 	// give padding around text
 	unsigned int diff;
@@ -80,6 +88,9 @@ bool TetrisButton::init(std::string text, cocos2d::Vec2 position, float size, Fo
 
 bool TetrisButton::insideBoundingBox(cocos2d::Vec2 pos)
 {
+	if (nonInteractive)
+		return false;
+
 	if (pos.x >= leftPt.x && pos.x <= rightPt.x
 		&& pos.y <= leftPt.y && pos.y >= rightPt.y)
 	{
@@ -155,12 +166,62 @@ void TetrisButton::stopAnimate()
 
 void TetrisButton::animate(float dt)
 {
-	// get random color
-	auto color = cocos2d::Color4F(TetrominoTemplate::colorTemplates->at(rand() % TetrominoTemplate::size));
+	if (rIter != randList.end())
+	{
+		// get random color
+		auto color = cocos2d::Color4F(TetrominoTemplate::colorTemplates->at(rand() % TetrominoTemplate::size));
+		auto pos = *rIter;
+		++rIter;
 
-	// get random position
-	auto pos = rand() % font->fontBlocksDD.size();
+		// draw 
+		font->drawBlock(*curr, pos, color);
+	}
+	else
+	{
+		// switch animate node
+		(*curr)->setLocalZOrder(-1);
+		if (*curr == p)
+			curr = &s;
+		else
+			curr = &p;
 
-	// draw 
-	font->drawBlock(fontDrawNode, pos, color);
+		(*curr)->clear();
+		(*curr)->setLocalZOrder(0);
+		createRandList();
+	}
+
+}
+
+
+void TetrisButton::createRandList()
+{
+	randList.clear();
+
+	for (size_t i = 0; i < font->fontBlocksDD.size(); i++)
+		randList.push_back(i);
+
+	// rearrange randomely
+	for (size_t i = 0; i < font->fontBlocksDD.size() - 1; i++)
+	{
+		// get rand pos between i and size
+		//auto r = i + int((rand() * (font->fontBlocksDD.size() - i)) / (RAND_MAX + 1.0));
+		auto r = rand() % (font->fontBlocksDD.size() - i);
+
+		// swap a[i] to a[r]
+		auto temp = randList[i];
+		randList[i] = randList[i + r];
+		randList[i + r] = temp;
+	}
+
+	rIter = randList.begin();
+}
+
+
+void TetrisButton::reWrite(std::string text)
+{
+	stopAnimate();
+	(*curr)->clear();
+	font->reWrite(text, *curr);
+	createRandList();
+	startAnimate();
 }

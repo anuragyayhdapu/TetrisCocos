@@ -48,13 +48,13 @@ bool Board::init(double u, Vec2 leftTopPoint, std::list<short>::iterator& randLi
 	DrawNode *tempDrawNode = DrawNode::create();
 	this->addChild(tempDrawNode);
 	bucketDrawNode = DrawNode::create();
-	this->addChild(bucketDrawNode);
+	this->addChild(bucketDrawNode, -2);
 	ghostDrawNode = DrawNode::create();
-	this->addChild(ghostDrawNode);
+	this->addChild(ghostDrawNode, 1);
 	movingTetDrawNode = DrawNode::create();
-	this->addChild(movingTetDrawNode);
+	this->addChild(movingTetDrawNode, 2);
 	solidTetDrawNode = DrawNode::create();
-	this->addChild(solidTetDrawNode);
+	this->addChild(solidTetDrawNode, -1);
 
 	// bucket walls
 	// left wall
