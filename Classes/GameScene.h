@@ -2,8 +2,9 @@
 
 #include "cocos2d.h"
 #include "TetrisButton.h"
+#include "Observer.h"
 
-class GameScene : public cocos2d::Scene
+class GameScene : public cocos2d::Scene, public Observer
 {
 private:
 	static cocos2d::Layer* ctLayer;
@@ -19,6 +20,6 @@ public:
 
 	void countDown(cocos2d::Size size);
 	virtual void start() = 0;
-	virtual void initFromDB() = 0;
-	virtual void saveToDB() = 0;
+	virtual void initFromDB() {}
+	virtual void saveToDB() {}
 };

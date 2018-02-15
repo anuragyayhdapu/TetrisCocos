@@ -10,7 +10,7 @@
 //#include "sqlite3\include\sqlite3.h"
 #include <sqlite3.h>
 
-class TetrisBoardScene : public GameScene, public Observer
+class TetrisBoardScene : public GameScene
 {
 public:
 	virtual bool init();
