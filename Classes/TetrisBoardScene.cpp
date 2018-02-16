@@ -17,7 +17,7 @@ bool TetrisBoardScene::init()
 
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	//visibleSize.width /= 1.5;
-	this->calcSceneDrawingData(_u, _pf, visibleSize);
+	this->calcSceneDrawingData(_u, _pf, visibleSize, t_const::sp::NUM_OF_UNIT_BLOCKS_IN_HEIGHT, t_const::sp::NUM_OF_UNIT_BLOCKS_IN_WIDTH);
 
 	// set up keyboard event listner
 	auto eventListner = EventListenerKeyboard::create();
@@ -35,7 +35,7 @@ bool TetrisBoardScene::init()
 	initFromDB();
 	int level = 1;
 	// add board
-	board = Board::createBoard(_u, _pf, randListIter, highScore, level);
+	board = Board::createBoard(_u, _pf, randListIter, highScore, level, t_const::sp::BUCKET_LEFT, t_const::sp::BUCKET_RIGHT, t_const::sp::BUCKET_TOP, t_const::sp::BUCKET_BOTTOM);
 	board->registerObserver(this);
 	this->addChild(board);
 
@@ -193,21 +193,21 @@ void TetrisBoardScene::drawFonts(Size visibleSize)
 	this->addChild(lvlNumDrawNode);
 
 	scoreTxt = TetrisFont::create("score", cocos2d::Color4F::GRAY,
-		Vec2(_pf.x + _u * (t_const::WINDOW_RIGHT - 1), 0.4 * visibleSize.height), 0.5f, FontColorPattern::FULL, FontDrawPattern::SOLID, FontAlign::RIGHT);
+		Vec2(_pf.x + _u * (t_const::sp::WINDOW_RIGHT - 1), 0.4 * visibleSize.height), 0.5f, FontColorPattern::FULL, FontDrawPattern::SOLID, FontAlign::RIGHT);
 	hScoreTxt = TetrisFont::create("h score", cocos2d::Color4F::GRAY,
-		Vec2(_pf.x + _u * (t_const::WINDOW_RIGHT - 1), 0.3 * visibleSize.height), 0.5f, FontColorPattern::FULL, FontDrawPattern::SOLID, FontAlign::RIGHT);
+		Vec2(_pf.x + _u * (t_const::sp::WINDOW_RIGHT - 1), 0.3 * visibleSize.height), 0.5f, FontColorPattern::FULL, FontDrawPattern::SOLID, FontAlign::RIGHT);
 	lvlTxt = TetrisFont::create("level", cocos2d::Color4F::GRAY,
-		Vec2(_pf.x + _u * (t_const::WINDOW_RIGHT - 1), 0.2 * visibleSize.height), 0.5f, FontColorPattern::FULL, FontDrawPattern::SOLID, FontAlign::RIGHT);
+		Vec2(_pf.x + _u * (t_const::sp::WINDOW_RIGHT - 1), 0.2 * visibleSize.height), 0.5f, FontColorPattern::FULL, FontDrawPattern::SOLID, FontAlign::RIGHT);
 
 	scoreNum = TetrisFont::create(".", cocos2d::Color4F::GRAY,
-		Vec2(_pf.x + _u * (t_const::WINDOW_RIGHT), 0.4 * visibleSize.height), 0.6f, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, FontAlign::LEFT);
+		Vec2(_pf.x + _u * (t_const::sp::WINDOW_RIGHT), 0.4 * visibleSize.height), 0.6f, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, FontAlign::LEFT);
 	std::string hsTxt(".");
 	if (this->highScore > 0)
 		hsTxt = std::to_string(this->highScore);
 	hScoreNum = TetrisFont::create(hsTxt, cocos2d::Color4F::GRAY,
-		Vec2(_pf.x + _u * (t_const::WINDOW_RIGHT), 0.3 * visibleSize.height), 0.6f, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, FontAlign::LEFT);
+		Vec2(_pf.x + _u * (t_const::sp::WINDOW_RIGHT), 0.3 * visibleSize.height), 0.6f, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, FontAlign::LEFT);
 	lvlNum = TetrisFont::create("1", cocos2d::Color4F::GRAY,
-		Vec2(_pf.x + _u * (t_const::WINDOW_RIGHT), 0.2 * visibleSize.height), 0.6f, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, FontAlign::LEFT);
+		Vec2(_pf.x + _u * (t_const::sp::WINDOW_RIGHT), 0.2 * visibleSize.height), 0.6f, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, FontAlign::LEFT);
 
 	this->addChild(scoreNum);
 	this->addChild(hScoreNum);
@@ -227,8 +227,8 @@ void TetrisBoardScene::drawWindow()
 	this->addChild(drawNode);
 
 	drawNode->drawRect(
-		Vec2(_pf.x + _u * (t_const::WINDOW_LEFT) - _u / 2, _pf.y - _u * (t_const::WINDOW_TOP)),
-		Vec2(_pf.x + _u * (t_const::WINDOW_RIGHT), _pf.y - _u * (t_const::WINDOW_BOTTOM)),
+		Vec2(_pf.x + _u * (t_const::sp::WINDOW_LEFT) - _u / 2, _pf.y - _u * (t_const::sp::WINDOW_TOP)),
+		Vec2(_pf.x + _u * (t_const::sp::WINDOW_RIGHT), _pf.y - _u * (t_const::sp::WINDOW_BOTTOM)),
 		Color4F::ORANGE
 	);
 	redrawWindow();
@@ -244,7 +244,7 @@ void TetrisBoardScene::redrawWindow()
 			TetrominoTemplate::rotationTemplates->at(*iter)->getInitialRotation(),
 			TetrominoTemplate::colorTemplates->at(*iter),
 			TetrominoTemplate::borderColorTemplates->at(*iter),
-			BoardPos(t_const::WINDOW_LEFT + 1, (t_const::NUM_OF_UNIT_BLOCKS_IN_TETROMINO * i) + t_const::WINDOW_TOP + 1)
+			BoardPos(t_const::sp::WINDOW_LEFT + 1, (t_const::NUM_OF_UNIT_BLOCKS_IN_TETROMINO * i) + t_const::sp::WINDOW_TOP + 1)
 		);
 
 		tet->draw(windowDrawNode);

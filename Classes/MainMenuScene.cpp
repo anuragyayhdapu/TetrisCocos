@@ -1,5 +1,6 @@
 #include "MainMenuScene.h"
 #include "TetrisBoardScene.h"
+#include "LocalTetrisBoardScene.h"
 #include <functional>
 
 USING_NS_CC;
@@ -34,6 +35,7 @@ bool MainMenuScene::init()
 
 void MainMenuScene::GoToSinglePlayerScene(Ref *pSender)
 {
-	auto scene = TetrisBoardScene::create();
+	//auto scene = TetrisBoardScene::create();
+	auto scene = LocalTetrisBoardScene::create();	// TODO: for testing only, replace with it's own multiplayer
 	Director::getInstance()->replaceScene(scene);
 }

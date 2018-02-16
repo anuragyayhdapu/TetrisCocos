@@ -1,5 +1,30 @@
 #include "SolidBlocks.h"
 
+SolidBlocks::SolidBlocks(short bucketLeft, short bucketRight, short bucketTop, short bucketBottom)
+	:
+	bucketLeft(bucketLeft),
+	bucketRight(bucketRight),
+	bucketTop(bucketTop),
+	bucketBottom(bucketBottom)
+{
+}
+
+
+SolidBlocks * SolidBlocks::create(short bucketLeft, short bucketRight, short bucketTop, short bucketBottom)
+{
+	SolidBlocks* block = new(std::nothrow)SolidBlocks(bucketLeft, bucketRight, bucketTop, bucketBottom);
+	if (block && block->init())
+	{
+		block->autorelease();
+	}
+	else
+	{
+		delete block;
+		block = nullptr;
+	}
+	return block;
+}
+
 
 bool SolidBlocks::init()
 {
@@ -37,8 +62,8 @@ void SolidBlocks::add(Tetromino* tetromino, bool firstTime)
 	for (auto block : tetromino->getUnitBlocksVec())
 	{
 		// adjust block position relative to bucket
-		auto relativeX = block->getX() - t_const::BUCKET_LEFT;
-		auto relativeY = block->getY() - t_const::BUCKET_TOP;
+		auto relativeX = block->getX() - bucketLeft;
+		auto relativeY = block->getY() - bucketTop;
 
 		bucket[relativeY][relativeX] = tetromino;
 	}
@@ -57,8 +82,8 @@ void SolidBlocks::shiftDown(Tetromino* tetromino)
 	for (auto block : tetromino->getUnitBlocksVec())
 	{
 		// adjust block position relative to bucket
-		auto relativeX = block->getX() - t_const::BUCKET_LEFT;
-		auto relativeY = block->getY() - t_const::BUCKET_TOP;
+		auto relativeX = block->getX() - bucketLeft;
+		auto relativeY = block->getY() - bucketTop;
 
 		bucket[relativeY][relativeX] = nullptr;
 	}
@@ -75,8 +100,8 @@ void SolidBlocks::shiftDown(Tetromino* tetromino)
 bool SolidBlocks::find(BoardPos bPos) const
 {
 	// adjust block position relative to bucket
-	auto relativeX = bPos.x - t_const::BUCKET_LEFT;
-	auto relativeY = bPos.y - t_const::BUCKET_TOP;
+	auto relativeX = bPos.x - bucketLeft;
+	auto relativeY = bPos.y - bucketTop;
 
 	return bucket[relativeY][relativeX] != nullptr;
 }
@@ -113,15 +138,15 @@ int SolidBlocks::clearLines()
 			for (size_t j = 0; j < t_const::BUCKET_WIDTH; j++)
 			{
 				// calculate block position relative to bucket
-				auto absoluteX = j + t_const::BUCKET_LEFT;
-				auto absoluteY = i + t_const::BUCKET_TOP;
+				auto absoluteX = j + bucketLeft;
+				auto absoluteY = i + bucketTop;
 				bucket[i][j]->removeBlock(BoardPos(absoluteX, absoluteY));
 
 				// check if tetromino is to be divided
 				for (auto block : bucket[i][j]->getUnitBlocksVec())
 				{
 					// check for bottom blocks
-					if (block->getY() > i) 
+					if (block->getY() > i)
 					{
 						divideTetromino(bucket[i][j], i);
 						break;
@@ -154,7 +179,7 @@ int SolidBlocks::clearLines()
 }
 
 
-void SolidBlocks::divideTetromino(Tetromino* old, short y) 
+void SolidBlocks::divideTetromino(Tetromino* old, short y)
 {
 	bool createNewTetromino = false;
 	std::forward_list<BoardPos> topBlockPos;
@@ -180,8 +205,8 @@ void SolidBlocks::divideTetromino(Tetromino* old, short y)
 		for (auto pos : topBlockPos)
 		{
 			// adjust block position relative to bucket
-			auto relativeX = pos.x - t_const::BUCKET_LEFT;
-			auto relativeY = pos.y - t_const::BUCKET_TOP;
+			auto relativeX = pos.x - bucketLeft;
+			auto relativeY = pos.y - bucketTop;
 			bucket[relativeY][relativeX] = topTetromino;
 		}
 	}

@@ -20,7 +20,7 @@ public:
 	virtual ~Tetromino();
 	static Tetromino* createWithBlocks(const Tetromino& old, std::forward_list<BoardPos> blocksPos);
 	bool initWithBlocks(const Tetromino& old, std::forward_list<BoardPos> blocksPos);
-	static Tetromino* create(double u, cocos2d::Vec2 pf, RotationQ::Rnode* rotationQ, cocos2d::Color4B _color, cocos2d::Color4B _borderColor, BoardPos gridMatrixPoint = t_const::SPAWN_POSITION);
+	static Tetromino* create(double u, cocos2d::Vec2 pf, RotationQ::Rnode* rotationQ, cocos2d::Color4B _color, cocos2d::Color4B _borderColor, BoardPos gridMatrixPoint = t_const::sp::SPAWN_POSITION);
 	bool init(double u, cocos2d::Vec2 pf, RotationQ::Rnode* rotationQ, cocos2d::Color4B _color, cocos2d::Color4B _borderColor, BoardPos gridMatrixPoint);
 
 	bool moveLeft(const SolidBlocks& solidBlocks);

@@ -24,9 +24,11 @@ public:
 	double _u;	// size of one unit block
 	cocos2d::Vec2 _pf;	// // first middle point of a unit block in grid (point_first)
 
-	UnitBlock();
-	//virtual ~UnitBlock();
-	static UnitBlock* create(const UnitBlock& block) { return create(block._u, block._pf, block._x, block._y, cocos2d::Color4B(block.drawData.color), cocos2d::Color4B(block.drawData.borderColor)); }
+	UnitBlock() {}
+	virtual ~UnitBlock() {}
+	static UnitBlock* create(const UnitBlock& block) {
+		return create(block._u, block._pf, block._x, block._y, cocos2d::Color4B(block.drawData.color), cocos2d::Color4B(block.drawData.borderColor));
+	}
 	static UnitBlock* create(double u, cocos2d::Vec2 pf, short x, short y, cocos2d::Color4B color, cocos2d::Color4B borderColor);
 	bool init(double u, cocos2d::Vec2 pf, short x, short y, cocos2d::Color4B color, cocos2d::Color4B borderColor);
 
@@ -43,7 +45,7 @@ public:
 	void moveAt(BoardPos pos);
 
 	BoardPos currPos() { return BoardPos(_x, _y); }
-	void setPos(BoardPos pos ) { _x = pos.x, _y = pos.y; }
+	void setPos(BoardPos pos) { _x = pos.x, _y = pos.y; }
 	short getX() { return _x; }
 	short getY() { return _y; }
 	void draw(cocos2d::DrawNode* drawNode);

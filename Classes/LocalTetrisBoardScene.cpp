@@ -12,9 +12,11 @@ bool LocalTetrisBoardScene::init()
 	}
 
 	auto visibleSize = Director::getInstance()->getVisibleSize();
-	this->calcSceneDrawingData(_u, p1_pf, visibleSize / 2);
+	auto drawSize = visibleSize;
+	drawSize.width /= 2;
+	this->calcSceneDrawingData(_u, p1_pf, drawSize, t_const::lm::NUM_OF_UNIT_BLOCKS_IN_HEIGHT, t_const::lm::NUM_OF_UNIT_BLOCKS_IN_WIDTH);
 	p2_pf = p1_pf;
-	p2_pf.x = visibleSize.width;
+	p2_pf.x += drawSize.width;
 
 	// set up keyboard event listner
 	auto eventListner = EventListenerKeyboard::create();
@@ -31,10 +33,10 @@ bool LocalTetrisBoardScene::init()
 	p2RandListIter = randList.begin();
 
 	// add boards
-	p1Board = Board::createBoard(_u, p1_pf, p1RandListIter, 0, 1);
+	p1Board = Board::createBoard(_u, p1_pf, p1RandListIter, 0, 1, t_const::lm::BUCKET_LEFT, t_const::lm::BUCKET_RIGHT, t_const::lm::BUCKET_TOP, t_const::lm::BUCKET_BOTTOM);
 	p1Board->registerObserver(this);
 	this->addChild(p1Board);
-	p2Board = Board::createBoard(_u, p2_pf, p1RandListIter, 0, 1);
+	p2Board = Board::createBoard(_u, p2_pf, p1RandListIter, 0, 1, t_const::lm::BUCKET_LEFT, t_const::lm::BUCKET_RIGHT, t_const::lm::BUCKET_TOP, t_const::lm::BUCKET_BOTTOM);
 	p2Board->registerObserver(this);
 	this->addChild(p2Board);
 
@@ -103,8 +105,8 @@ void LocalTetrisBoardScene::drawWindow()
 	this->addChild(drawNode);
 
 	drawNode->drawRect(
-		Vec2(p1_pf.x + _u * (t_const::WINDOW_LEFT) - _u / 2, p1_pf.y - _u * (t_const::WINDOW_TOP)),
-		Vec2(p1_pf.x + _u * (t_const::WINDOW_RIGHT), p1_pf.y - _u * (t_const::WINDOW_BOTTOM)),
+		Vec2(p1_pf.x + _u * (t_const::lm::WINDOW_LEFT) - _u / 2, p1_pf.y - _u * (t_const::lm::WINDOW_TOP)),
+		Vec2(p1_pf.x + _u * (t_const::lm::WINDOW_RIGHT), p1_pf.y - _u * (t_const::lm::WINDOW_BOTTOM)),
 		Color4F::ORANGE
 	);
 	redrawWindow();
@@ -121,7 +123,7 @@ void LocalTetrisBoardScene::redrawWindow()
 			TetrominoTemplate::rotationTemplates->at(*iter)->getInitialRotation(),
 			TetrominoTemplate::colorTemplates->at(*iter),
 			TetrominoTemplate::borderColorTemplates->at(*iter),
-			BoardPos(t_const::WINDOW_LEFT + 1, (t_const::NUM_OF_UNIT_BLOCKS_IN_TETROMINO * i) + t_const::WINDOW_TOP + 1)
+			BoardPos(t_const::lm::WINDOW_LEFT + 1, (t_const::NUM_OF_UNIT_BLOCKS_IN_TETROMINO * i) + t_const::lm::WINDOW_TOP + 1)
 		);
 
 		tet->draw(windowDrawNode);

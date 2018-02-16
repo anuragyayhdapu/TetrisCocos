@@ -15,7 +15,7 @@ public:
 	virtual bool init();
 	void GoToPauseScene(cocos2d::Ref * pSender);
 	void GoToGameOverScene(cocos2d::Ref * pSender);
-	void calcSceneDrawingData(double& u, cocos2d::Vec2& pf, cocos2d::Size size);
+	void calcSceneDrawingData(double& u, cocos2d::Vec2& pf, cocos2d::Size size, int numOfUnitBlocksInHeight, int numOfUnitBlocksInWidth);
 	void addButtons();
 
 	void countDown(cocos2d::Size size);

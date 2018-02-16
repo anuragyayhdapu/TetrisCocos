@@ -13,20 +13,20 @@ TetrisButton *GameScene::ctFont;
 #define TETRIS_FONT 2
 
 
-void GameScene::calcSceneDrawingData(double & u, cocos2d::Vec2 & pf, cocos2d::Size size)
+void GameScene::calcSceneDrawingData(double & u, cocos2d::Vec2 & pf, cocos2d::Size size, int numOfUnitBlocksInHeight, int numOfUnitBlocksInWidth)
 {
 	// calculate _u, _pl, _pf
 	double y = size.height, x = size.width;
 	u = 0;
 	if (size.height < size.width)
 	{
-		u = y / t_const::NUM_OF_UNIT_BLOCKS_IN_HEIGHT;
-		x = u * t_const::NUM_OF_UNIT_BLOCKS_IN_WIDTH;
+		u = y / numOfUnitBlocksInHeight;
+		x = u * numOfUnitBlocksInWidth;
 	}
 	else if (size.height >= size.width)
 	{
-		u = x / t_const::NUM_OF_UNIT_BLOCKS_IN_WIDTH;
-		y = u * t_const::NUM_OF_UNIT_BLOCKS_IN_HEIGHT;
+		u = x / numOfUnitBlocksInHeight;
+		y = u * numOfUnitBlocksInWidth;
 	}
 
 	double xd = size.width - x;

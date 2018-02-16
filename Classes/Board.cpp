@@ -2,10 +2,14 @@
 
 USING_NS_CC;
 
-Board::Board(std::list<short>::iterator& iter) :
+Board::Board(std::list<short>::iterator& iter, short bucketLeft, short bucketRight, short bucketTop, short bucketBottom) :
 	randListIter(iter),
 	moveDelaySeconds(t_const::START_SPEED),
-	tempDt(0.0f)
+	tempDt(0.0f),
+	bucketLeft(bucketLeft),
+	bucketRight(bucketRight),
+	bucketTop(bucketTop),
+	bucketBottom(bucketBottom)
 {
 }
 
@@ -13,9 +17,9 @@ Board::~Board()
 {
 }
 
-Board * Board::createBoard(double u, Vec2 leftTopPoint, std::list<short>::iterator& randListIter, unsigned int highScore, int level)
+Board * Board::createBoard(double u, Vec2 leftTopPoint, std::list<short>::iterator& randListIter, unsigned int highScore, int level, short bucketLeft, short bucketRight, short bucketTop, short bucketBottom)
 {
-	Board* board = new(std::nothrow)Board(randListIter);
+	Board* board = new(std::nothrow)Board(randListIter, bucketLeft, bucketRight, bucketTop, bucketBottom);
 	if (board && board->init(u, leftTopPoint, randListIter, highScore, level))
 	{
 		board->autorelease();
@@ -59,20 +63,20 @@ bool Board::init(double u, Vec2 leftTopPoint, std::list<short>::iterator& randLi
 	// bucket walls
 	// left wall
 	tempDrawNode->drawRect(
-		Vec2((t_const::BUCKET_LEFT - 1) * _u + _pf.x - _u / 2, _pf.y - _u / 2 - (t_const::BUCKET_TOP + t_const::BUCKET_TOP_GAP) * _u),
-		Vec2(t_const::BUCKET_LEFT * _u + _pf.x - _u / 2, _pf.y - _u / 2 - (t_const::BUCKET_BOTTOM - 1) * _u),
+		Vec2((bucketLeft - 1) * _u + _pf.x - _u / 2, _pf.y - _u / 2 - (bucketTop + t_const::BUCKET_TOP_GAP) * _u),
+		Vec2(bucketLeft * _u + _pf.x - _u / 2, _pf.y - _u / 2 - (bucketBottom - 1) * _u),
 		Color4F(Color4B(105, 105, 105, 255))
 	);
 	// right wall
 	tempDrawNode->drawRect(
-		Vec2(t_const::BUCKET_RIGHT * _u + _pf.x - _u / 2, _pf.y - _u / 2 - (t_const::BUCKET_TOP + t_const::BUCKET_TOP_GAP) * _u),
-		Vec2((t_const::BUCKET_RIGHT + 1) * _u + _pf.x - _u / 2, _pf.y - _u / 2 - (t_const::BUCKET_BOTTOM - 1) * _u),
+		Vec2(bucketRight * _u + _pf.x - _u / 2, _pf.y - _u / 2 - (bucketTop + t_const::BUCKET_TOP_GAP) * _u),
+		Vec2((bucketRight + 1) * _u + _pf.x - _u / 2, _pf.y - _u / 2 - (bucketBottom - 1) * _u),
 		Color4F(Color4B(105, 105, 105, 255))
 	);
 	// bottom bed
 	tempDrawNode->drawRect(
-		Vec2((t_const::BUCKET_LEFT - 1)* _u + _pf.x - _u / 2, _pf.y - _u / 2 - (t_const::BUCKET_BOTTOM - 1) * _u),
-		Vec2((t_const::BUCKET_RIGHT + 1) * _u + _pf.x - _u / 2, _pf.y - _u / 2 - (t_const::BUCKET_BOTTOM) * _u),
+		Vec2((bucketLeft - 1)* _u + _pf.x - _u / 2, _pf.y - _u / 2 - (bucketBottom - 1) * _u),
+		Vec2((bucketRight + 1) * _u + _pf.x - _u / 2, _pf.y - _u / 2 - (bucketBottom) * _u),
 		Color4F(Color4B(105, 105, 105, 255))
 	);
 
@@ -95,7 +99,7 @@ void Board::start()
 	drawBucketInnerGrid();
 
 	// add solidBlocks
-	solidBlocks = SolidBlocks::create();
+	solidBlocks = SolidBlocks::create(bucketLeft, bucketRight, bucketTop, bucketBottom);
 	this->addChild(solidBlocks);
 
 	// add movable Tetromino
@@ -233,9 +237,9 @@ void Board::drawSolidTetromino()
 
 void Board::drawBucketInnerGrid(cocos2d::Color4B color)
 {
-	for (double i = t_const::BUCKET_LEFT; i < t_const::BUCKET_RIGHT; ++i)
+	for (double i = bucketLeft; i < bucketRight; ++i)
 	{
-		for (double j = t_const::BUCKET_TOP; j < t_const::BUCKET_BOTTOM; ++j)
+		for (double j = bucketTop; j < bucketBottom; ++j)
 		{
 			bucketDrawNode->drawPoint(Vec2(i * _u + _pf.x, _pf.y - j * _u), 2, cocos2d::Color4F(color));
 		}

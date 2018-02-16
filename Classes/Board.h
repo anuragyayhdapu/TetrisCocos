@@ -9,9 +9,9 @@
 class Board : public cocos2d::Node, public Subject
 {
 public:
-	Board(std::list<short>::iterator& iter);
+	Board(std::list<short>::iterator& iter, short bucketLeft, short bucketRight, short bucketTop, short bucketBottom);
 	virtual ~Board();
-	static Board* createBoard(double u, cocos2d::Vec2 leftTopPoint, std::list<short>::iterator& randListIter, unsigned int highScore, int level);
+	static Board* createBoard(double u, cocos2d::Vec2 leftTopPoint, std::list<short>::iterator& randListIter, unsigned int highScore, int level, short bucketLeft, short bucketRight, short bucketTop, short bucketBottom);
 	virtual bool init(double u, cocos2d::Vec2 leftTopPoint, std::list<short>::iterator& randListIter, unsigned int highScore, int level);
 
 	void movingBlockDown();
@@ -24,6 +24,7 @@ public:
 	void stop();
 
 private:
+	short bucketLeft, bucketRight, bucketTop, bucketBottom;
 	double _u;			 // size of one unit block
 	cocos2d::Vec2 _pf;	 // first middle point of a unit block in grid (point_first)
 	Tetromino *movableTetromino;	// only one movable block at a time

@@ -27,11 +27,15 @@ private:
 	void divideTetromino(Tetromino * old, short y_axis);
 
 public:
+	short bucketLeft, bucketRight, bucketTop, bucketBottom;
+	SolidBlocks(short bucketLeft, short bucketRight, short bucketTop, short bucketBottom);
+	virtual ~SolidBlocks() {}
+
 	// add new blocks in solidBlock
 	void add(Tetromino* tetromino, bool firstTime = true);
 
+	static SolidBlocks* create(short bucketLeft, short bucketRight, short bucketTop, short bucketBottom);
 	virtual bool init();
-	CREATE_FUNC(SolidBlocks);
 
 	bool find(BoardPos bPos) const;
 

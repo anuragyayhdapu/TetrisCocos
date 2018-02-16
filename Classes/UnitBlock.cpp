@@ -3,25 +3,19 @@
 
 USING_NS_CC;
 
-UnitBlock::UnitBlock()
-{
-}
-
-
 UnitBlock * UnitBlock::create(double u, cocos2d::Vec2 pf, short x, short y, cocos2d::Color4B color, cocos2d::Color4B borderColor)
 {
 	UnitBlock* block = new(std::nothrow)UnitBlock();
 	if (block && block->init(u, pf, x, y, color, borderColor))
 	{
 		block->autorelease();
-		return block;
 	}
 	else
 	{
 		delete block;
 		block = nullptr;
-		return nullptr;
 	}
+	return block;
 }
 
 bool UnitBlock::init(double u, cocos2d::Vec2 pf, short x, short y, cocos2d::Color4B color, cocos2d::Color4B borderColor)
@@ -83,8 +77,8 @@ void UnitBlock::moveAt(BoardPos pos)
 bool UnitBlock::checkMoveAt(BoardPos nextPos, const SolidBlocks& solidBlocks)
 {
 	if (solidBlocks.find(nextPos) == true
-		|| nextPos.x < t_const::BUCKET_LEFT || nextPos.x > t_const::BUCKET_RIGHT - 1
-		|| nextPos.y < t_const::BUCKET_TOP || nextPos.y > t_const::BUCKET_BOTTOM - 1)
+		|| nextPos.x < solidBlocks.bucketLeft || nextPos.x > solidBlocks.bucketRight - 1
+		|| nextPos.y < solidBlocks.bucketTop || nextPos.y > solidBlocks.bucketBottom - 1)
 	{
 		// block is either touching something or has hit the boundraies
 		return false;
@@ -97,7 +91,7 @@ bool UnitBlock::checkMoveDown(const SolidBlocks& solidBlocks)
 {
 	BoardPos nextPos(_x, _y + 1); // next position down
 	if (solidBlocks.find(nextPos) == true
-		|| nextPos.y > t_const::BUCKET_BOTTOM - 1)
+		|| nextPos.y > solidBlocks.bucketBottom - 1)
 	{
 		// block is either touching something or has hit the boundraies
 		return false;
@@ -109,7 +103,7 @@ bool UnitBlock::checkMoveLeft(const SolidBlocks& solidBlocks)
 {
 	BoardPos nextPos(_x - 1, _y); // next position left
 	if (solidBlocks.find(nextPos) == true
-		|| nextPos.x < t_const::BUCKET_LEFT)
+		|| nextPos.x < solidBlocks.bucketLeft)
 	{
 		// block is either touching something or has hit the boundraies
 		return false;
@@ -121,7 +115,7 @@ bool UnitBlock::checkMoveRight(const SolidBlocks& solidBlocks)
 {
 	BoardPos nextPos(_x + 1, _y); // next position right
 	if (solidBlocks.find(nextPos) == true
-		|| nextPos.x > t_const::BUCKET_RIGHT - 1)
+		|| nextPos.x > solidBlocks.bucketRight - 1)
 	{
 		// block is either touching something or has hit the boundraies
 		return false;
