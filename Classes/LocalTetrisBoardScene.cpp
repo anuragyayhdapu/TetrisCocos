@@ -13,7 +13,7 @@ bool LocalTetrisBoardScene::init()
 
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	auto drawSize = visibleSize;
-	//drawSize.width /= 2;
+	drawSize.width /= 2;
 	this->calcSceneDrawingData(_u, p1_pf, drawSize, t_const::lm::NUM_OF_UNIT_BLOCKS_IN_HEIGHT, t_const::lm::NUM_OF_UNIT_BLOCKS_IN_WIDTH);
 	p2_pf = p1_pf;
 	p2_pf.x += drawSize.width;
@@ -30,28 +30,22 @@ bool LocalTetrisBoardScene::init()
 		randList.push_back(rand() % TetrominoTemplate::size);
 	}
 	p1RandListIter = randList.begin();
-	//p2RandListIter = randList.begin();
-
-	Tetromino::spawnPoint = t_const::lm::SPAWN_POSITION;
+	p2RandListIter = randList.begin();
 
 	// add boards
 	p1Board = Board::createBoard(_u, p1_pf, p1RandListIter, 0, 1, t_const::lm::BUCKET_LEFT, t_const::lm::BUCKET_RIGHT, t_const::lm::BUCKET_TOP, t_const::lm::BUCKET_BOTTOM);
 	p1Board->registerObserver(this);
 	this->addChild(p1Board);
-	/*p2Board = Board::createBoard(_u, p2_pf, p1RandListIter, 0, 1, t_const::lm::BUCKET_LEFT, t_const::lm::BUCKET_RIGHT, t_const::lm::BUCKET_TOP, t_const::lm::BUCKET_BOTTOM);
+	p2Board = Board::createBoard(_u, p2_pf, p1RandListIter, 0, 1, t_const::lm::BUCKET_LEFT, t_const::lm::BUCKET_RIGHT, t_const::lm::BUCKET_TOP, t_const::lm::BUCKET_BOTTOM);
 	p2Board->registerObserver(this);
-	this->addChild(p2Board);*/
+	this->addChild(p2Board);
 
 	windowDrawNode = DrawNode::create();
 	addChild(windowDrawNode);
 	drawWindow();
 
-	// TODO: remove after testing
 	countDownLayer = nullptr;
-	//countDown(visibleSize);
-
-	p1Board->start();
-
+	countDown(visibleSize);
 
 	return true;
 }
@@ -61,7 +55,7 @@ void LocalTetrisBoardScene::start()
 	this->addButtons();
 	this->removeChild(countDownLayer);
 	p1Board->start();
-	//p2Board->start();
+	p2Board->start();
 }
 
 
@@ -128,8 +122,8 @@ void LocalTetrisBoardScene::redrawWindow()
 		auto tet = Tetromino::create(_u, p1_pf,
 			TetrominoTemplate::rotationTemplates->at(*iter)->getInitialRotation(),
 			TetrominoTemplate::colorTemplates->at(*iter),
-			TetrominoTemplate::borderColorTemplates->at(*iter)
-			//BoardPos(t_const::lm::WINDOW_LEFT + 1, (t_const::NUM_OF_UNIT_BLOCKS_IN_TETROMINO * i) + t_const::lm::WINDOW_TOP + 1)
+			TetrominoTemplate::borderColorTemplates->at(*iter),
+			BoardPos(t_const::lm::WINDOW_LEFT + 1, (t_const::NUM_OF_UNIT_BLOCKS_IN_TETROMINO * i) + t_const::lm::WINDOW_TOP + 1)
 		);
 
 		tet->draw(windowDrawNode);
