@@ -1,5 +1,7 @@
 #include "Tetromino.h"
 
+BoardPos Tetromino::spawnPoint = t_const::sp::SPAWN_POSITION;
+
 Tetromino::Tetromino()
 {
 }
@@ -52,10 +54,10 @@ bool Tetromino::initWithBlocks(const Tetromino& old, std::forward_list<BoardPos>
 }
 
 
-Tetromino * Tetromino::create(double u, cocos2d::Vec2 pf, RotationQ::Rnode* rotationQ, cocos2d::Color4B _color, cocos2d::Color4B _borderColor, BoardPos gridMatrixPoint)
+Tetromino * Tetromino::create(double u, cocos2d::Vec2 pf, RotationQ::Rnode* rotationQ, cocos2d::Color4B _color, cocos2d::Color4B _borderColor)
 {
 	Tetromino* pRet = new(std::nothrow)Tetromino();
-	if (pRet && pRet->init(u, pf, rotationQ, _color, _borderColor, gridMatrixPoint))
+	if (pRet && pRet->init(u, pf, rotationQ, _color, _borderColor))
 	{
 		pRet->autorelease();
 		return pRet;
@@ -69,7 +71,7 @@ Tetromino * Tetromino::create(double u, cocos2d::Vec2 pf, RotationQ::Rnode* rota
 }
 
 
-bool Tetromino::init(double u, cocos2d::Vec2 pf, RotationQ::Rnode* rotationQ, cocos2d::Color4B _color, cocos2d::Color4B _borderColor, BoardPos gridMatrixPoint)
+bool Tetromino::init(double u, cocos2d::Vec2 pf, RotationQ::Rnode* rotationQ, cocos2d::Color4B _color, cocos2d::Color4B _borderColor)
 {
 	if (!Node::init())
 	{
@@ -77,7 +79,7 @@ bool Tetromino::init(double u, cocos2d::Vec2 pf, RotationQ::Rnode* rotationQ, co
 	}
 
 	// initialze at spawn posiiton
-	this->gridMatrixPoint = gridMatrixPoint;
+	this->gridMatrixPoint = Tetromino::spawnPoint;
 
 	// set template
 	this->u = u;

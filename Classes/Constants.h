@@ -11,7 +11,7 @@ namespace t_const
 
 	const int WINDOW_WIDTH = 5;
 	const int WINDOW_HEIGHT = 12;
-	
+
 	const int NUM_OF_UNIT_BLOCKS_IN_TETROMINO = 4;
 
 	// for local multiplayer
@@ -30,6 +30,8 @@ namespace t_const
 		const int WINDOW_LEFT = BUCKET_RIGHT + WINDOW_LEFT_GAP;
 		const int WINDOW_RIGHT = WINDOW_LEFT + WINDOW_WIDTH;
 		const int WINDOW_BOTTOM = WINDOW_TOP + WINDOW_HEIGHT;
+
+		const BoardPos SPAWN_POSITION(BUCKET_LEFT + BUCKET_WIDTH / 2, 0);
 	}
 
 	// for single player
@@ -49,7 +51,8 @@ namespace t_const
 		const int WINDOW_RIGHT = WINDOW_LEFT + WINDOW_WIDTH;
 		const int WINDOW_BOTTOM = WINDOW_TOP + WINDOW_HEIGHT;
 
-		const BoardPos SPAWN_POSITION(10, 0);
+		const BoardPos SPAWN_POSITION(BUCKET_LEFT + BUCKET_WIDTH / 2, 0);
+
 	}
 
 	const int ONE_LINE_CLEAR_SCORE = 10;

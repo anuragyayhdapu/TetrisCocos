@@ -32,6 +32,8 @@ bool TetrisBoardScene::init()
 	}
 	randListIter = randList.begin();
 
+	Tetromino::spawnPoint = t_const::sp::SPAWN_POSITION;
+
 	initFromDB();
 	int level = 1;
 	// add board
@@ -243,8 +245,8 @@ void TetrisBoardScene::redrawWindow()
 		auto tet = Tetromino::create(_u, _pf,
 			TetrominoTemplate::rotationTemplates->at(*iter)->getInitialRotation(),
 			TetrominoTemplate::colorTemplates->at(*iter),
-			TetrominoTemplate::borderColorTemplates->at(*iter),
-			BoardPos(t_const::sp::WINDOW_LEFT + 1, (t_const::NUM_OF_UNIT_BLOCKS_IN_TETROMINO * i) + t_const::sp::WINDOW_TOP + 1)
+			TetrominoTemplate::borderColorTemplates->at(*iter)
+			//BoardPos(t_const::sp::WINDOW_LEFT + 1, (t_const::NUM_OF_UNIT_BLOCKS_IN_TETROMINO * i) + t_const::sp::WINDOW_TOP + 1)
 		);
 
 		tet->draw(windowDrawNode);
