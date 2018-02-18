@@ -2,14 +2,15 @@
 
 USING_NS_CC;
 
-Board::Board(std::list<short>::iterator& iter, short bucketLeft, short bucketRight, short bucketTop, short bucketBottom) :
+Board::Board(std::list<short>::iterator& iter, short bucketLeft, short bucketRight, short bucketTop, short bucketBottom, BoardPos spawnPoint) :
 	randListIter(iter),
 	moveDelaySeconds(t_const::START_SPEED),
 	tempDt(0.0f),
 	bucketLeft(bucketLeft),
 	bucketRight(bucketRight),
 	bucketTop(bucketTop),
-	bucketBottom(bucketBottom)
+	bucketBottom(bucketBottom),
+	spawnPoint(spawnPoint)
 {
 }
 
@@ -17,9 +18,9 @@ Board::~Board()
 {
 }
 
-Board * Board::createBoard(double u, Vec2 leftTopPoint, std::list<short>::iterator& randListIter, unsigned int highScore, int level, short bucketLeft, short bucketRight, short bucketTop, short bucketBottom)
+Board * Board::createBoard(double u, Vec2 leftTopPoint, std::list<short>::iterator& randListIter, unsigned int highScore, int level, short bucketLeft, short bucketRight, short bucketTop, short bucketBottom, BoardPos spawnpoint)
 {
-	Board* board = new(std::nothrow)Board(randListIter, bucketLeft, bucketRight, bucketTop, bucketBottom);
+	Board* board = new(std::nothrow)Board(randListIter, bucketLeft, bucketRight, bucketTop, bucketBottom, spawnpoint);
 	if (board && board->init(u, leftTopPoint, randListIter, highScore, level))
 	{
 		board->autorelease();
@@ -81,9 +82,9 @@ bool Board::init(double u, Vec2 leftTopPoint, std::list<short>::iterator& randLi
 	);
 
 	/* ---- this board area*/
-	/*for (double i = 0; i < t_const::NUM_OF_UNIT_BLOCKS_IN_WIDTH; ++i)
+	/*for (double i = 0; i < t_const::lm::NUM_OF_UNIT_BLOCKS_IN_WIDTH; ++i)
 	{
-		for (double j = 0; j < t_const::NUM_OF_UNIT_BLOCKS_IN_HEIGHT; ++j)
+		for (double j = 0; j < t_const::lm::NUM_OF_UNIT_BLOCKS_IN_HEIGHT; ++j)
 		{
 			tempDrawNode->drawPoint(Vec2(i * _u + _pf.x, _pf.y - j * _u), 2, Color4F::ORANGE);
 		}
@@ -195,7 +196,7 @@ void Board::generateBlock()
 	auto color = TetrominoTemplate::colorTemplates->at(randNum);
 	auto borderColor = TetrominoTemplate::borderColorTemplates->at(randNum);
 
-	auto newBlock = Tetromino::create(_u, _pf, rotation, color, borderColor);
+	auto newBlock = Tetromino::create(_u, _pf, rotation, color, borderColor, spawnPoint);
 	this->addChild(newBlock);
 	movableTetromino = newBlock;
 	drawMovingTetromino();

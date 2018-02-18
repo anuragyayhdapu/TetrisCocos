@@ -35,7 +35,7 @@ bool TetrisBoardScene::init()
 	initFromDB();
 	int level = 1;
 	// add board
-	board = Board::createBoard(_u, _pf, randListIter, highScore, level, t_const::sp::BUCKET_LEFT, t_const::sp::BUCKET_RIGHT, t_const::sp::BUCKET_TOP, t_const::sp::BUCKET_BOTTOM);
+	board = Board::createBoard(_u, _pf, randListIter, highScore, level, t_const::sp::BUCKET_LEFT, t_const::sp::BUCKET_RIGHT, t_const::sp::BUCKET_TOP, t_const::sp::BUCKET_BOTTOM, t_const::sp::SPAWN_POSITION);
 	board->registerObserver(this);
 	this->addChild(board);
 

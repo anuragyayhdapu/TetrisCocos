@@ -1,5 +1,5 @@
 #include "LocalTetrisBoardScene.h"
-#include "TetrominoTemplates.h"
+//#include "TetrominoTemplates.h"
 
 USING_NS_CC;
 
@@ -12,11 +12,15 @@ bool LocalTetrisBoardScene::init()
 	}
 
 	auto visibleSize = Director::getInstance()->getVisibleSize();
-	auto drawSize = visibleSize;
-	drawSize.width /= 2;
-	this->calcSceneDrawingData(_u, p1_pf, drawSize, t_const::lm::NUM_OF_UNIT_BLOCKS_IN_HEIGHT, t_const::lm::NUM_OF_UNIT_BLOCKS_IN_WIDTH);
-	p2_pf = p1_pf;
-	p2_pf.x += drawSize.width;
+	this->calcSceneDrawingData(_u, p1_pf, visibleSize, t_const::lm::NUM_OF_UNIT_BLOCKS_IN_HEIGHT, t_const::lm::NUM_OF_UNIT_BLOCKS_IN_WIDTH);
+	p1_pf.x = 0.05 * visibleSize.width;
+	p2_pf.x = 0.60 * visibleSize.width;
+	p1_pf.y = 0.90 * visibleSize.height;
+	p2_pf.y = p1_pf.y;
+
+	windowDrawNode = DrawNode::create();
+	this->addChild(windowDrawNode);
+
 
 	// set up keyboard event listner
 	auto eventListner = EventListenerKeyboard::create();
@@ -33,29 +37,20 @@ bool LocalTetrisBoardScene::init()
 	p2RandListIter = randList.begin();
 
 	// add boards
-	p1Board = Board::createBoard(_u, p1_pf, p1RandListIter, 0, 1, t_const::lm::BUCKET_LEFT, t_const::lm::BUCKET_RIGHT, t_const::lm::BUCKET_TOP, t_const::lm::BUCKET_BOTTOM);
+	p1Board = Board::createBoard(_u, p1_pf, p1RandListIter, 0, 1, t_const::lm::BUCKET_LEFT, t_const::lm::BUCKET_RIGHT, t_const::lm::BUCKET_TOP, t_const::lm::BUCKET_BOTTOM, t_const::lm::SPAWN_POSITION);
 	p1Board->registerObserver(this);
 	this->addChild(p1Board);
-	p2Board = Board::createBoard(_u, p2_pf, p1RandListIter, 0, 1, t_const::lm::BUCKET_LEFT, t_const::lm::BUCKET_RIGHT, t_const::lm::BUCKET_TOP, t_const::lm::BUCKET_BOTTOM);
+	p1Board->start();
+
+	p2Board = Board::createBoard(_u, p2_pf, p2RandListIter, 0, 1, t_const::lm::BUCKET_LEFT, t_const::lm::BUCKET_RIGHT, t_const::lm::BUCKET_TOP, t_const::lm::BUCKET_BOTTOM, t_const::lm::SPAWN_POSITION);
 	p2Board->registerObserver(this);
 	this->addChild(p2Board);
+	p2Board->start();
 
-	windowDrawNode = DrawNode::create();
-	addChild(windowDrawNode);
 	drawWindow();
 
-	countDownLayer = nullptr;
-	countDown(visibleSize);
 
 	return true;
-}
-
-void LocalTetrisBoardScene::start()
-{
-	this->addButtons();
-	this->removeChild(countDownLayer);
-	p1Board->start();
-	p2Board->start();
 }
 
 
@@ -65,11 +60,10 @@ void LocalTetrisBoardScene::onNotify(const Board & board, TetrisEvent _event)
 	{
 	case INCREMENT_RAND_ITERATOR:
 
-		// TODO: figure this out later
-		++p1RandListIter;
-		randList.push_back(rand() % TetrominoTemplate::size);
-		randList.pop_front();
-		redrawWindow();
+		if (&board == p2Board)
+			randListMoverHelper(p2RandListIter, p1RandListIter);
+		else
+			randListMoverHelper(p1RandListIter, p2RandListIter);
 
 		break;
 	case GAMEOVER:
@@ -93,9 +87,33 @@ void LocalTetrisBoardScene::onNotify(const Board & board, TetrisEvent _event)
 }
 
 
-void LocalTetrisBoardScene::drawFonts(cocos2d::Size visibleSize)
+void LocalTetrisBoardScene::randListMoverHelper(std::list<short>::iterator & iterA, std::list<short>::iterator & iterB)
 {
-	// TODO later
+	// 1. if one to be incremented is equal, both are pointing to top
+	// don't push_back, don't pop_front
+
+	// 2. if one to be incremented is faster, 
+	// then push if exceding 4, don't pop_front
+
+	// 3. if one to be increased is slower, 
+	// then push if faster one is less than 4, pop_front
+
+
+	auto a = std::distance(randList.begin(), iterA);
+	auto b = std::distance(randList.begin(), iterB);
+	++iterA;
+
+	// 1,2
+	if (a >= randList.size() - 1)
+		randList.push_back(rand() % TetrominoTemplate::size);
+	// 3
+	else if (a < b)
+	{
+		randList.pop_front();
+
+		if (b < t_const::WINDOW_SIZE + 1)
+			randList.push_back(rand() % TetrominoTemplate::size);
+	}
 }
 
 
@@ -115,9 +133,10 @@ void LocalTetrisBoardScene::drawWindow()
 
 void LocalTetrisBoardScene::redrawWindow()
 {
+	// show in window positions 2, 3, and 4
 	windowDrawNode->clear();
 	int i = 0;
-	for (auto iter = ++randList.begin(); iter != randList.end(); ++iter)
+	for (auto iter = ++randList.begin(); i < 3; ++iter)
 	{
 		auto tet = Tetromino::create(_u, p1_pf,
 			TetrominoTemplate::rotationTemplates->at(*iter)->getInitialRotation(),
@@ -131,6 +150,7 @@ void LocalTetrisBoardScene::redrawWindow()
 		++i;
 	}
 }
+
 
 
 void LocalTetrisBoardScene::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event * event)

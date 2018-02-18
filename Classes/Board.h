@@ -9,9 +9,9 @@
 class Board : public cocos2d::Node, public Subject
 {
 public:
-	Board(std::list<short>::iterator& iter, short bucketLeft, short bucketRight, short bucketTop, short bucketBottom);
+	Board(std::list<short>::iterator& iter, short bucketLeft, short bucketRight, short bucketTop, short bucketBottom, BoardPos spawnPoint);
 	virtual ~Board();
-	static Board* createBoard(double u, cocos2d::Vec2 leftTopPoint, std::list<short>::iterator& randListIter, unsigned int highScore, int level, short bucketLeft, short bucketRight, short bucketTop, short bucketBottom);
+	static Board* createBoard(double u, cocos2d::Vec2 leftTopPoint, std::list<short>::iterator& randListIter, unsigned int highScore, int level, short bucketLeft, short bucketRight, short bucketTop, short bucketBottom, BoardPos spawnPoint);
 	virtual bool init(double u, cocos2d::Vec2 leftTopPoint, std::list<short>::iterator& randListIter, unsigned int highScore, int level);
 
 	void movingBlockDown();
@@ -33,6 +33,7 @@ private:
 	cocos2d::DrawNode *movingTetDrawNode, *solidTetDrawNode, *bucketDrawNode, *ghostDrawNode;
 	float moveDelaySeconds, tempDt;
 	std::list<short>::iterator& randListIter;	// randList iterator given to generate next tetromino
+	BoardPos spawnPoint;
 
 	unsigned int score, highScore;
 	int level;

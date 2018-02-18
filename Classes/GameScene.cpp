@@ -107,8 +107,8 @@ void GameScene::GoToPauseScene(cocos2d::Ref *pSender)
 
 void GameScene::GoToGameOverScene(cocos2d::Ref *pSender)
 {
-	auto prevScene = static_cast<TetrisBoardScene*>(pSender);
+	/*auto prevScene = static_cast<TetrisBoardScene*>(pSender);
 
 	auto scene = GameOverScene::create(prevScene->getScore(), prevScene->getHighScore(), prevScene->getLevel());
-	Director::getInstance()->replaceScene(scene);
+	Director::getInstance()->replaceScene(scene);*/
 }

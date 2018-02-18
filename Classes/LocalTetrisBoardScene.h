@@ -20,16 +20,12 @@ private:
 	Board *p1Board, *p2Board;
 	std::list<short> randList;					// randomly generated list to get next tetromino
 	std::list<short>::iterator p1RandListIter, p2RandListIter;	// randList iterators given to board
-
 	cocos2d::DrawNode* windowDrawNode;
-	cocos2d::Layer *countDownLayer;
-	TetrisFont *p1Score, *p2Score, *p1Level, *p2Level;
-	cocos2d::DrawNode* p1DrawNode, p2DrawNode;
 
-	void drawFonts(cocos2d::Size visibleSize);
+	virtual void onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);
+	void randListMoverHelper(std::list<short>::iterator& a, std::list<short>::iterator& b);		// 'a' iterator has moved
+
 	void drawWindow();
 	void redrawWindow();
-	virtual void onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);
-
-	void start();
+	void start() {}
 };

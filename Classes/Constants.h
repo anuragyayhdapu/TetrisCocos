@@ -11,14 +11,14 @@ namespace t_const
 
 	const int WINDOW_WIDTH = 5;
 	const int WINDOW_HEIGHT = 12;
-	
+
 	const int NUM_OF_UNIT_BLOCKS_IN_TETROMINO = 4;
 
 	// for local multiplayer
 	namespace lm
 	{
-		const int NUM_OF_UNIT_BLOCKS_IN_HEIGHT = 25;
-		const int NUM_OF_UNIT_BLOCKS_IN_WIDTH = 14;
+		const int NUM_OF_UNIT_BLOCKS_IN_HEIGHT = 30;
+		const int NUM_OF_UNIT_BLOCKS_IN_WIDTH = 16;
 
 		const int BUCKET_LEFT = 2;
 		const int BUCKET_RIGHT = BUCKET_LEFT + BUCKET_WIDTH;
@@ -26,10 +26,12 @@ namespace t_const
 		const int BUCKET_BOTTOM = BUCKET_TOP + BUCKET_HEIGHT;
 
 		const int WINDOW_TOP = 1;
-		const int WINDOW_LEFT_GAP = 1;
+		const int WINDOW_LEFT_GAP = 3;
 		const int WINDOW_LEFT = BUCKET_RIGHT + WINDOW_LEFT_GAP;
 		const int WINDOW_RIGHT = WINDOW_LEFT + WINDOW_WIDTH;
 		const int WINDOW_BOTTOM = WINDOW_TOP + WINDOW_HEIGHT;
+
+		const BoardPos SPAWN_POSITION((BUCKET_LEFT + BUCKET_WIDTH / 2) - NUM_OF_UNIT_BLOCKS_IN_TETROMINO / 2, BUCKET_TOP);
 	}
 
 	// for single player
@@ -49,7 +51,7 @@ namespace t_const
 		const int WINDOW_RIGHT = WINDOW_LEFT + WINDOW_WIDTH;
 		const int WINDOW_BOTTOM = WINDOW_TOP + WINDOW_HEIGHT;
 
-		const BoardPos SPAWN_POSITION(10, 0);
+		const BoardPos SPAWN_POSITION((BUCKET_LEFT + BUCKET_WIDTH / 2) - NUM_OF_UNIT_BLOCKS_IN_TETROMINO / 2, BUCKET_TOP);
 	}
 
 	const int ONE_LINE_CLEAR_SCORE = 10;
@@ -57,7 +59,7 @@ namespace t_const
 	const float START_SPEED = 1.0f;
 	const float SPEED_DECREASE = 0.7f;
 
-
+	const short WINDOW_SIZE = 3;
 	const short GRID_MATRIX_SIZE = 4;
 
 	const short FONT_WIDTH = 5;
