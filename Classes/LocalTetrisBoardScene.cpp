@@ -65,6 +65,8 @@ void LocalTetrisBoardScene::onNotify(const Board & board, TetrisEvent _event)
 		else
 			randListMoverHelper(p1RandListIter, p2RandListIter);
 
+		redrawWindow();
+
 		break;
 	case GAMEOVER:
 		// TODO: figure this out later
@@ -93,7 +95,7 @@ void LocalTetrisBoardScene::randListMoverHelper(std::list<short>::iterator & ite
 	// don't push_back, don't pop_front
 
 	// 2. if one to be incremented is faster, 
-	// then push if exceding 4, don't pop_front
+	// then push if exceding size of list, don't pop_front
 
 	// 3. if one to be increased is slower, 
 	// then push if faster one is less than 4, pop_front
@@ -101,13 +103,15 @@ void LocalTetrisBoardScene::randListMoverHelper(std::list<short>::iterator & ite
 
 	auto a = std::distance(randList.begin(), iterA);
 	auto b = std::distance(randList.begin(), iterB);
-	++iterA;
 
-	// 1,2
+	// 1, 2
 	if (a >= randList.size() - 1)
+	{
 		randList.push_back(rand() % TetrominoTemplate::size);
+	}
+	++iterA;
 	// 3
-	else if (a < b)
+	if (a < b)
 	{
 		randList.pop_front();
 
@@ -158,24 +162,46 @@ void LocalTetrisBoardScene::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode
 	switch (keyCode)
 	{
 
-	case EventKeyboard::KeyCode::KEY_DOWN_ARROW:
+	case EventKeyboard::KeyCode::KEY_S:
 		p1Board->movingBlockDown();
 		break;
 
-	case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
+	case EventKeyboard::KeyCode::KEY_D:
 		p1Board->movingBlockRight();
 		break;
 
-	case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
+	case EventKeyboard::KeyCode::KEY_A:
 		p1Board->movingBlockLeft();
 		break;
 
-	case EventKeyboard::KeyCode::KEY_UP_ARROW:
+	case EventKeyboard::KeyCode::KEY_W:
 		p1Board->movingBlockRotate();
 		break;
 
-	case EventKeyboard::KeyCode::KEY_SPACE:
+	case EventKeyboard::KeyCode::KEY_LEFT_SHIFT:
 		p1Board->movingBlockGravityDrop();
+		break;
+
+
+		// board2
+	case EventKeyboard::KeyCode::KEY_DOWN_ARROW:
+		p2Board->movingBlockDown();
+		break;
+
+	case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
+		p2Board->movingBlockRight();
+		break;
+
+	case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
+		p2Board->movingBlockLeft();
+		break;
+
+	case EventKeyboard::KeyCode::KEY_UP_ARROW:
+		p2Board->movingBlockRotate();
+		break;
+
+	case EventKeyboard::KeyCode::KEY_RIGHT_SHIFT:
+		p2Board->movingBlockGravityDrop();
 		break;
 
 	default: break;

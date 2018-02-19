@@ -65,6 +65,8 @@ namespace t_const
 	const short FONT_WIDTH = 5;
 	const short FONT_HEIGHT = 5;
 
+	const float MEDIUM_DESIGN_RESOLUTION_HEIGHT = 768;
+
 	// things that are fixed for now, and probably will never change:
 		// number of blocks in any tetromino = 4
 		// number of rotation states = 4

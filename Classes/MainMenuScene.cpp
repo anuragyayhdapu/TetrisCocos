@@ -19,6 +19,9 @@ bool MainMenuScene::init()
 	this->addChild(fontDrawNode);
 	auto heading = TetrisFont::create("tetris", Color4F::BLUE, Vec2(visibleSize.width / 2, visibleSize.height * 0.8), 3.5,
 		FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, FontAlign::MIDDLE);
+	cocos2d::log(std::to_string(heading->getLeftPt().y).c_str());
+	cocos2d::log(std::to_string(visibleSize.height).c_str());
+	
 	heading->write(fontDrawNode);
 	
 	auto heading2 = TetrisFont::create("cocos", Color4F::BLUE, Vec2(visibleSize.width / 2, visibleSize.height * 0.60), 2.5,
@@ -35,7 +38,7 @@ bool MainMenuScene::init()
 
 void MainMenuScene::GoToSinglePlayerScene(Ref *pSender)
 {
-	//auto scene = TetrisBoardScene::create();
-	auto scene = LocalTetrisBoardScene::create();	// TODO: for testing only, replace with it's own multiplayer
+	auto scene = TetrisBoardScene::create();
+	//auto scene = LocalTetrisBoardScene::create();	// TODO: for testing only, replace with it's own multiplayer
 	Director::getInstance()->replaceScene(scene);
 }

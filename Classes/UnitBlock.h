@@ -54,6 +54,7 @@ public:
 private:
 	short _x, _y; // position of block in term of number of units
 	DrawData drawData;
+	static float midPointSize;
 
 	void calcDrawData();
 };

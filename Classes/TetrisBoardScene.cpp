@@ -59,15 +59,6 @@ void TetrisBoardScene::start()
 }
 
 
-int callback2(void *data, int argc, char **argv, char **azColName)
-{
-	int *d = (int*)data;
-	*d = std::atoi(argv[0]);
-
-	return 0;
-}
-
-
 void TetrisBoardScene::initFromDB()
 {
 	// get values from db
@@ -87,7 +78,14 @@ void TetrisBoardScene::initFromDB()
 		// get data from single_player_table
 		char *query = "select score from sp where name = 'player';";
 
-		int rc = sqlite3_exec(db, query, callback2, (void*)&highScore, &errorMsg);
+		int rc = sqlite3_exec(db, query, [](void *data, int argc, char **argv, char **azColName) -> int {
+			int *d = (int*)data;
+			*d = std::atoi(argv[0]);
+
+			return 0;
+		}
+		, (void*)&highScore, &errorMsg);
+
 		if (rc != SQLITE_OK)
 		{
 			cocos2d::log("sql error");

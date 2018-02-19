@@ -26,15 +26,6 @@ static cocos2d::Size smallResolutionSize = cocos2d::Size(480, 320);
 static cocos2d::Size mediumResolutionSize = cocos2d::Size(1024, 768);
 static cocos2d::Size largeResolutionSize = cocos2d::Size(2048, 1536);
 
-static void initializeDatabase();
-void initializeTextUnitBlock();
-int callback(void *count, int argc, char **argv, char **azColName)
-{
-	// increment count
-	(*((int*)count))++;
-
-	return 0;
-}
 
 AppDelegate::AppDelegate()
 {
@@ -73,7 +64,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 	if (!glview) {
 
 		// Setting Design Resolution to Medium Resolution
-		designResolutionSize = mediumResolutionSize;
+		//designResolutionSize = mediumResolutionSize;
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) || (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
 		glview = GLViewImpl::createWithRect("TetrisCocos", cocos2d::Rect(0, 0, designResolutionSize.width, designResolutionSize.height));
@@ -149,7 +140,7 @@ void AppDelegate::applicationWillEnterForeground() {
 }
 
 
-void initializeDatabase()
+void AppDelegate::initializeDatabase()
 {
 	sqlite3 * db;
 	char *errorMsg;
@@ -185,7 +176,15 @@ void initializeDatabase()
 			// create entry for player if not exist
 			query = "select score from sp where name = 'player'";
 			int count = 0;
-			rc = sqlite3_exec(db, query, callback, (void*)&count, &errorMsg);
+			rc = sqlite3_exec(db, query,
+				[](void *count, int argc, char **argv, char **azColName) -> int {
+
+				// increment count
+				(*((int*)count))++;
+
+				return 0;
+			},
+				(void*)&count, &errorMsg);
 			if (rc != SQLITE_OK)
 			{
 				cocos2d::log("(create entry for player if not exist) sql error");
@@ -224,7 +223,7 @@ void initializeDatabase()
 }
 
 
-void initializeTextUnitBlock()
+void AppDelegate::initializeTextUnitBlock()
 {
 	auto height = Director::getInstance()->getVisibleSize().height;
 	auto width = Director::getInstance()->getVisibleSize().width;
