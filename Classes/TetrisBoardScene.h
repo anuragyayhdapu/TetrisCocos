@@ -7,8 +7,7 @@
 #include "Constants.h"
 #include "TetrisFont.h"
 #include <list>
-//#include "sqlite3\include\sqlite3.h"
-#include <sqlite3.h>
+#include <sqlite3\include\sqlite3.h>
 
 class TetrisBoardScene : public GameScene
 {

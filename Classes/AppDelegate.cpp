@@ -2,7 +2,7 @@
 #include "MainMenuScene.h"
 #include "TetrisBoardScene.h"
 #include "TetrisFont.h"
-#include <sqlite3.h>
+#include <sqlite3\include\sqlite3.h>
 
 // #define USE_AUDIO_ENGINE 1
 // #define USE_SIMPLE_AUDIO_ENGINE 1
