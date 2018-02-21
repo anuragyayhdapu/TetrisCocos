@@ -15,6 +15,7 @@ public:
 	void onNotify(const Board& board, TetrisEvent _event);
 
 private:
+	short PW;	// x position of window in BoardPos
 	double _u;			// size of one unit block
 	cocos2d::Vec2 p1_pf, p2_pf;	// first middle point of a unit block in grid (point_first)
 	Board *p1Board, *p2Board;

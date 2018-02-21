@@ -18,9 +18,9 @@ namespace t_const
 	namespace lm
 	{
 		const int NUM_OF_UNIT_BLOCKS_IN_HEIGHT = 30;
-		const int NUM_OF_UNIT_BLOCKS_IN_WIDTH = 16;
+		const int NUM_OF_UNIT_BLOCKS_IN_WIDTH = 12;
 
-		const int BUCKET_LEFT = 2;
+		const int BUCKET_LEFT = 1;
 		const int BUCKET_RIGHT = BUCKET_LEFT + BUCKET_WIDTH;
 		const int BUCKET_TOP = 0;
 		const int BUCKET_BOTTOM = BUCKET_TOP + BUCKET_HEIGHT;
@@ -45,7 +45,7 @@ namespace t_const
 		const int BUCKET_TOP = 0;
 		const int BUCKET_BOTTOM = BUCKET_TOP + BUCKET_HEIGHT;
 
-		const int WINDOW_TOP = 1;
+		const int WINDOW_TOP = 0;
 		const int WINDOW_LEFT_GAP = 3;
 		const int WINDOW_LEFT = BUCKET_RIGHT + WINDOW_LEFT_GAP;
 		const int WINDOW_RIGHT = WINDOW_LEFT + WINDOW_WIDTH;
@@ -66,11 +66,6 @@ namespace t_const
 	const short FONT_HEIGHT = 5;
 
 	const float MEDIUM_DESIGN_RESOLUTION_HEIGHT = 768;
-
-	// things that are fixed for now, and probably will never change:
-		// number of blocks in any tetromino = 4
-		// number of rotation states = 4
-		// number of rotation templates = 7
 }
 
 enum TetrisEvent {

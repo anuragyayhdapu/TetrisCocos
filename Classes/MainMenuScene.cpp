@@ -38,7 +38,7 @@ bool MainMenuScene::init()
 
 void MainMenuScene::GoToSinglePlayerScene(Ref *pSender)
 {
-	auto scene = TetrisBoardScene::create();
-	//auto scene = LocalTetrisBoardScene::create();	// TODO: for testing only, replace with it's own multiplayer
+	//auto scene = TetrisBoardScene::create();
+	auto scene = LocalTetrisBoardScene::create();	// TODO: for testing only, replace with it's own multiplayer
 	Director::getInstance()->replaceScene(scene);
 }
