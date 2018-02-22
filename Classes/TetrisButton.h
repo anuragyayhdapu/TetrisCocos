@@ -12,6 +12,7 @@ public:
 	TetrisButton(std::function<void(cocos2d::Ref*)> _btnCallbackFunc, cocos2d::Color4F borderColor);
 	virtual ~TetrisButton();
 
+	static TetrisButton * TetrisButton::create(std::string text, cocos2d::Vec2 position, float size, cocos2d::Color4F borderColor = cocos2d::Color4F::ORANGE, FontAlign align = FontAlign::MIDDLE);
 	static TetrisButton* create(std::function<void(cocos2d::Ref*)> _btnCallbackFunc, std::string text, cocos2d::Color4F color, cocos2d::Vec2 position, float size, FontAlign = FontAlign::LEFT, FontColorPattern = FontColorPattern::RANDOM_BLOCK, FontDrawPattern = FontDrawPattern::BORDERED, float btnWidth = 0);
 
 	bool init(std::string text, cocos2d::Vec2 position, float size, FontColorPattern, FontDrawPattern, FontAlign, unsigned int width);
@@ -20,6 +21,9 @@ public:
 	void stopAnimate();
 	void reWrite(std::string text);
 	bool nonInteractive;
+	void drawBorder() { btnDrawNode->drawRect(leftPt, rightPt, cocos2d::Color4F::ORANGE); }
+	void removeBorder() { btnDrawNode->clear(); }
+	void freeze() { stopAnimate(); removeBorder(); }
 
 private:
 	TetrisFont * font;

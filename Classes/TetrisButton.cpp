@@ -18,6 +18,24 @@ TetrisButton::~TetrisButton()
 {
 }
 
+
+TetrisButton * TetrisButton::create(std::string text, cocos2d::Vec2 position, float size, cocos2d::Color4F borderColor, FontAlign align)
+{
+	TetrisButton* ptr = new(std::nothrow)TetrisButton([](cocos2d::Ref*) {}, borderColor);
+	ptr->nonInteractive = true;
+	if (ptr && ptr->init(text, position, size, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, align, /*padding*/0))
+	{
+		ptr->autorelease();
+	}
+	else
+	{
+		delete ptr;
+		ptr = nullptr;
+	}
+	return ptr;
+}
+
+
 TetrisButton * TetrisButton::create(std::function<void(cocos2d::Ref*)> _btnCallbackFunc, std::string text, cocos2d::Color4F color, cocos2d::Vec2 position, float size, FontAlign align, FontColorPattern colorPattern, FontDrawPattern drawPattern, float width)
 {
 	TetrisButton* ptr = new(std::nothrow)TetrisButton(_btnCallbackFunc, color);
@@ -65,7 +83,8 @@ bool TetrisButton::init(std::string text, cocos2d::Vec2 position, float size, Fo
 	float offset = (size * TetrisFont::u * diff);
 	leftPt.x -= offset;
 	leftPt.y += size * TetrisFont::u;
-	rightPt.x += offset;
+	if (diff > 1)
+		rightPt.x += offset;
 	rightPt.y -= size * TetrisFont::u;
 
 	btnDrawNode = cocos2d::DrawNode::create();
@@ -107,7 +126,7 @@ bool TetrisButton::onMouseMove(cocos2d::EventMouse * mouseEvent)
 		if (!alreadyDrawn)
 		{
 			stopAnimate();
-			btnDrawNode->drawRect(leftPt, rightPt, cocos2d::Color4F::ORANGE);
+			drawBorder();
 			alreadyDrawn = true;
 			alreadyClear = false;
 		}
