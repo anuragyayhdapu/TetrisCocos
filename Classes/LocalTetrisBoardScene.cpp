@@ -1,4 +1,5 @@
 #include "LocalTetrisBoardScene.h"
+#include "LocalPauseScene.h"
 
 USING_NS_CC;
 
@@ -400,6 +401,13 @@ void LocalTetrisBoardScene::addText()
 	auto pau_r = p1_pf.x + t_const::lm::NUM_OF_UNIT_BLOCKS_IN_WIDTH * _u;
 	auto d = p2_pf.x - pau_r;
 	auto pau_y = cocos2d::Director::getInstance()->getVisibleSize().height * 0.23;
-	pauseBtn = TetrisButton::create([](cocos2d::Ref*) {cocos2d::log("pase clicked..."); }, "|", cocos2d::Color4F::ORANGE, Vec2(pau_r + d / 2, pau_y), 3.5f, FontAlign::MIDDLE, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, 2);
+	auto pauseCallback = std::bind(&LocalTetrisBoardScene::goToPauseScene, this, std::placeholders::_1);
+	pauseBtn = TetrisButton::create(pauseCallback, "|", cocos2d::Color4F::ORANGE, Vec2(pau_r + d / 2, pau_y), 3.5f, FontAlign::MIDDLE, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, 2);
 	this->addChild(pauseBtn);
+}
+
+
+void LocalTetrisBoardScene::goToPauseScene(cocos2d::Ref * pSender)
+{
+	Director::getInstance()->pushScene(LocalPauseScene::create(std::to_string(p1Board->getScore()), std::to_string(p2Board->getScore())));
 }

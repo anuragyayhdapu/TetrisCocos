@@ -40,4 +40,5 @@ private:
 	void redrawWindow();
 	void addText();
 	void start() {}
+	void goToPauseScene(cocos2d::Ref * pSender);
 };
