@@ -64,7 +64,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 	if (!glview) {
 
 		// Setting Design Resolution to Medium Resolution
-		//designResolutionSize = mediumResolutionSize;
+		designResolutionSize = mediumResolutionSize;
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) || (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
 		glview = GLViewImpl::createWithRect("TetrisCocos", cocos2d::Rect(0, 0, designResolutionSize.width, designResolutionSize.height));

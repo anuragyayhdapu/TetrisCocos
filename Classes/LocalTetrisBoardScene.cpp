@@ -66,30 +66,34 @@ void LocalTetrisBoardScene::onNotify(const Board & board, TetrisEvent _event)
 	switch (_event)
 	{
 	case INCREMENT_RAND_ITERATOR:
-
 		if (&board == p2Board)
 			randListMoverHelper(p2RandListIter, p1RandListIter);
 		else
 			randListMoverHelper(p1RandListIter, p2RandListIter);
-
 		redrawWindow();
-
 		break;
+
 	case GAMEOVER:
 		// TODO: figure this out later
 
 		// display game over scene
 		this->GoToGameOverScene(this);
+		break;
 
-		break;
 	case LEVEL_UP:
-		// TODO: figure this out later
-		//lvlNum->reWrite(std::to_string(board.getLevel()), lvlNumDrawNode);
+		if (&board == p1Board)
+			leftLvlNum->reWrite(std::to_string(board.getLevel()), leftLvlDrawNode);
+		else
+			rightLvlNum->reWrite(std::to_string(board.getLevel()), rightLvlDrawNode);
 		break;
+
 	case SCORE_UP:
-		// TODO: figure this out later
-		//scoreNum->reWrite(std::to_string(board.getScore()), scoreNumDrawNode);
+		if (&board == p1Board)
+			leftScoreNum->reWrite(std::to_string(board.getScore()), leftScoreDrawNode);
+		else
+			rightScoreNum->reWrite(std::to_string(board.getScore()), rightScoreDrawNode);
 		break;
+
 	default:
 		break;
 	}
@@ -108,8 +112,8 @@ void LocalTetrisBoardScene::randListMoverHelper(std::list<short>::iterator & ite
 	// then push if faster one is less than 4, pop_front
 
 
-	auto a = std::distance(randList.begin(), iterA);
-	auto b = std::distance(randList.begin(), iterB);
+	size_t a = std::distance(randList.begin(), iterA);
+	size_t b = std::distance(randList.begin(), iterB);
 
 	// 1, 2
 	if (a >= randList.size() - 1)
@@ -138,11 +142,33 @@ void LocalTetrisBoardScene::drawWindow()
 	short d_u = d / _u;
 	PW = (d_u / 2) - (t_const::WINDOW_WIDTH / 2);
 
+	window_left_x = p1r + _u * PW - _u / 2;
+	window_right_x = p1r + _u * (PW + t_const::WINDOW_WIDTH);
+
 	drawNode->drawRect(
-		Vec2(p1r + _u * PW - _u / 2, p1_pf.y - _u * (t_const::lm::WINDOW_TOP)),
-		Vec2(p1r + _u * (PW + t_const::WINDOW_WIDTH), p1_pf.y - _u * (t_const::lm::WINDOW_BOTTOM)),
+		Vec2(window_left_x, p1_pf.y - _u * (t_const::lm::WINDOW_TOP)),
+		Vec2(window_right_x, p1_pf.y - _u * (t_const::lm::WINDOW_BOTTOM)),
 		Color4F::ORANGE
 	);
+
+	// draw arrow for next  tetromino
+	leftArrowDrawNode = DrawNode::create();
+	this->addChild(leftArrowDrawNode);
+	auto l_x = window_left_x - _u;
+	arrow_y = p1_pf.y - (t_const::lm::WINDOW_TOP + 1) * _u;
+
+	leftArrow = TetrisFont::create("$", Color4F::GRAY, Vec2(l_x, arrow_y), 1.0f, FontColorPattern::FULL, FontDrawPattern::SOLID, FontAlign::RIGHT);
+	this->addChild(leftArrow);
+	leftArrow->write(leftArrowDrawNode);
+
+	rightArrowDrawNode = DrawNode::create();
+	this->addChild(rightArrowDrawNode);
+	auto r_x = window_right_x + _u;
+
+	rightArrow = TetrisFont::create("!", Color4F::GRAY, Vec2(r_x, arrow_y), 1.0f, FontColorPattern::FULL, FontDrawPattern::SOLID);
+	this->addChild(rightArrow);
+	rightArrow->write(rightArrowDrawNode);
+
 	redrawWindow();
 }
 
@@ -165,6 +191,23 @@ void LocalTetrisBoardScene::redrawWindow()
 
 		++i;
 	}
+
+	// reposition arrows
+	calcArraowD(p1RandListIter, leftArrow, leftArrowDrawNode);
+	calcArraowD(p2RandListIter, rightArrow, rightArrowDrawNode);
+}
+
+
+void LocalTetrisBoardScene::calcArraowD(std::list<short>::iterator & iter, TetrisFont* arrow, DrawNode* drawNode)
+{
+	size_t d = std::distance(randList.begin(), iter);
+	if (d > 3)
+		d = 3;
+
+	if (d < 3)
+		arrow->reDraw(drawNode, cocos2d::Vec2(arrow->getPos().x, arrow_y - (4 * d * _u)), cocos2d::Color4F::GRAY);
+	else
+		arrow->reDraw(drawNode, cocos2d::Vec2(arrow->getPos().x, arrow_y - (3.5 * d * _u)), cocos2d::Color4F::ORANGE);
 }
 
 
@@ -280,7 +323,7 @@ void LocalTetrisBoardScene::addText()
 	p1_up = TetrisButton::create("w", Vec2(p1_up_x, p1_up_y), 0.8f);
 	p1_up->drawBorder();
 	this->addChild(p1_up);
-	p1_down = TetrisButton::create("s", Vec2(p1_up_x, p1_up_y - 2 *_u), 0.8f);
+	p1_down = TetrisButton::create("s", Vec2(p1_up_x, p1_up_y - 2 * _u), 0.8f);
 	p1_down->drawBorder();
 	this->addChild(p1_down);
 	p1_gdrop = TetrisButton::create("l shift", Vec2(p1_up_x, p1_up_y - 4 * _u), 0.5f);
@@ -357,6 +400,6 @@ void LocalTetrisBoardScene::addText()
 	auto pau_r = p1_pf.x + t_const::lm::NUM_OF_UNIT_BLOCKS_IN_WIDTH * _u;
 	auto d = p2_pf.x - pau_r;
 	auto pau_y = cocos2d::Director::getInstance()->getVisibleSize().height * 0.23;
-	pauseBtn = TetrisButton::create([](cocos2d::Ref*) {cocos2d::log("pase clicked..."); }, "|",cocos2d::Color4F::ORANGE, Vec2(pau_r + d / 2, pau_y), 3.5f, FontAlign::MIDDLE, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, 2);
+	pauseBtn = TetrisButton::create([](cocos2d::Ref*) {cocos2d::log("pase clicked..."); }, "|", cocos2d::Color4F::ORANGE, Vec2(pau_r + d / 2, pau_y), 3.5f, FontAlign::MIDDLE, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, 2);
 	this->addChild(pauseBtn);
 }

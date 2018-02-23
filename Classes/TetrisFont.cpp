@@ -4,7 +4,7 @@
 
 float TetrisFont::u;
 
-TetrisFont::TetrisFont(std::string text, cocos2d::Color4F color, float size, FontColorPattern colorPattern, FontDrawPattern drawPattern, FontAlign align, cocos2d::Vec2 leftPt, cocos2d::Vec2 rightPt)
+TetrisFont::TetrisFont(std::string text, cocos2d::Color4F color, float size, FontColorPattern colorPattern, FontDrawPattern drawPattern, FontAlign align, cocos2d::Vec2 position)
 	:
 	text(text),
 	color(color),
@@ -12,8 +12,9 @@ TetrisFont::TetrisFont(std::string text, cocos2d::Color4F color, float size, Fon
 	colorPattern(colorPattern),
 	drawPattern(drawPattern),
 	align(align),
-	leftPt(leftPt),
-	rightPt(rightPt)
+	leftPt(cocos2d::Vec2()),
+	rightPt(cocos2d::Vec2()),
+	position(position)
 {
 }
 
@@ -23,8 +24,8 @@ TetrisFont::~TetrisFont()
 
 TetrisFont * TetrisFont::create(std::string text, cocos2d::Color4F color, cocos2d::Vec2 position, float size, FontColorPattern pattern, FontDrawPattern drawPattern, FontAlign align)
 {
-	TetrisFont* ptr = new(std::nothrow)TetrisFont(text, color, size, pattern, drawPattern, align);
-	if (ptr && ptr->init(position))
+	TetrisFont* ptr = new(std::nothrow)TetrisFont(text, color, size, pattern, drawPattern, align, position);
+	if (ptr && ptr->init())
 	{
 		ptr->autorelease();
 	}
@@ -37,21 +38,21 @@ TetrisFont * TetrisFont::create(std::string text, cocos2d::Color4F color, cocos2
 }
 
 
-bool TetrisFont::init(cocos2d::Vec2 position)
+bool TetrisFont::init()
 {
 	if (!Node::init())
 	{
 		return false;
 	}
 	
-	setBoundingPoints(position);
+	setBoundingPoints();
 	createFontBlocks();
 
 	return true;
 }
 
 
-void TetrisFont::setBoundingPoints(cocos2d::Vec2 position)
+void TetrisFont::setBoundingPoints()
 {
 	leftPt.y = position.y;
 	rightPt.y = position.y - (size * t_const::FONT_HEIGHT);
@@ -149,12 +150,27 @@ void TetrisFont::write(cocos2d::DrawNode * drawNode)
 }
 
 
+void TetrisFont::reDraw(cocos2d::DrawNode * drawNode, cocos2d::Vec2 newPos)
+{
+	this->position = newPos;
+	reWrite(this->text, drawNode);
+}
+
+
+void TetrisFont::reDraw(cocos2d::DrawNode * drawNode, cocos2d::Vec2 newPos, cocos2d::Color4F newColor)
+{
+	this->color = newColor;
+	reDraw(drawNode, newPos);
+}
+
+
 void TetrisFont::reWrite(std::string newText, cocos2d::DrawNode * drawNode)
 {
 	drawNode->clear();
 	fontBlocksDD.clear();
 
 	this->text = newText;
+	setBoundingPoints();
 	createFontBlocks();
 	write(drawNode);
 }

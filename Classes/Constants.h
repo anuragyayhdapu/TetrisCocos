@@ -25,7 +25,7 @@ namespace t_const
 		const int BUCKET_TOP = 0;
 		const int BUCKET_BOTTOM = BUCKET_TOP + BUCKET_HEIGHT;
 
-		const int WINDOW_TOP = 1;
+		const int WINDOW_TOP = 0;
 		const int WINDOW_LEFT_GAP = 3;
 		const int WINDOW_LEFT = BUCKET_RIGHT + WINDOW_LEFT_GAP;
 		const int WINDOW_RIGHT = WINDOW_LEFT + WINDOW_WIDTH;
