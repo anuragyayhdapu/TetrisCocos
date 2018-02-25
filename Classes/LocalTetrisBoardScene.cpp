@@ -1,13 +1,33 @@
 #include "LocalTetrisBoardScene.h"
 #include "LocalPauseScene.h"
+#include "LocalGameOverScene.h"
 
 USING_NS_CC;
 
-LocalTetrisBoardScene::LocalTetrisBoardScene()
+LocalTetrisBoardScene::LocalTetrisBoardScene(MultiplayerGameMode gameMode, int timerMinutes)
 	:
 	p1_upP(true), p1_leftP(true), p1_rightP(true), p1_downP(true), p1_gdropP(true),
-	leftScore(0), rightScore(0)
+	leftScore(0), rightScore(0),
+	gameMode(gameMode),
+	timerMinutes(timerMinutes),
+	timerSeconds(0)
 {
+}
+
+
+LocalTetrisBoardScene * LocalTetrisBoardScene::create(MultiplayerGameMode gameMode, int timerMinutes)
+{
+	auto scene = new(std::nothrow)LocalTetrisBoardScene(gameMode, timerMinutes);
+	if (scene && scene->init())
+	{
+		scene->autorelease();
+	}
+	else
+	{
+		delete scene;
+		scene = nullptr;
+	}
+	return scene;
 }
 
 bool LocalTetrisBoardScene::init()
@@ -47,18 +67,26 @@ bool LocalTetrisBoardScene::init()
 	p1Board = Board::createBoard(_u, p1_pf, p1RandListIter, 0, 1, t_const::lm::BUCKET_LEFT, t_const::lm::BUCKET_RIGHT, t_const::lm::BUCKET_TOP, t_const::lm::BUCKET_BOTTOM, t_const::lm::SPAWN_POSITION);
 	p1Board->registerObserver(this);
 	this->addChild(p1Board);
-	p1Board->start();
 
 	p2Board = Board::createBoard(_u, p2_pf, p2RandListIter, 0, 1, t_const::lm::BUCKET_LEFT, t_const::lm::BUCKET_RIGHT, t_const::lm::BUCKET_TOP, t_const::lm::BUCKET_BOTTOM, t_const::lm::SPAWN_POSITION);
 	p2Board->registerObserver(this);
 	this->addChild(p2Board);
-	p2Board->start();
 
 	drawWindow();
-	addText();
-
+	countDownLayer = nullptr;
+	countDown(visibleSize);
 
 	return true;
+}
+
+void LocalTetrisBoardScene::start()
+{
+	p1Board->start();
+	p2Board->start();
+	addText();
+
+	if (gameMode == MultiplayerGameMode::RACE_AGAINS_TIME)
+		schedule(CC_SCHEDULE_SELECTOR(LocalTetrisBoardScene::timerUpdateSchedular), 1.0f);
 }
 
 
@@ -75,10 +103,30 @@ void LocalTetrisBoardScene::onNotify(const Board & board, TetrisEvent _event)
 		break;
 
 	case GAMEOVER:
-		// TODO: figure this out later
+		switch (gameMode)
+		{
+		case LAST_MAN_STANDING:
+			if (&board == p2Board)
+				Director::getInstance()->replaceScene(LocalGameOverScene::create("left", "", gameMode));
+			else
+				Director::getInstance()->replaceScene(LocalGameOverScene::create("right", "", gameMode));
+			break;
 
-		// display game over scene
-		this->GoToGameOverScene(this);
+		case RACE_AGAINS_TIME:
+		case ALL_ABOUT_SCORE:
+			// calculate the highest score
+			if (p1Board->getScore() == p2Board->getScore())
+				Director::getInstance()->replaceScene(LocalGameOverScene::create(std::to_string(p1Board->getScore()), gameMode));
+			else if (p1Board->getScore() > p2Board->getScore())
+				Director::getInstance()->replaceScene(LocalGameOverScene::create("left", std::to_string(p1Board->getScore() - p2Board->getScore()), gameMode));
+			else
+				Director::getInstance()->replaceScene(LocalGameOverScene::create("right", std::to_string(p2Board->getScore() - p1Board->getScore()), gameMode));
+			break;
+
+		default:
+			break;
+		}
+
 		break;
 
 	case LEVEL_UP:
@@ -89,10 +137,13 @@ void LocalTetrisBoardScene::onNotify(const Board & board, TetrisEvent _event)
 		break;
 
 	case SCORE_UP:
-		if (&board == p1Board)
-			leftScoreNum->reWrite(std::to_string(board.getScore()), leftScoreDrawNode);
-		else
-			rightScoreNum->reWrite(std::to_string(board.getScore()), rightScoreDrawNode);
+		if (gameMode != MultiplayerGameMode::LAST_MAN_STANDING) {
+
+			if (&board == p1Board)
+				leftScoreNum->reWrite(std::to_string(board.getScore()), leftScoreDrawNode);
+			else
+				rightScoreNum->reWrite(std::to_string(board.getScore()), rightScoreDrawNode);
+		}
 		break;
 
 	default:
@@ -355,19 +406,21 @@ void LocalTetrisBoardScene::addText()
 	p2_left->drawBorder();
 	this->addChild(p2_left);
 
-	// left player score
-	txtDrawNode = DrawNode::create();
-	this->addChild(txtDrawNode);
-
 	auto p1_s_x = p1_pf.x + (t_const::BUCKET_WIDTH + 2) * _u;
 	auto p1_s_y = Director::getInstance()->getVisibleSize().height * 0.5;
-	leftScoreTxt = TetrisFont::create("score", cocos2d::Color4F::GRAY, Vec2(p1_s_x, p1_s_y), 0.40f, FontColorPattern::FULL, FontDrawPattern::SOLID);
-	leftScoreTxt->write(txtDrawNode);
-	leftScoreDrawNode = DrawNode::create();
-	this->addChild(leftScoreDrawNode);
-	leftScoreNum = TetrisFont::create(".", cocos2d::Color4F::GRAY, Vec2(p1_s_x, p1_s_y - 1.5 * _u), 0.60f, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID);
-	this->addChild(leftScoreNum);
-	leftScoreNum->write(leftScoreDrawNode);
+	txtDrawNode = DrawNode::create();
+	this->addChild(txtDrawNode);
+	// left player score
+	if (gameMode != MultiplayerGameMode::LAST_MAN_STANDING) {
+
+		leftScoreTxt = TetrisFont::create("score", cocos2d::Color4F::GRAY, Vec2(p1_s_x, p1_s_y), 0.40f, FontColorPattern::FULL, FontDrawPattern::SOLID);
+		leftScoreTxt->write(txtDrawNode);
+		leftScoreDrawNode = DrawNode::create();
+		this->addChild(leftScoreDrawNode);
+		leftScoreNum = TetrisFont::create(".", cocos2d::Color4F::GRAY, Vec2(p1_s_x, p1_s_y - 1.5 * _u), 0.60f, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID);
+		this->addChild(leftScoreNum);
+		leftScoreNum->write(leftScoreDrawNode);
+	}
 
 	// left player level
 	leftLvlTxt = TetrisFont::create("level", cocos2d::Color4F::GRAY, Vec2(p1_s_x, p1_s_y - 4.5 * _u), 0.40f, FontColorPattern::FULL, FontDrawPattern::SOLID);
@@ -380,13 +433,16 @@ void LocalTetrisBoardScene::addText()
 
 	// right player score
 	auto p2_s_x = p2_pf.x - _u;
-	rightScoreTxt = TetrisFont::create("score", cocos2d::Color4F::GRAY, Vec2(p2_s_x, p1_s_y), 0.40f, FontColorPattern::FULL, FontDrawPattern::SOLID, FontAlign::RIGHT);
-	rightScoreTxt->write(txtDrawNode);
-	rightScoreDrawNode = DrawNode::create();
-	this->addChild(rightScoreDrawNode);
-	rightScoreNum = TetrisFont::create(".", cocos2d::Color4F::GRAY, Vec2(p2_s_x, p1_s_y - 1.5 * _u), 0.60f, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, FontAlign::RIGHT);
-	this->addChild(rightScoreNum);
-	rightScoreNum->write(rightScoreDrawNode);
+	if (gameMode != MultiplayerGameMode::LAST_MAN_STANDING) {
+
+		rightScoreTxt = TetrisFont::create("score", cocos2d::Color4F::GRAY, Vec2(p2_s_x, p1_s_y), 0.40f, FontColorPattern::FULL, FontDrawPattern::SOLID, FontAlign::RIGHT);
+		rightScoreTxt->write(txtDrawNode);
+		rightScoreDrawNode = DrawNode::create();
+		this->addChild(rightScoreDrawNode);
+		rightScoreNum = TetrisFont::create(".", cocos2d::Color4F::GRAY, Vec2(p2_s_x, p1_s_y - 1.5 * _u), 0.60f, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, FontAlign::RIGHT);
+		this->addChild(rightScoreNum);
+		rightScoreNum->write(rightScoreDrawNode);
+	}
 
 	// right player level
 	rightLvlTxt = TetrisFont::create("level", cocos2d::Color4F::GRAY, Vec2(p2_s_x, p1_s_y - 4.5 * _u), 0.40f, FontColorPattern::FULL, FontDrawPattern::SOLID, FontAlign::RIGHT);
@@ -400,14 +456,62 @@ void LocalTetrisBoardScene::addText()
 	// pause button
 	auto pau_r = p1_pf.x + t_const::lm::NUM_OF_UNIT_BLOCKS_IN_WIDTH * _u;
 	auto d = p2_pf.x - pau_r;
-	auto pau_y = cocos2d::Director::getInstance()->getVisibleSize().height * 0.23;
+	auto pau_y = cocos2d::Director::getInstance()->getVisibleSize().height * 0.15;
+	auto mid_x = pau_r + d / 2;
 	auto pauseCallback = std::bind(&LocalTetrisBoardScene::goToPauseScene, this, std::placeholders::_1);
-	pauseBtn = TetrisButton::create(pauseCallback, "|", cocos2d::Color4F::ORANGE, Vec2(pau_r + d / 2, pau_y), 3.5f, FontAlign::MIDDLE, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, 2);
+	pauseBtn = TetrisButton::create(pauseCallback, "|", cocos2d::Color4F::ORANGE, Vec2(mid_x, pau_y), 2.0f, FontAlign::MIDDLE, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, 2);
 	this->addChild(pauseBtn);
+
+	// timer
+	if (gameMode == MultiplayerGameMode::RACE_AGAINS_TIME)
+	{
+		minuteDrawNode = DrawNode::create();
+		this->addChild(minuteDrawNode);
+		minuteTxt = TetrisFont::create(std::to_string(timerMinutes), cocos2d::Color4F::ORANGE, Vec2(mid_x - _u, pau_y + 3 * _u), 1.0f, FontColorPattern::FULL, FontDrawPattern::SOLID, FontAlign::RIGHT);
+		this->addChild(minuteTxt);
+		minuteTxt->write(minuteDrawNode);
+
+		secondDrawNode = DrawNode::create();
+		this->addChild(secondDrawNode);
+		secondTxt = TetrisFont::create(std::to_string(timerSeconds), cocos2d::Color4F::ORANGE, Vec2(mid_x + _u, pau_y + 3 * _u), 1.0f, FontColorPattern::FULL, FontDrawPattern::SOLID, FontAlign::LEFT);
+		this->addChild(secondTxt);
+		secondTxt->write(secondDrawNode);
+
+		auto dot = TetrisFont::create(":", cocos2d::Color4F::ORANGE, Vec2(mid_x, pau_y + 3 * _u), 1.0f, FontColorPattern::FULL, FontDrawPattern::SOLID, FontAlign::MIDDLE);
+		dot->write(txtDrawNode);
+	}
 }
 
 
 void LocalTetrisBoardScene::goToPauseScene(cocos2d::Ref * pSender)
 {
-	Director::getInstance()->pushScene(LocalPauseScene::create(std::to_string(p1Board->getScore()), std::to_string(p2Board->getScore())));
+	Director::getInstance()->pushScene(LocalPauseScene::create(std::to_string(p1Board->getScore()), std::to_string(p2Board->getScore()), gameMode));
+}
+
+
+void LocalTetrisBoardScene::timerUpdateSchedular(float dt)
+{
+	// reduce one second from timer
+	// if timer reaches zero, call game over scene
+	if (--timerSeconds < 0)
+	{
+		timerSeconds = 59;
+		if (--timerMinutes < 0)
+		{
+			// copare board score
+			if (p1Board->getScore() == p2Board->getScore())
+				Director::getInstance()->replaceScene(LocalGameOverScene::create(std::to_string(p1Board->getScore()), gameMode));
+			if (p1Board->getScore() > p2Board->getScore())
+			{
+				Director::getInstance()->replaceScene(LocalGameOverScene::create("left", std::to_string(p1Board->getScore()), gameMode));
+			}
+			else
+				Director::getInstance()->replaceScene(LocalGameOverScene::create("right", std::to_string(p2Board->getScore()), gameMode));
+		}
+	}
+
+
+	// redraw
+	secondTxt->reWrite(timerSeconds, secondDrawNode);
+	minuteTxt->reWrite(timerMinutes, minuteDrawNode);
 }

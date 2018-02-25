@@ -16,6 +16,7 @@ public:
 	bool init();
 
 	void write(cocos2d::DrawNode* drawNode);
+	void reWrite(int newText, cocos2d::DrawNode* drawNode);
 	void reWrite(std::string newText, cocos2d::DrawNode* drawNode);
 	void reDraw(cocos2d::DrawNode* drawNode, cocos2d::Vec2 newPos);
 	void reDraw(cocos2d::DrawNode* drawNode, cocos2d::Vec2 newPos, cocos2d::Color4F newColor);

@@ -10,14 +10,15 @@
 class LocalTetrisBoardScene : public GameScene
 {
 public:
-	LocalTetrisBoardScene();
-	virtual bool init();
-	CREATE_FUNC(LocalTetrisBoardScene);
+	LocalTetrisBoardScene(MultiplayerGameMode gameMode, int timerMinutes);
+	static LocalTetrisBoardScene* create(MultiplayerGameMode gameMode, int timerMinutes = 1);
 	virtual ~LocalTetrisBoardScene() {}
 
 	void onNotify(const Board& board, TetrisEvent _event);
 
 private:
+	virtual bool init();
+	MultiplayerGameMode gameMode;
 	float window_left_x, window_right_x, l_arr_y, arrow_y;
 	short PW;	// x position of window in BoardPos
 	double _u;			// size of one unit block
@@ -39,6 +40,13 @@ private:
 	void drawWindow();
 	void redrawWindow();
 	void addText();
-	void start() {}
+	void start();
 	void goToPauseScene(cocos2d::Ref * pSender);
+
+	cocos2d::DrawNode *minuteDrawNode, *secondDrawNode;
+	TetrisFont *minuteTxt, *secondTxt;
+	int timerMinutes, timerSeconds;
+	void timerUpdateSchedular(float dt);
+
+	cocos2d::Layer *countDownLayer;
 };

@@ -164,6 +164,11 @@ void TetrisFont::reDraw(cocos2d::DrawNode * drawNode, cocos2d::Vec2 newPos, coco
 }
 
 
+void TetrisFont::reWrite(int newText, cocos2d::DrawNode * drawNode)
+{
+	reWrite(std::to_string(newText), drawNode);
+}
+
 void TetrisFont::reWrite(std::string newText, cocos2d::DrawNode * drawNode)
 {
 	drawNode->clear();

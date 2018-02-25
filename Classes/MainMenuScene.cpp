@@ -1,6 +1,6 @@
 #include "MainMenuScene.h"
 #include "TetrisBoardScene.h"
-#include "LocalTetrisBoardScene.h"
+#include "LocalMultiplayerMenuScene.h"
 #include <functional>
 
 USING_NS_CC;
@@ -29,8 +29,16 @@ bool MainMenuScene::init()
 	heading2->write(fontDrawNode);
 
 	auto btnCallbackFunc = std::bind(&MainMenuScene::GoToSinglePlayerScene, this, std::placeholders::_1);
-	spStartBtn = TetrisButton::create(btnCallbackFunc, ">", Color4F::RED, Vec2(visibleSize.width / 2, visibleSize.height * 0.30), 3.5, FontAlign::MIDDLE, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, 3);
+	spStartBtn = TetrisButton::create(btnCallbackFunc, "alone", Color4F::RED, Vec2(visibleSize.width / 2, visibleSize.height * 0.40), 2.0, FontAlign::MIDDLE, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, 3);
 	this->addChild(spStartBtn);
+
+	// local multiplayer 
+	lmStartBtn = TetrisButton::create([](Ref*) {
+		Director::getInstance()->replaceScene(LocalMultiPlayerMenuScene::create());
+	}, "together", Color4F::RED, Vec2(visibleSize.width / 2, visibleSize.height * 0.20), 2.0, FontAlign::MIDDLE, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, 3);
+	this->addChild(lmStartBtn);
+
+
 
 	return true;
 }
@@ -38,7 +46,6 @@ bool MainMenuScene::init()
 
 void MainMenuScene::GoToSinglePlayerScene(Ref *pSender)
 {
-	//auto scene = TetrisBoardScene::create();
-	auto scene = LocalTetrisBoardScene::create();	// TODO: for testing only, replace with it's own multiplayer
+	auto scene = TetrisBoardScene::create();
 	Director::getInstance()->replaceScene(scene);
 }

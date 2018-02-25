@@ -12,5 +12,5 @@ public:
 	void GoToSinglePlayerScene(Ref * pSender);
 
 private:
-	TetrisButton *spStartBtn;
+	TetrisButton *spStartBtn, *lmStartBtn;
 };

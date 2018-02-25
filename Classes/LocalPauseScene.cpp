@@ -4,9 +4,9 @@
 
 USING_NS_CC;
 
-LocalPauseScene * LocalPauseScene::create(std::string p1Score, std::string p2Score)
+LocalPauseScene * LocalPauseScene::create(std::string p1Score, std::string p2Score, MultiplayerGameMode gameMode)
 {
-	auto pauseScene = new(std::nothrow)LocalPauseScene();
+	auto pauseScene = new(std::nothrow)LocalPauseScene(gameMode);
 	if (pauseScene && pauseScene->init(p1Score, p2Score))
 	{
 		pauseScene->autorelease();
@@ -52,7 +52,7 @@ bool LocalPauseScene::init(std::string p1Score, std::string p2Score)
 	nums.append(p2Score);
 
 	auto scoreTxt = TetrisFont::create(text, cocos2d::Color4F::GRAY, Vec2(visibleSize.width * 0.5, 0.63 * visibleSize.height), 0.5f, FontColorPattern::FULL, FontDrawPattern::SOLID, FontAlign::MIDDLE);
-	auto scoreNums = TetrisFont::create(nums, cocos2d::Color4F::GRAY, Vec2(visibleSize.width * 0.5, 0.65 * visibleSize.height), 1.0f, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, FontAlign::MIDDLE);
+	auto scoreNums = TetrisFont::create(nums, cocos2d::Color4F::ORANGE, Vec2(visibleSize.width * 0.5, 0.65 * visibleSize.height), 1.0f, FontColorPattern::FULL, FontDrawPattern::SOLID, FontAlign::MIDDLE);
 
 	scoreTxt->write(txtDrawNode);
 	scoreNums->write(txtDrawNode);
@@ -67,7 +67,7 @@ void LocalPauseScene::goBack(cocos2d::Ref * pSender)
 
 void LocalPauseScene::rematch(cocos2d::Ref * pSender)
 {
-	auto scene = LocalTetrisBoardScene::create();
+	auto scene = LocalTetrisBoardScene::create(this->gameMode);
 	Director::getInstance()->replaceScene(scene);
 }
 

@@ -84,3 +84,9 @@ enum FontDrawPattern {
 enum FontAlign {
 	LEFT, MIDDLE, RIGHT
 };
+
+enum MultiplayerGameMode {
+	LAST_MAN_STANDING	// no timer, no score, only level, survive till end
+	, ALL_ABOUT_SCORE	// no timer, score, level, one with the highest score wins
+	, RACE_AGAINS_TIME	// timer, score, level, make highest score in given time
+};
