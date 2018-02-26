@@ -13,4 +13,4 @@ Multi Player
 
 Setup this Project
 --------------------
-Refer Install.md
+Refer [Install.md](Install.md)
