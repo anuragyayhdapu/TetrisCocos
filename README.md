@@ -7,6 +7,10 @@ Single Player
 ---------------
 ![TetrisCocos screenshot](Screenshots/sp_game.png)
 
+Multi Player
+---------------
+![TetrisCocos screenshot](Screenshots/lm_game.png)
+
 Setup this Project
 --------------------
 Refer Install.md
