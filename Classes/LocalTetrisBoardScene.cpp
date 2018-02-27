@@ -45,9 +45,7 @@ bool LocalTetrisBoardScene::init()
 	p1_pf.y = 0.98 * visibleSize.height;
 	p2_pf.y = p1_pf.y;
 
-	windowDrawNode = DrawNode::create();
-	this->addChild(windowDrawNode);
-
+	initDrawNodes();
 
 	// set up keyboard event listner
 	auto eventListner = EventListenerKeyboard::create();
@@ -74,19 +72,92 @@ bool LocalTetrisBoardScene::init()
 
 	drawWindow();
 	countDownLayer = nullptr;
-	countDown(visibleSize);
+
+	if (gameMode != MultiplayerGameMode::RACE_AGAINS_TIME)
+	{
+		countDown(visibleSize);
+	}
+	else
+	{
+		addTimerButtons();
+	}
 
 	return true;
 }
+
+
+void LocalTetrisBoardScene::initDrawNodes()
+{
+	addChild(windowDrawNode = DrawNode::create());
+	addChild(txtDrawNode = DrawNode::create(), 1);
+	addChild(minuteDrawNode = DrawNode::create(), 1);
+	addChild(secondDrawNode = DrawNode::create(), 1);
+}
+
 
 void LocalTetrisBoardScene::start()
 {
 	p1Board->start();
 	p2Board->start();
 	addText();
+}
 
-	if (gameMode == MultiplayerGameMode::RACE_AGAINS_TIME)
-		schedule(CC_SCHEDULE_SELECTOR(LocalTetrisBoardScene::timerUpdateSchedular), 1.0f);
+void LocalTetrisBoardScene::startWithTimer()
+{
+	removeChild(countDownLayer);
+	removeChild(minusBtn);
+	removeChild(plusBtn);
+	removeChild(timerGameStartBtn);
+	txtDrawNode->clear();
+	minuteDrawNode->clear();
+	secondDrawNode->clear();
+
+	p1Board->start();
+	p2Board->start();
+	addText();
+
+	schedule(CC_SCHEDULE_SELECTOR(LocalTetrisBoardScene::timerUpdateSchedular), 1.0f);
+}
+
+
+
+void LocalTetrisBoardScene::addTimerButtons()
+{
+	auto visibleSize = Director::getInstance()->getVisibleSize();
+	countDownLayer = LayerColor::create(Color4B(0, 0, 0, 128), visibleSize.width, visibleSize.height);
+	countDownLayer->setPosition(Vec2(0, 0));
+	this->addChild(countDownLayer);
+
+	auto midpos = cocos2d::Vec2(visibleSize.width / 2, visibleSize.height / 2);
+
+	minuteTxt = TetrisFont::create(std::to_string(timerMinutes), cocos2d::Color4F::ORANGE, Vec2(midpos.x - _u, midpos.y), 1.0f, FontColorPattern::FULL, FontDrawPattern::SOLID, FontAlign::RIGHT);
+	this->addChild(minuteTxt);
+	minuteTxt->write(minuteDrawNode);
+
+	secondTxt = TetrisFont::create("00", cocos2d::Color4F::ORANGE, Vec2(midpos.x + _u, midpos.y), 1.0f, FontColorPattern::FULL, FontDrawPattern::SOLID, FontAlign::LEFT);
+	this->addChild(secondTxt);
+	secondTxt->write(secondDrawNode);
+
+	auto dot = TetrisFont::create(":", cocos2d::Color4F::ORANGE, midpos, 1.0f, FontColorPattern::FULL, FontDrawPattern::SOLID, FontAlign::MIDDLE);
+	dot->write(txtDrawNode);
+
+	// add buttons
+	// minus
+	addChild(minusBtn = TetrisButton::create([&](cocos2d::Ref*) {
+		if (timerMinutes > 1) --timerMinutes;
+		minuteTxt->reWrite(timerMinutes, minuteDrawNode);
+	}, "_", Color4F::BLUE, Vec2(midpos.x - 5 * _u, midpos.y), 1.0f, FontAlign::MIDDLE, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID));
+
+	// plus
+	addChild(plusBtn = TetrisButton::create([&](cocos2d::Ref*) {
+		if (timerMinutes < 10) ++timerMinutes;
+		minuteTxt->reWrite(timerMinutes, minuteDrawNode);
+	}, "+", Color4F::BLUE, Vec2(midpos.x + 6 * _u, midpos.y), 1.0f, FontAlign::LEFT, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID));
+
+	// start
+	addChild(timerGameStartBtn = TetrisButton::create([&](cocos2d::Ref*) {
+		startWithTimer();
+	}, "start", Color4F::BLUE, Vec2(midpos.x, midpos.y - 4 * _u), 1.0f, FontAlign::MIDDLE, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID));
 }
 
 
@@ -408,8 +479,7 @@ void LocalTetrisBoardScene::addText()
 
 	auto p1_s_x = p1_pf.x + (t_const::BUCKET_WIDTH + 2) * _u;
 	auto p1_s_y = Director::getInstance()->getVisibleSize().height * 0.5;
-	txtDrawNode = DrawNode::create();
-	this->addChild(txtDrawNode);
+
 	// left player score
 	if (gameMode != MultiplayerGameMode::LAST_MAN_STANDING) {
 
@@ -465,19 +535,15 @@ void LocalTetrisBoardScene::addText()
 	// timer
 	if (gameMode == MultiplayerGameMode::RACE_AGAINS_TIME)
 	{
-		minuteDrawNode = DrawNode::create();
-		this->addChild(minuteDrawNode);
-		minuteTxt = TetrisFont::create(std::to_string(timerMinutes), cocos2d::Color4F::ORANGE, Vec2(mid_x - _u, pau_y + 3 * _u), 1.0f, FontColorPattern::FULL, FontDrawPattern::SOLID, FontAlign::RIGHT);
+		minuteTxt = TetrisFont::create(std::to_string(timerMinutes), cocos2d::Color4F::GRAY, Vec2(mid_x - 2 * _u, pau_y + 3 * _u), 1.0f, FontColorPattern::FULL, FontDrawPattern::SOLID, FontAlign::RIGHT);
 		this->addChild(minuteTxt);
 		minuteTxt->write(minuteDrawNode);
 
-		secondDrawNode = DrawNode::create();
-		this->addChild(secondDrawNode);
-		secondTxt = TetrisFont::create(std::to_string(timerSeconds), cocos2d::Color4F::ORANGE, Vec2(mid_x + _u, pau_y + 3 * _u), 1.0f, FontColorPattern::FULL, FontDrawPattern::SOLID, FontAlign::LEFT);
+		secondTxt = TetrisFont::create(std::to_string(timerSeconds), cocos2d::Color4F::GRAY, Vec2(mid_x, pau_y + 3 * _u), 1.0f, FontColorPattern::FULL, FontDrawPattern::SOLID, FontAlign::LEFT);
 		this->addChild(secondTxt);
 		secondTxt->write(secondDrawNode);
 
-		auto dot = TetrisFont::create(":", cocos2d::Color4F::ORANGE, Vec2(mid_x, pau_y + 3 * _u), 1.0f, FontColorPattern::FULL, FontDrawPattern::SOLID, FontAlign::MIDDLE);
+		auto dot = TetrisFont::create(":", cocos2d::Color4F::GRAY, Vec2(mid_x - _u, pau_y + 3 * _u), 1.0f, FontColorPattern::FULL, FontDrawPattern::SOLID, FontAlign::MIDDLE);
 		dot->write(txtDrawNode);
 	}
 }

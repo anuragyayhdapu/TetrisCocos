@@ -18,6 +18,7 @@ public:
 
 private:
 	virtual bool init();
+	void initDrawNodes();
 	MultiplayerGameMode gameMode;
 	float window_left_x, window_right_x, l_arr_y, arrow_y;
 	short PW;	// x position of window in BoardPos
@@ -41,12 +42,15 @@ private:
 	void redrawWindow();
 	void addText();
 	void start();
+	void startWithTimer();
 	void goToPauseScene(cocos2d::Ref * pSender);
 
 	cocos2d::DrawNode *minuteDrawNode, *secondDrawNode;
 	TetrisFont *minuteTxt, *secondTxt;
+	TetrisButton *minusBtn, *plusBtn, *timerGameStartBtn;
 	int timerMinutes, timerSeconds;
 	void timerUpdateSchedular(float dt);
+	void addTimerButtons();
 
 	cocos2d::Layer *countDownLayer;
 };
