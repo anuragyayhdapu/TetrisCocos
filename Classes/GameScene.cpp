@@ -87,11 +87,7 @@ void GameScene::addButtons()
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 
 	auto pauseCallBack = std::bind(&GameScene::GoToPauseScene, this, std::placeholders::_1);
-	pauseBtn = TetrisButton::create(pauseCallBack, "p", Color4F::RED, Vec2(visibleSize.width * 0.20, visibleSize.height * 0.95), 1.5, FontAlign::RIGHT, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID);
-	this->addChild(pauseBtn);
-
-	auto stopCallBack = std::bind(&GameScene::GoToGameOverScene, this, std::placeholders::_1);
-	pauseBtn = TetrisButton::create(stopCallBack, "x", Color4F::RED, Vec2(visibleSize.width * 0.10, visibleSize.height * 0.95), 1.5, FontAlign::RIGHT, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID);
+	pauseBtn = TetrisButton::create(pauseCallBack, "|", Color4F::RED, Vec2(visibleSize.width * 0.10, visibleSize.height * 0.95), 2.0f, FontAlign::MIDDLE, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID);
 	this->addChild(pauseBtn);
 }
 
@@ -107,8 +103,8 @@ void GameScene::GoToPauseScene(cocos2d::Ref *pSender)
 
 void GameScene::GoToGameOverScene(cocos2d::Ref *pSender)
 {
-	/*auto prevScene = static_cast<TetrisBoardScene*>(pSender);
+	auto prevScene = static_cast<TetrisBoardScene*>(pSender);
 
 	auto scene = GameOverScene::create(prevScene->getScore(), prevScene->getHighScore(), prevScene->getLevel());
-	Director::getInstance()->replaceScene(scene);*/
+	Director::getInstance()->replaceScene(scene);
 }

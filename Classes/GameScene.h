@@ -9,7 +9,7 @@ class GameScene : public cocos2d::Scene, public Observer
 private:
 	static cocos2d::Layer* ctLayer;
 	static TetrisButton *ctFont;
-	TetrisButton* pauseBtn, stopBtn;
+	TetrisButton* pauseBtn;
 
 public:
 	virtual bool init();
