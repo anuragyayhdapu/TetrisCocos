@@ -6,7 +6,6 @@ USING_NS_CC;
 
 LocalTetrisBoardScene::LocalTetrisBoardScene(MultiplayerGameMode gameMode, int timerMinutes)
 	:
-	p1_upP(true), p1_leftP(true), p1_rightP(true), p1_downP(true), p1_gdropP(true),
 	leftScore(0), rightScore(0),
 	gameMode(gameMode),
 	timerMinutes(timerMinutes),
@@ -342,94 +341,54 @@ void LocalTetrisBoardScene::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode
 
 	case EventKeyboard::KeyCode::KEY_S:
 		p1Board->movingBlockDown();
-		if (p1_downP)
-		{
-			p1_down->freeze();
-			p1_downP = false;
-		}
+		p1_down->freeze();
 		break;
 
 	case EventKeyboard::KeyCode::KEY_D:
 		p1Board->movingBlockRight();
-		if (p1_rightP)
-		{
-			p1_right->freeze();
-			p1_rightP = false;
-		}
+		p1_right->freeze();
 		break;
 
 	case EventKeyboard::KeyCode::KEY_A:
 		p1Board->movingBlockLeft();
-		if (p1_leftP)
-		{
-			p1_left->freeze();
-			p1_leftP = false;
-		}
+		p1_left->freeze();
 		break;
 
 	case EventKeyboard::KeyCode::KEY_W:
 		p1Board->movingBlockRotate();
-		if (p1_upP)
-		{
-			p1_up->freeze();
-			p1_upP = false;
-		}
+		p1_up->freeze();
 		break;
 
 	case EventKeyboard::KeyCode::KEY_LEFT_SHIFT:
 		p1Board->movingBlockGravityDrop();
-		if (p1_gdropP)
-		{
-			p1_gdrop->freeze();
-			p1_gdropP = false;
-		}
+		p1_gdrop->freeze();
 		break;
 
 
 		// board2
 	case EventKeyboard::KeyCode::KEY_DOWN_ARROW:
 		p2Board->movingBlockDown();
-		if (p2_downP)
-		{
-			p2_down->freeze();
-			p2_downP = false;
-		}
+		p2_down->freeze();
 		break;
 
 	case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
 		p2Board->movingBlockRight();
-		if (p2_rightP)
-		{
-			p2_right->freeze();
-			p2_rightP = false;
-		}
+		p2_right->freeze();
 		break;
 
 	case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
 		p2Board->movingBlockLeft();
-		if (p2_leftP)
-		{
-			p2_left->freeze();
-			p2_leftP = false;
-		}
+		p2_left->freeze();
 		break;
 
 	case EventKeyboard::KeyCode::KEY_UP_ARROW:
 		p2Board->movingBlockRotate();
-		if (p2_upP)
-		{
-			p2_up->freeze();
-			p2_upP = false;
-		}
+		p2_up->freeze();
 		break;
 
 	case EventKeyboard::KeyCode::KEY_RIGHT_SHIFT:
 		p2Board->movingBlockGravityDrop();
-		if (p2_gdropP)
-		{
-			p2_gdrop->freeze();
-			p2_gdropP = false;
-		}
+		p2_gdrop->freeze();
 		break;
 
 	default: break;

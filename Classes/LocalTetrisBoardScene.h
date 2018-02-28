@@ -30,7 +30,6 @@ private:
 	std::list<short>::iterator p1RandListIter, p2RandListIter;	// randList iterators given to board
 	cocos2d::DrawNode* windowDrawNode;
 	TetrisButton *p1_up, *p1_left, *p1_right, *p1_down, *p1_gdrop, *p2_up, *p2_left, *p2_right, *p2_down, *p2_gdrop, *pauseBtn;
-	boolean p1_upP, p1_leftP, p1_rightP, p1_downP, p1_gdropP, p2_upP, p2_leftP, p2_rightP, p2_downP, p2_gdropP;
 	TetrisFont *leftScoreTxt, *rightScoreTxt, *leftScoreNum, *rightScoreNum, *leftLvlTxt, *rightLvlTxt, *leftLvlNum, *rightLvlNum, *rightArrow, *leftArrow;
 	cocos2d::DrawNode *leftScoreDrawNode, *rightScoreDrawNode, *txtDrawNode, *leftLvlDrawNode, *rightLvlDrawNode, *rightArrowDrawNode, *leftArrowDrawNode;
 

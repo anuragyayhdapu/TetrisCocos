@@ -10,7 +10,8 @@ TetrisButton::TetrisButton(std::function<void(cocos2d::Ref*)> _btnCallbackFunc, 
 	alreadyClear(true),
 	alreadyDrawn(false),
 	curr(&s),
-	nonInteractive(false)
+	nonInteractive(false),
+	animating(false)
 {
 }
 
@@ -173,12 +174,14 @@ bool TetrisButton::onTouchEnded(cocos2d::Touch * touch, cocos2d::Event * _event)
 
 void TetrisButton::startAnimate()
 {
+	animating = true;
 	schedule(CC_SCHEDULE_SELECTOR(TetrisButton::animate));
 }
 
 
 void TetrisButton::stopAnimate()
 {
+	animating = false;
 	unschedule(CC_SCHEDULE_SELECTOR(TetrisButton::animate));
 }
 
@@ -243,4 +246,13 @@ void TetrisButton::reWrite(std::string text)
 	font->reWrite(text, *curr);
 	createRandList();
 	startAnimate();
+}
+
+void TetrisButton::freeze()
+{
+	if (animating)
+	{
+		stopAnimate();
+		removeBorder();
+	}
 }

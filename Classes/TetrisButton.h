@@ -8,7 +8,7 @@
 class TetrisButton : public cocos2d::Node
 {
 public:
-	TetrisButton() {  }
+	TetrisButton() : animating(false) {  }
 	TetrisButton(std::function<void(cocos2d::Ref*)> _btnCallbackFunc, cocos2d::Color4F borderColor);
 	virtual ~TetrisButton();
 
@@ -23,7 +23,7 @@ public:
 	bool nonInteractive;
 	void drawBorder() { btnDrawNode->drawRect(leftPt, rightPt, cocos2d::Color4F::ORANGE); }
 	void removeBorder() { btnDrawNode->clear(); }
-	void freeze() { stopAnimate(); removeBorder(); }
+	void freeze();
 
 private:
 	TetrisFont * font;
@@ -40,6 +40,7 @@ private:
 	bool onTouchBegan(cocos2d::Touch * touch, cocos2d::Event * _event);
 	bool onTouchEnded(cocos2d::Touch * touch, cocos2d::Event * _event);
 
+	bool animating;
 	void animate(float dt);
 
 	std::vector<int>::iterator rIter;
