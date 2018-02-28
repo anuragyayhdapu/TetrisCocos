@@ -32,6 +32,7 @@ private:
 	cocos2d::DrawNode* windowDrawNode;
 	cocos2d::Layer *countDownLayer;
 	TetrisFont *scoreTxt, *hScoreTxt, *lvlTxt, *scoreNum, *hScoreNum, *lvlNum;
+	TetrisButton *up, *down, *left, *right, *gdrop;
 	cocos2d::DrawNode *txtDrawNode, *scoreNumDrawNode, *hScoreNumDrawNode, *lvlNumDrawNode;
 
 	void drawFonts(cocos2d::Size visibleSize);
@@ -42,4 +43,5 @@ private:
 
 	void initFromDB();
 	void saveToDB();
+	void addText();
 };

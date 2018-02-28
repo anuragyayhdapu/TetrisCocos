@@ -55,6 +55,7 @@ void TetrisBoardScene::start()
 {
 	this->addButtons();
 	this->removeChild(countDownLayer);
+	addText();
 	board->start();
 }
 
@@ -261,30 +262,35 @@ void TetrisBoardScene::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, coc
 	case EventKeyboard::KeyCode::KEY_DOWN_ARROW:
 
 		board->movingBlockDown();
+		down->freeze();
 
 		break;
 
 	case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
 
 		board->movingBlockRight();
+		right->freeze();
 
 		break;
 
 	case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
 
 		board->movingBlockLeft();
+		left->freeze();
 
 		break;
 
 	case EventKeyboard::KeyCode::KEY_UP_ARROW:
 
 		board->movingBlockRotate();
+		up->freeze();
 
 		break;
 
 	case EventKeyboard::KeyCode::KEY_SPACE:
 
 		board->movingBlockGravityDrop();
+		gdrop->freeze();
 
 		break;
 
@@ -292,4 +298,31 @@ void TetrisBoardScene::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, coc
 
 	}
 
+}
+
+
+void TetrisBoardScene::addText()
+{
+	auto visibleSize = Director::getInstance()->getVisibleSize();
+
+	// player controls
+	auto x = 0.12 * visibleSize.width;
+	auto y = visibleSize.height * 0.4;
+
+	addChild(up = TetrisButton::create("#", Vec2(x, y), 1.0f));
+	addChild(down = TetrisButton::create("@", Vec2(x, y - 2 * _u), 1.0f));
+	addChild(gdrop = TetrisButton::create("[==]", Vec2(x, y - 4 * _u), 1.0f));
+	addChild(right = TetrisButton::create("$", Vec2(x + 2 * _u, y - _u), 1.0f));
+	addChild(left = TetrisButton::create("!", Vec2(x - 2 * _u, y - _u), 1.0f));
+
+	up->drawBorder();
+	down->drawBorder();
+	gdrop->drawBorder();
+	right->drawBorder();
+	left->drawBorder();
+
+	// arrow
+	auto arrow = TetrisFont::create("!", Color4F::GRAY, Vec2(_pf.x + (t_const::sp::WINDOW_RIGHT + 1)* _u, visibleSize.height - 2 * _u), 1.0f, FontColorPattern::FULL, FontDrawPattern::SOLID);
+	addChild(arrow);
+	arrow->write(txtDrawNode);
 }
