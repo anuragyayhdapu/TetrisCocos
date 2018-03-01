@@ -54,6 +54,7 @@ private:
 	void lineClearShedular(float dt);
 	void dropHangingBlocksShedular(float dt);
 	bool toUpdate(float dt);
+	bool Board::halfSecondUpdate(float dt);
 
 public:
 	unsigned int getScore() const { return score; }

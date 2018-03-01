@@ -364,7 +364,7 @@ void Board::moveSchedular(float dt)
 
 void Board::lineClearShedular(float dt)
 {
-	if (toUpdate(dt))
+	if (halfSecondUpdate(dt))
 	{
 		tempDt = 0.0f;
 
@@ -396,7 +396,7 @@ void Board::lineClearShedular(float dt)
 
 void Board::dropHangingBlocksShedular(float dt)
 {
-	if (toUpdate(dt))
+	if (halfSecondUpdate(dt))
 	{
 		tempDt = 0.0f;
 
@@ -411,6 +411,15 @@ void Board::dropHangingBlocksShedular(float dt)
 bool Board::toUpdate(float dt)
 {
 	if ((tempDt += dt) >= moveDelaySeconds)
+		return true;
+
+	return false;
+}
+
+
+bool Board::halfSecondUpdate(float dt)
+{
+	if ((tempDt += dt) >= 0.5f)
 		return true;
 
 	return false;
