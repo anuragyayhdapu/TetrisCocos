@@ -3,7 +3,6 @@
 
 USING_NS_CC;
 
-float UnitBlock::midPointSize = (5.0f / t_const::MEDIUM_DESIGN_RESOLUTION_HEIGHT) * Director::getInstance()->getVisibleSize().height;
 
 UnitBlock * UnitBlock::create(double u, cocos2d::Vec2 pf, short x, short y, cocos2d::Color4B color, cocos2d::Color4B borderColor)
 {
@@ -130,11 +129,11 @@ void UnitBlock::draw(cocos2d::DrawNode * drawNode)
 {
 	drawNode->drawSolidRect(drawData.origin, drawData.destination, drawData.color);
 	drawNode->drawRect(drawData.origin, drawData.destination, cocos2d::Color4F::BLACK);
-	drawNode->drawPoint(drawData.midPoint, midPointSize, cocos2d::Color4F::BLACK);
+	drawNode->drawPoint(drawData.midPoint, t_const::POINT_SIZE, cocos2d::Color4F::BLACK);
 }
 
 void UnitBlock::drawHollow(cocos2d::DrawNode * drawNode)
 {
 	drawNode->drawRect(drawData.origin, drawData.destination, drawData.color);
-	drawNode->drawPoint(drawData.midPoint, midPointSize, drawData.color);
+	drawNode->drawPoint(drawData.midPoint, t_const::POINT_SIZE, drawData.color);
 }

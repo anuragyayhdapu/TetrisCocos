@@ -24,6 +24,7 @@ USING_NS_CC;
 static cocos2d::Size designResolutionSize = cocos2d::Size(480, 320);
 static cocos2d::Size smallResolutionSize = cocos2d::Size(480, 320);
 static cocos2d::Size mediumResolutionSize = cocos2d::Size(1024, 768);
+static cocos2d::Size mediumResolutionSize2 = cocos2d::Size(512, 288);
 static cocos2d::Size largeResolutionSize = cocos2d::Size(2048, 1536);
 
 
@@ -238,6 +239,6 @@ void AppDelegate::initializeTextUnitBlock()
 		box = height;
 	}
 
-	// let's say standard unit text size is about 2% of box
+	// standard unit text size is 1% of box
 	TetrisFont::u = 0.01 * box;
 }

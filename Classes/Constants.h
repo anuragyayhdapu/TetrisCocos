@@ -66,6 +66,7 @@ namespace t_const
 	const short FONT_HEIGHT = 5;
 
 	const float MEDIUM_DESIGN_RESOLUTION_HEIGHT = 768;
+	const float POINT_SIZE = 1.0f;
 }
 
 enum TetrisEvent {

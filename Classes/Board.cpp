@@ -242,7 +242,7 @@ void Board::drawBucketInnerGrid(cocos2d::Color4B color)
 	{
 		for (double j = bucketTop; j < bucketBottom; ++j)
 		{
-			bucketDrawNode->drawPoint(Vec2(i * _u + _pf.x, _pf.y - j * _u), 2, cocos2d::Color4F(color));
+			bucketDrawNode->drawPoint(Vec2(i * _u + _pf.x, _pf.y - j * _u), t_const::POINT_SIZE, cocos2d::Color4F(color));
 		}
 	}
 }

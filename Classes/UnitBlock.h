@@ -5,17 +5,12 @@
 #include "SolidBlocks.h"
 #include "DrawData.h"
 
-/*
- * Basic building block of the world
- *	1. Can be relatively positioned in the grid
- *	2. Can be drawn
- *  3. Can be moved
- *	4. Has physics attached (pending {for now my own collision system})
- *	5. Initiates and interacts with Animation (pending)
- */
 
 class SolidBlocks;
 
+/*
+ * Basic building block of the world
+ */
 class UnitBlock : public cocos2d::Node
 {
 	//using SolidBlocksSet = const std::set<BoardPos, BoardPosComparator>&;
@@ -54,7 +49,6 @@ public:
 private:
 	short _x, _y; // position of block in term of number of units
 	DrawData drawData;
-	static float midPointSize;
 
 	void calcDrawData();
 };
