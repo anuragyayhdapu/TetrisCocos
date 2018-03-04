@@ -323,13 +323,14 @@ void LocalTetrisBoardScene::redrawWindow()
 void LocalTetrisBoardScene::calcArraowD(std::list<short>::iterator & iter, TetrisFont* arrow, DrawNode* drawNode)
 {
 	size_t d = std::distance(randList.begin(), iter);
-	if (d > 3)
-		d = 3;
 
 	if (d < 3)
 		arrow->reDraw(drawNode, cocos2d::Vec2(arrow->getPos().x, arrow_y - (4 * d * _u)), cocos2d::Color4F::GRAY);
 	else
+	{
+		d = 3;
 		arrow->reDraw(drawNode, cocos2d::Vec2(arrow->getPos().x, arrow_y - (3.5 * d * _u)), cocos2d::Color4F::ORANGE);
+	}
 }
 
 
