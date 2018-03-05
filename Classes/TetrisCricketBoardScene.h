@@ -4,6 +4,7 @@
 #include "Board.h"
 #include "GameScene.h"
 #include "TetrisFont.h"
+#include "TetrisButton.h"
 
 class TetrisCricketBoardScene : public GameScene
 {
@@ -20,8 +21,9 @@ private:
 	Board *board;
 	double _u;			// size of one unit block
 	cocos2d::Vec2 _pf;
-	cocos2d::DrawNode* windowDrawNode, *arrowDrawNode;
+	cocos2d::DrawNode* windowDrawNode, *arrowDrawNode, *txtDrawNode;
 	TetrisFont *arrow;
+	TetrisButton * b_up, *b_down, *b_gdrop, *b_right, *b_left, *w_up, *w_down;
 	float arrow_y;
 
 	std::list<short> bowlingList;	// bowling list in control of other player
@@ -34,4 +36,5 @@ private:
 	void moveArrowUp();
 	void moveArrowDown();
 	void redrawArrow();
+	void addText();
 };

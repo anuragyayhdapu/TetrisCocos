@@ -1,5 +1,6 @@
 #include "TetrisCricketBoardScene.h"
 #include "TetrominoTemplates.h"
+#include "MainMenuScene.h"
 
 USING_NS_CC;
 
@@ -35,12 +36,14 @@ bool TetrisCricketBoardScene::init()
 
 void TetrisCricketBoardScene::start()
 {
+	addText();
 	board->start();
 }
 
 void TetrisCricketBoardScene::initDrawNodes()
 {
 	addChild(windowDrawNode = DrawNode::create());
+	addChild(txtDrawNode = DrawNode::create());
 }
 
 void TetrisCricketBoardScene::initBowlingList()
@@ -128,6 +131,39 @@ void TetrisCricketBoardScene::redrawArrow()
 	arrow->reDraw(arrowDrawNode, cocos2d::Vec2(arrow->getPos().x, arrow_y - (4 * d * _u)), cocos2d::Color4F::GRAY);
 }
 
+void TetrisCricketBoardScene::addText()
+{
+	auto visibleSize = Director::getInstance()->getVisibleSize();
+	auto y = visibleSize.height * 0.3;
+
+	// window controls
+	auto w_x = _pf.x - 4 * _u;
+	addChild(w_up = TetrisButton::create("w", Vec2(w_x, y - 1.5 * _u), 1.0f));
+	addChild(w_down = TetrisButton::create("s", Vec2(w_x, y - 3.5 * _u), 1.0f));
+	auto f = TetrisFont::create("controls", Color4F::GRAY, Vec2(w_x, y - 6.5 * _u), 0.4f, FontColorPattern::FULL, FontDrawPattern::SOLID, FontAlign::MIDDLE);
+	addChild(f);
+	f->write(txtDrawNode);
+
+	// bucket controls
+	auto b_x = _pf.x + _u * (t_const::cr::NUM_OF_UNIT_BLOCKS_IN_WIDTH + 4);
+	addChild(b_up = TetrisButton::create("#", Vec2(b_x, y), 1.0f));
+	addChild(b_down = TetrisButton::create("@", Vec2(b_x, y - 2 * _u), 1.0f));
+	addChild(b_gdrop = TetrisButton::create("[==]", Vec2(b_x, y - 4 * _u), 1.0f));
+	addChild(b_right = TetrisButton::create("$", Vec2(b_x + 2 * _u, y - _u), 1.0f));
+	addChild(b_left = TetrisButton::create("!", Vec2(b_x - 2 * _u, y - _u), 1.0f));
+	auto g = TetrisFont::create("controls", Color4F::GRAY, Vec2(b_x, y - 6.5 * _u), 0.4f, FontColorPattern::FULL, FontDrawPattern::SOLID, FontAlign::MIDDLE);
+	addChild(g);
+	g->write(txtDrawNode);
+
+	w_up->drawBorder();
+	w_down->drawBorder();
+	b_up->drawBorder();
+	b_down->drawBorder();
+	b_gdrop->drawBorder();
+	b_right->drawBorder();
+	b_left->drawBorder();
+}
+
 void TetrisCricketBoardScene::onNotify(const Board & board, TetrisEvent _event)
 {
 	switch (_event)
@@ -159,37 +195,46 @@ void TetrisCricketBoardScene::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCo
 	{
 	case EventKeyboard::KeyCode::KEY_W:
 		moveArrowUp();
+		w_up->freeze();
 		break;
 
 	case EventKeyboard::KeyCode::KEY_S:
 		moveArrowDown();
+		w_down->freeze();
 		break;
 
 	case EventKeyboard::KeyCode::KEY_DOWN_ARROW:
 		board->movingBlockDown();
+		b_down->freeze();
 		break;
 
 	case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
 		board->movingBlockRight();
+		b_right->freeze();
 		break;
 
 	case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
 		board->movingBlockLeft();
+		b_left->freeze();
 		break;
 
 	case EventKeyboard::KeyCode::KEY_UP_ARROW:
 		board->movingBlockRotate();
+		b_up->freeze();
 		break;
 
 	case EventKeyboard::KeyCode::KEY_SPACE:
 		board->movingBlockGravityDrop();
+		b_gdrop->freeze();
 		break;
 
 	case EventKeyboard::KeyCode::KEY_ESCAPE:
 		Director::getInstance()->replaceScene(TetrisCricketBoardScene::create());
 		break;
 
-
+	case EventKeyboard::KeyCode::KEY_BACKSPACE:
+		Director::getInstance()->replaceScene(MainMenuScene::create());
+		break;
 
 
 	default: break;
