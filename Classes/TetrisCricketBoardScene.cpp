@@ -31,6 +31,10 @@ bool TetrisCricketBoardScene::init()
 	drawWindow();
 	start();
 
+
+	addChild(initLayer = TetrisCricketInitLayer::create([&](cocos2d::Ref*) {removeChild(initLayer); }));
+
+
 	return true;
 }
 

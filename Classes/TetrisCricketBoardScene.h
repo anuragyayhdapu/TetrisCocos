@@ -5,6 +5,7 @@
 #include "GameScene.h"
 #include "TetrisFont.h"
 #include "TetrisButton.h"
+#include "TetrisCricketInitLayer.h"
 
 class TetrisCricketBoardScene : public GameScene
 {
@@ -37,4 +38,6 @@ private:
 	void moveArrowDown();
 	void redrawArrow();
 	void addText();
+
+	TetrisCricketInitLayer* initLayer;
 };
