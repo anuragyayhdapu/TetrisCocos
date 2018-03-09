@@ -35,7 +35,12 @@ bool CricketGameOverScene::init()
 	headingTxt->write(txtDrawNode);
 
 	// draw custom message
-
+	std::string text(winPlayerName);
+	text.append(" won by ");
+	text.append(score);
+	text.append(" runs");
+	auto scoreTxt = TetrisFont::create(text, cocos2d::Color4F::GRAY, Vec2(visibleSize.width * 0.5, 0.63 * visibleSize.height), 0.5f, FontColorPattern::FULL, FontDrawPattern::SOLID, FontAlign::MIDDLE);
+	scoreTxt->write(txtDrawNode);
 
 
 	addChild(TetrisButton::create([&](cocos2d::Ref*) {
