@@ -112,3 +112,27 @@ enum MultiplayerGameMode {
 	, ALL_ABOUT_SCORE	// no timer, score, level, one with the highest score wins
 	, RACE_AGAINS_TIME	// timer, score, level, make highest score in given time
 };
+
+enum CricketInnings {
+	FIRST_INIINGS,
+	SECOND_INNING
+};
+
+
+// create func macro to pass arguments to be initialized by constructor
+#define CREATE_FUNC_ARG(__TYPE__,__ARG_TYPE1__) \
+static __TYPE__* create(__ARG_TYPE1__ arg1) \
+{ \
+    __TYPE__ *pRet = new(std::nothrow) __TYPE__(arg1); \
+    if (pRet && pRet->init()) \
+    { \
+        pRet->autorelease(); \
+        return pRet; \
+    } \
+    else \
+    { \
+        delete pRet; \
+        pRet = nullptr; \
+        return nullptr; \
+    } \
+}
