@@ -30,29 +30,17 @@ bool TetrisCricketSwitchLayer::init()
 	auto midpos = cocos2d::Vec2(size.width / 2, size.height / 2);
 	addChild(TetrisButton::create(startFunc, "play", Color4F::BLUE, Vec2(midpos.x, size.height * 0.25), 1.5f, FontAlign::MIDDLE, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID));
 
-	TetrisFont *p1, *p2, *s1, *s2, *t1, *t2, *h;
 	DrawNode *txtDrawNode;
-
 	addChild(txtDrawNode = DrawNode::create());
-	addChild(h = TetrisFont::create("second inning", Color4F::ORANGE, Vec2(midpos.x, size.height * 0.8), 1.5f, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, FontAlign::MIDDLE));
+	addChild(TetrisFont::create("second inning", txtDrawNode, Color4F::ORANGE, Vec2(midpos.x, size.height * 0.8), 1.5f, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, FontAlign::MIDDLE));
 
-	addChild(s1 = TetrisFont::create("score to chase", Color4F::GRAY, Vec2(midpos.x, size.height * 0.58), 0.4f, FontColorPattern::FULL, FontDrawPattern::SOLID, FontAlign::RIGHT));
-	addChild(s2 = TetrisFont::create(std::to_string(scoreToChase), Color4F::ORANGE, Vec2(size.width * 0.53, size.height * 0.6), 1.0f, FontColorPattern::FULL, FontDrawPattern::SOLID, FontAlign::LEFT));
+	addChild(TetrisFont::create("score to chase", txtDrawNode, Color4F::GRAY, Vec2(midpos.x, size.height * 0.58), 0.4f, FontColorPattern::FULL, FontDrawPattern::SOLID, FontAlign::RIGHT));
+	addChild(TetrisFont::create(std::to_string(scoreToChase), txtDrawNode, Color4F::ORANGE, Vec2(size.width * 0.53, size.height * 0.6), 1.0f, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, FontAlign::LEFT));
 	
-	addChild(p1 = TetrisFont::create("player1", Color4F::GRAY, Vec2(midpos.x, size.height * 0.5), 0.8f, FontColorPattern::FULL, FontDrawPattern::SOLID, FontAlign::RIGHT));
-	addChild(p2 = TetrisFont::create("player2", Color4F::GRAY, Vec2(midpos.x, size.height * 0.4), 0.8f, FontColorPattern::FULL, FontDrawPattern::SOLID, FontAlign::RIGHT));
-	addChild(t2 = TetrisFont::create("batting", Color4F::ORANGE, Vec2(size.width * 0.53, size.height * 0.5), 1.0f, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, FontAlign::LEFT));
-	addChild(t1 = TetrisFont::create("bowling", Color4F::ORANGE, Vec2(size.width * 0.53, size.height * 0.4), 1.0f, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, FontAlign::LEFT));
+	addChild(TetrisFont::create("player1", txtDrawNode, Color4F::GRAY, Vec2(midpos.x, size.height * 0.5), 0.8f, FontColorPattern::FULL, FontDrawPattern::SOLID, FontAlign::RIGHT));
+	addChild(TetrisFont::create("player2", txtDrawNode, Color4F::GRAY, Vec2(midpos.x, size.height * 0.4), 0.8f, FontColorPattern::FULL, FontDrawPattern::SOLID, FontAlign::RIGHT));
+	addChild(TetrisFont::create("batting", txtDrawNode, Color4F::ORANGE, Vec2(size.width * 0.53, size.height * 0.5), 1.0f, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, FontAlign::LEFT));
+	addChild(TetrisFont::create("bowling", txtDrawNode, Color4F::ORANGE, Vec2(size.width * 0.53, size.height * 0.4), 1.0f, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, FontAlign::LEFT));
 
-
-
-
-	h->write(txtDrawNode);
-	p1->write(txtDrawNode);
-	p2->write(txtDrawNode);
-	t1->write(txtDrawNode);
-	t2->write(txtDrawNode);
-	s1->write(txtDrawNode);
-	s2->write(txtDrawNode);
 	return true;
 }

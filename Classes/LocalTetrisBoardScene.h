@@ -30,7 +30,7 @@ private:
 	std::list<short>::iterator p1RandListIter, p2RandListIter;	// randList iterators given to board
 	cocos2d::DrawNode* windowDrawNode;
 	TetrisButton *p1_up, *p1_left, *p1_right, *p1_down, *p1_gdrop, *p2_up, *p2_left, *p2_right, *p2_down, *p2_gdrop, *pauseBtn;
-	TetrisFont *leftScoreTxt, *rightScoreTxt, *leftScoreNum, *rightScoreNum, *leftLvlTxt, *rightLvlTxt, *leftLvlNum, *rightLvlNum, *rightArrow, *leftArrow;
+	TetrisFont *leftScoreNum, *rightScoreNum, *leftLvlNum, *rightLvlNum, *rightArrow, *leftArrow;
 	cocos2d::DrawNode *leftScoreDrawNode, *rightScoreDrawNode, *txtDrawNode, *leftLvlDrawNode, *rightLvlDrawNode, *rightArrowDrawNode, *leftArrowDrawNode;
 
 	virtual void onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);

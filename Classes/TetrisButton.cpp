@@ -60,15 +60,11 @@ bool TetrisButton::init(std::string text, cocos2d::Vec2 position, float size, Fo
 	}
 
 	// draw using primary
-	p = cocos2d::DrawNode::create();
-	this->addChild(p);
-	this->font = TetrisFont::create(text, this->borderColor, position, size, colorPattern, drawPattern, align);
-	this->addChild(font);
-	font->write(p);
+	addChild(p = cocos2d::DrawNode::create());
+	addChild(font = TetrisFont::create(text, p, this->borderColor, position, size, colorPattern, drawPattern, align));
 
 	// initialize rand animate list
-	s = cocos2d::DrawNode::create();
-	this->addChild(s);
+	addChild(s = cocos2d::DrawNode::create());
 	createRandList();
 
 	// give padding around text

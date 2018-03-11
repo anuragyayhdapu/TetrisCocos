@@ -1,5 +1,6 @@
 #include "LocalGameOverScene.h"
 #include "LocalTetrisBoardScene.h"
+#include "TetrisButton.h"
 #include "MainMenuScene.h"
 
 USING_NS_CC;
@@ -41,6 +42,7 @@ bool LocalGameOverScene::init(std::string winPlayerName, std::string winScoreDel
 		return false;
 	}
 
+	addChild(txtDrawNode = DrawNode::create());
 	heading();
 	winMessage(winPlayerName, winScoreDelta);
 	buttons();
@@ -55,6 +57,7 @@ bool LocalGameOverScene::init(std::string drawScore)
 		return false;
 	}
 
+	addChild(txtDrawNode = DrawNode::create());
 	heading();
 	drawMessage(drawScore);
 	buttons();
@@ -67,10 +70,7 @@ void LocalGameOverScene::heading()
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 
 	// draw heading
-	txtDrawNode = DrawNode::create();
-	this->addChild(txtDrawNode);
-	auto headingTxt = TetrisFont::create("game over", cocos2d::Color4F::GRAY, Vec2(visibleSize.width * 0.5, 0.9 * visibleSize.height), 2.2f, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, FontAlign::MIDDLE);
-	headingTxt->write(txtDrawNode);
+	addChild(TetrisFont::create("game over", txtDrawNode, cocos2d::Color4F::GRAY, Vec2(visibleSize.width * 0.5, 0.9 * visibleSize.height), 2.2f, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, FontAlign::MIDDLE));
 }
 
 void LocalGameOverScene::buttons()
@@ -78,16 +78,14 @@ void LocalGameOverScene::buttons()
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 
 	// rematch button
-	rematchBtn = TetrisButton::create([&](cocos2d::Ref*) {
+	addChild(TetrisButton::create([&](cocos2d::Ref*) {
 		Director::getInstance()->replaceScene(LocalTetrisBoardScene::create(this->gameMode));
-	}, "rematch", Color4F::RED, Vec2(visibleSize.width * 0.5, visibleSize.height * 0.40), 1.5, FontAlign::MIDDLE, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, 7);
-	this->addChild(rematchBtn);
+	}, "rematch", Color4F::RED, Vec2(visibleSize.width * 0.5, visibleSize.height * 0.40), 1.5, FontAlign::MIDDLE, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, 7));
 
 	// main menu button
-	mainMenuBtn = TetrisButton::create([](cocos2d::Ref*) {
+	addChild(TetrisButton::create([](cocos2d::Ref*) {
 		Director::getInstance()->replaceScene(MainMenuScene::create());
-	}, "menu", Color4F::RED, Vec2(visibleSize.width * 0.5, visibleSize.height * 0.25), 1.5, FontAlign::MIDDLE, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, 7);
-	this->addChild(mainMenuBtn);
+	}, "menu", Color4F::RED, Vec2(visibleSize.width * 0.5, visibleSize.height * 0.25), 1.5, FontAlign::MIDDLE, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, 7));
 }
 
 void LocalGameOverScene::drawMessage(std::string drawScore)
@@ -98,8 +96,7 @@ void LocalGameOverScene::drawMessage(std::string drawScore)
 	text.append("draw by ");
 	text.append(drawScore);
 	text.append(" pts");
-	auto scoreTxt = TetrisFont::create(text, cocos2d::Color4F::GRAY, Vec2(visibleSize.width * 0.5, 0.63 * visibleSize.height), 0.5f, FontColorPattern::FULL, FontDrawPattern::SOLID, FontAlign::MIDDLE);
-	scoreTxt->write(txtDrawNode);
+	addChild(TetrisFont::create(text, txtDrawNode, cocos2d::Color4F::GRAY, Vec2(visibleSize.width * 0.5, 0.63 * visibleSize.height), 0.5f, FontColorPattern::FULL, FontDrawPattern::SOLID, FontAlign::MIDDLE));
 }
 
 void LocalGameOverScene::winMessage(std::string winPlayerName, std::string winScoreDelta)
@@ -121,18 +118,17 @@ void LocalGameOverScene::winMessage(std::string winPlayerName, std::string winSc
 		nums.append(winScoreDelta);
 		nums.append("  ");
 
-		auto scoreTxt = TetrisFont::create(text, cocos2d::Color4F::GRAY, Vec2(visibleSize.width * 0.5, 0.63 * visibleSize.height), 0.5f, FontColorPattern::FULL, FontDrawPattern::SOLID, FontAlign::MIDDLE);
-		auto scoreNums = TetrisFont::create(nums, cocos2d::Color4F::GRAY, Vec2(scoreTxt->getRightPt().x, scoreTxt->getRightPt().y + 0.05 * scoreTxt->getRightPt().y), 1.0f, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, FontAlign::RIGHT);
+		auto scoreTxt = TetrisFont::create(text, txtDrawNode, cocos2d::Color4F::GRAY, Vec2(visibleSize.width * 0.5, 0.63 * visibleSize.height), 0.5f, FontColorPattern::FULL, FontDrawPattern::SOLID, FontAlign::MIDDLE);
+		auto scoreNums = TetrisFont::create(nums, txtDrawNode, cocos2d::Color4F::GRAY, Vec2(scoreTxt->getRightPt().x, scoreTxt->getRightPt().y + 0.05 * scoreTxt->getRightPt().y), 1.0f, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, FontAlign::RIGHT);
 
-		scoreTxt->write(txtDrawNode);
-		scoreNums->write(txtDrawNode);
+		addChild(scoreTxt);
+		addChild(scoreNums);
 	}
 	else
 	{
 		std::string text;
 		text.append(winPlayerName);
 		text.append(" player won");
-		auto scoreTxt = TetrisFont::create(text, cocos2d::Color4F::GRAY, Vec2(visibleSize.width * 0.5, 0.63 * visibleSize.height), 0.5f, FontColorPattern::FULL, FontDrawPattern::SOLID, FontAlign::MIDDLE);
-		scoreTxt->write(txtDrawNode);
+		addChild(TetrisFont::create(text, txtDrawNode, cocos2d::Color4F::GRAY, Vec2(visibleSize.width * 0.5, 0.63 * visibleSize.height), 0.5f, FontColorPattern::FULL, FontDrawPattern::SOLID, FontAlign::MIDDLE));
 	}
 }

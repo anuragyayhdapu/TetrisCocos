@@ -182,41 +182,32 @@ void TetrisBoardScene::onNotify(const Board & board, TetrisEvent _event)
 
 void TetrisBoardScene::drawFonts(Size visibleSize)
 {
-	txtDrawNode = DrawNode::create();
-	scoreNumDrawNode = DrawNode::create();
-	hScoreNumDrawNode = DrawNode::create();
-	lvlNumDrawNode = DrawNode::create();
-	this->addChild(txtDrawNode);
-	this->addChild(scoreNumDrawNode);
-	this->addChild(hScoreNumDrawNode);
-	this->addChild(lvlNumDrawNode);
+	addChild(txtDrawNode = DrawNode::create());
+	addChild(scoreNumDrawNode = DrawNode::create());
+	addChild(hScoreNumDrawNode = DrawNode::create());
+	addChild(lvlNumDrawNode = DrawNode::create());
 
-	scoreTxt = TetrisFont::create("score", cocos2d::Color4F::GRAY,
-		Vec2(_pf.x + _u * (t_const::sp::WINDOW_RIGHT - 1), 0.4 * visibleSize.height), 0.5f, FontColorPattern::FULL, FontDrawPattern::SOLID, FontAlign::RIGHT);
-	hScoreTxt = TetrisFont::create("h score", cocos2d::Color4F::GRAY,
-		Vec2(_pf.x + _u * (t_const::sp::WINDOW_RIGHT - 1), 0.3 * visibleSize.height), 0.5f, FontColorPattern::FULL, FontDrawPattern::SOLID, FontAlign::RIGHT);
-	lvlTxt = TetrisFont::create("level", cocos2d::Color4F::GRAY,
-		Vec2(_pf.x + _u * (t_const::sp::WINDOW_RIGHT - 1), 0.2 * visibleSize.height), 0.5f, FontColorPattern::FULL, FontDrawPattern::SOLID, FontAlign::RIGHT);
+	addChild(scoreTxt = TetrisFont::create("score", txtDrawNode, cocos2d::Color4F::GRAY,
+		Vec2(_pf.x + _u * (t_const::sp::WINDOW_RIGHT - 1), 0.4 * visibleSize.height), 0.5f, FontColorPattern::FULL, FontDrawPattern::SOLID, FontAlign::RIGHT));
+	addChild(hScoreTxt = TetrisFont::create("h score", txtDrawNode, cocos2d::Color4F::GRAY,
+		Vec2(_pf.x + _u * (t_const::sp::WINDOW_RIGHT - 1), 0.3 * visibleSize.height), 0.5f, FontColorPattern::FULL, FontDrawPattern::SOLID, FontAlign::RIGHT));
+	addChild(lvlTxt = TetrisFont::create("level", txtDrawNode, cocos2d::Color4F::GRAY,
+		Vec2(_pf.x + _u * (t_const::sp::WINDOW_RIGHT - 1), 0.2 * visibleSize.height), 0.5f, FontColorPattern::FULL, FontDrawPattern::SOLID, FontAlign::RIGHT));
 
-	scoreNum = TetrisFont::create(".", cocos2d::Color4F::GRAY,
-		Vec2(_pf.x + _u * (t_const::sp::WINDOW_RIGHT), 0.4 * visibleSize.height), 0.6f, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, FontAlign::LEFT);
+	addChild(scoreNum = TetrisFont::create(".", scoreNumDrawNode, cocos2d::Color4F::GRAY,
+		Vec2(_pf.x + _u * (t_const::sp::WINDOW_RIGHT), 0.4 * visibleSize.height), 0.6f, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, FontAlign::LEFT));
 	std::string hsTxt(".");
 	if (this->highScore > 0)
 		hsTxt = std::to_string(this->highScore);
-	hScoreNum = TetrisFont::create(hsTxt, cocos2d::Color4F::GRAY,
-		Vec2(_pf.x + _u * (t_const::sp::WINDOW_RIGHT), 0.3 * visibleSize.height), 0.6f, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, FontAlign::LEFT);
-	lvlNum = TetrisFont::create("1", cocos2d::Color4F::GRAY,
-		Vec2(_pf.x + _u * (t_const::sp::WINDOW_RIGHT), 0.2 * visibleSize.height), 0.6f, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, FontAlign::LEFT);
+	addChild(hScoreNum = TetrisFont::create(hsTxt, hScoreNumDrawNode, cocos2d::Color4F::GRAY,
+		Vec2(_pf.x + _u * (t_const::sp::WINDOW_RIGHT), 0.3 * visibleSize.height), 0.6f, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, FontAlign::LEFT));
+	addChild(lvlNum = TetrisFont::create("1", lvlNumDrawNode, cocos2d::Color4F::GRAY,
+		Vec2(_pf.x + _u * (t_const::sp::WINDOW_RIGHT), 0.2 * visibleSize.height), 0.6f, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, FontAlign::LEFT));
 
 	this->addChild(scoreNum);
 	this->addChild(hScoreNum);
 	this->addChild(lvlNum);
-	scoreTxt->write(txtDrawNode);
-	hScoreTxt->write(txtDrawNode);
-	lvlTxt->write(txtDrawNode);
-	scoreNum->write(scoreNumDrawNode);
-	hScoreNum->write(hScoreNumDrawNode);
-	lvlNum->write(lvlNumDrawNode);
+	
 }
 
 
@@ -322,7 +313,5 @@ void TetrisBoardScene::addText()
 	left->drawBorder();
 
 	// arrow
-	auto arrow = TetrisFont::create("!", Color4F::GRAY, Vec2(_pf.x + (t_const::sp::WINDOW_RIGHT + 1)* _u, visibleSize.height - 2 * _u), 1.0f, FontColorPattern::FULL, FontDrawPattern::SOLID);
-	addChild(arrow);
-	arrow->write(txtDrawNode);
+	addChild(TetrisFont::create("!", txtDrawNode, Color4F::GRAY, Vec2(_pf.x + (t_const::sp::WINDOW_RIGHT + 1)* _u, visibleSize.height - 2 * _u), 1.0f, FontColorPattern::FULL, FontDrawPattern::SOLID));
 }

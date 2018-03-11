@@ -1,7 +1,6 @@
 #pragma once
 
 #include "cocos2d.h"
-#include "TetrisButton.h"
 #include "Constants.h"
 
 class LocalGameOverScene : public cocos2d::Scene
@@ -15,7 +14,6 @@ public:
 private:
 	virtual bool init(std::string winPlayerName, std::string winScoreDelta);
 	virtual bool init(std::string drawScore);
-	TetrisButton *rematchBtn, *mainMenuBtn;
 	MultiplayerGameMode gameMode;
 	cocos2d::DrawNode* txtDrawNode;
 

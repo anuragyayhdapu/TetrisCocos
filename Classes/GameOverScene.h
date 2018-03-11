@@ -18,5 +18,6 @@ public:
 
 private:
 	TetrisButton *retryBtn, *mainMenuBtn, *quitBtn;
+	cocos2d::DrawNode *txtDrawNode;
 	void drawButtons();
 };

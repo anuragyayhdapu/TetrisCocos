@@ -22,10 +22,10 @@ TetrisFont::~TetrisFont()
 {
 }
 
-TetrisFont * TetrisFont::create(std::string text, cocos2d::Color4F color, cocos2d::Vec2 position, float size, FontColorPattern pattern, FontDrawPattern drawPattern, FontAlign align)
+TetrisFont * TetrisFont::create(std::string text, cocos2d::DrawNode* drawNode, cocos2d::Color4F color, cocos2d::Vec2 position, float size, FontColorPattern pattern, FontDrawPattern drawPattern, FontAlign align)
 {
 	TetrisFont* ptr = new(std::nothrow)TetrisFont(text, color, size, pattern, drawPattern, align, position);
-	if (ptr && ptr->init())
+	if (ptr && ptr->init(drawNode))
 	{
 		ptr->autorelease();
 	}
@@ -38,7 +38,7 @@ TetrisFont * TetrisFont::create(std::string text, cocos2d::Color4F color, cocos2
 }
 
 
-bool TetrisFont::init()
+bool TetrisFont::init(cocos2d::DrawNode* drawNode)
 {
 	if (!Node::init())
 	{
@@ -47,6 +47,7 @@ bool TetrisFont::init()
 	
 	setBoundingPoints();
 	createFontBlocks();
+	write(drawNode);
 
 	return true;
 }

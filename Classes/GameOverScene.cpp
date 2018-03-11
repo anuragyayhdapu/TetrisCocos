@@ -14,10 +14,9 @@ bool GameOverScene::init()
     
     auto visibleSize = Director::getInstance()->getVisibleSize();
 
-	auto txtDrawNode = DrawNode::create();
-	this->addChild(txtDrawNode);
-	auto headingTxt = TetrisFont::create("game over", cocos2d::Color4F::GRAY, Vec2(visibleSize.width * 0.5, 0.9 * visibleSize.height), 2.2f, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, FontAlign::MIDDLE);
-	headingTxt->write(txtDrawNode);
+	addChild(txtDrawNode = DrawNode::create());
+
+	addChild(TetrisFont::create("game over", txtDrawNode, Color4F::GRAY, Vec2(visibleSize.width * 0.5, 0.9 * visibleSize.height), 2.2f, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, FontAlign::MIDDLE));
 
 	drawButtons();
 
@@ -58,14 +57,8 @@ bool GameOverScene::init(std::string score, std::string highScore, std::string l
 
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 
-	auto txtDrawNode = DrawNode::create();
-	this->addChild(txtDrawNode);
-
-	auto scoreTxt = TetrisFont::create(text, cocos2d::Color4F::GRAY, Vec2(visibleSize.width * 0.5, 0.63 * visibleSize.height), 0.5f, FontColorPattern::FULL, FontDrawPattern::SOLID, FontAlign::MIDDLE);
-	auto scoreNums = TetrisFont::create(nums, cocos2d::Color4F::GRAY, Vec2(visibleSize.width * 0.5, 0.65 * visibleSize.height), 1.0f, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, FontAlign::MIDDLE);
-
-	scoreTxt->write(txtDrawNode);
-	scoreNums->write(txtDrawNode);
+	addChild(TetrisFont::create(text, txtDrawNode, cocos2d::Color4F::GRAY, Vec2(visibleSize.width * 0.5, 0.63 * visibleSize.height), 0.5f, FontColorPattern::FULL, FontDrawPattern::SOLID, FontAlign::MIDDLE));
+	addChild(TetrisFont::create(nums, txtDrawNode, cocos2d::Color4F::GRAY, Vec2(visibleSize.width * 0.5, 0.65 * visibleSize.height), 1.0f, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, FontAlign::MIDDLE));
 
 	return true;
 }

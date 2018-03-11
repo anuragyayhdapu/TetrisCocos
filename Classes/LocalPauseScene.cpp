@@ -30,8 +30,8 @@ bool LocalPauseScene::init(std::string p1Score, std::string p2Score)
 
 	auto txtDrawNode = DrawNode::create();
 	this->addChild(txtDrawNode);
-	auto headingTxt = TetrisFont::create("paused", cocos2d::Color4F::GRAY, Vec2(visibleSize.width * 0.5, 0.9 * visibleSize.height), 2.2f, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, FontAlign::MIDDLE);
-	headingTxt->write(txtDrawNode);
+
+	addChild(TetrisFont::create("paused", txtDrawNode, cocos2d::Color4F::GRAY, Vec2(visibleSize.width * 0.5, 0.9 * visibleSize.height), 2.2f, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, FontAlign::MIDDLE));
 
 	this->addButtons();
 
@@ -51,11 +51,8 @@ bool LocalPauseScene::init(std::string p1Score, std::string p2Score)
 	nums.append("    ");
 	nums.append(p2Score);
 
-	auto scoreTxt = TetrisFont::create(text, cocos2d::Color4F::GRAY, Vec2(visibleSize.width * 0.5, 0.63 * visibleSize.height), 0.5f, FontColorPattern::FULL, FontDrawPattern::SOLID, FontAlign::MIDDLE);
-	auto scoreNums = TetrisFont::create(nums, cocos2d::Color4F::ORANGE, Vec2(visibleSize.width * 0.5, 0.65 * visibleSize.height), 1.0f, FontColorPattern::FULL, FontDrawPattern::SOLID, FontAlign::MIDDLE);
-
-	scoreTxt->write(txtDrawNode);
-	scoreNums->write(txtDrawNode);
+	addChild(TetrisFont::create(text, txtDrawNode, cocos2d::Color4F::GRAY, Vec2(visibleSize.width * 0.5, 0.63 * visibleSize.height), 0.5f, FontColorPattern::FULL, FontDrawPattern::SOLID, FontAlign::MIDDLE));
+	addChild(TetrisFont::create(nums, txtDrawNode, cocos2d::Color4F::ORANGE, Vec2(visibleSize.width * 0.5, 0.65 * visibleSize.height), 1.0f, FontColorPattern::FULL, FontDrawPattern::SOLID, FontAlign::MIDDLE));
 
 	return true;
 }
