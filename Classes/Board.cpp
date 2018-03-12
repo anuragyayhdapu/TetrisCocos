@@ -82,13 +82,13 @@ bool Board::init(double u, Vec2 leftTopPoint, std::list<short>::iterator& randLi
 	);
 
 	/* ---- this board area*/
-	for (double i = 0; i < t_const::cr::NUM_OF_UNIT_BLOCKS_IN_WIDTH; ++i)
+	/*for (double i = 0; i < t_const::cr::NUM_OF_UNIT_BLOCKS_IN_WIDTH; ++i)
 	{
 		for (double j = 0; j < t_const::cr::NUM_OF_UNIT_BLOCKS_IN_HEIGHT; ++j)
 		{
 			tempDrawNode->drawPoint(Vec2(i * _u + _pf.x, _pf.y - j * _u), 2, Color4F::ORANGE);
 		}
-	}
+	}*/
 
 	return true;
 }
@@ -114,9 +114,14 @@ void Board::start()
 
 void Board::stop()
 {
+	score = highScore = 0;
+	level = 1;
 	unscheduleAllCallbacks();
+	movingTetDrawNode->clear();
+	removeChild(movableTetromino);
 	movableTetromino = nullptr;
 	solidBlocks->clear();
+	solidTetDrawNode->clear();
 }
 
 

@@ -6,12 +6,12 @@
 class TetrisCricketSwitchLayer : public cocos2d::LayerColor
 {
 public:
-	TetrisCricketSwitchLayer(std::function<void(cocos2d::Ref*)> startFunc, int scoreToChase) : startFunc(startFunc), scoreToChase(scoreToChase) {}
+	TetrisCricketSwitchLayer(std::function<void(cocos2d::Ref*)> startFunc, std::string scoreToChase) : startFunc(startFunc), scoreToChase(scoreToChase) {}
 	virtual ~TetrisCricketSwitchLayer(){}
 
-	static TetrisCricketSwitchLayer* create(std::function<void(cocos2d::Ref*)>, int scoreToChase);
+	static TetrisCricketSwitchLayer* create(std::function<void(cocos2d::Ref*)>, std::string scoreToChase);
 private:
 	virtual bool init();
 	std::function<void(cocos2d::Ref*)> startFunc;
-	int scoreToChase;
+	std::string scoreToChase;
 };

@@ -203,11 +203,6 @@ void TetrisBoardScene::drawFonts(Size visibleSize)
 		Vec2(_pf.x + _u * (t_const::sp::WINDOW_RIGHT), 0.3 * visibleSize.height), 0.6f, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, FontAlign::LEFT));
 	addChild(lvlNum = TetrisFont::create("1", lvlNumDrawNode, cocos2d::Color4F::GRAY,
 		Vec2(_pf.x + _u * (t_const::sp::WINDOW_RIGHT), 0.2 * visibleSize.height), 0.6f, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, FontAlign::LEFT));
-
-	this->addChild(scoreNum);
-	this->addChild(hScoreNum);
-	this->addChild(lvlNum);
-	
 }
 
 

@@ -4,7 +4,7 @@
 
 USING_NS_CC;
 
-TetrisCricketSwitchLayer * TetrisCricketSwitchLayer::create(std::function<void(cocos2d::Ref*)> startFunc, int scoreToChase)
+TetrisCricketSwitchLayer * TetrisCricketSwitchLayer::create(std::function<void(cocos2d::Ref*)> startFunc, std::string  scoreToChase)
 {
 	auto layer = new(std::nothrow)TetrisCricketSwitchLayer(startFunc, scoreToChase);
 	if (layer && layer->init())
@@ -35,8 +35,8 @@ bool TetrisCricketSwitchLayer::init()
 	addChild(TetrisFont::create("second inning", txtDrawNode, Color4F::ORANGE, Vec2(midpos.x, size.height * 0.8), 1.5f, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, FontAlign::MIDDLE));
 
 	addChild(TetrisFont::create("score to chase", txtDrawNode, Color4F::GRAY, Vec2(midpos.x, size.height * 0.58), 0.4f, FontColorPattern::FULL, FontDrawPattern::SOLID, FontAlign::RIGHT));
-	addChild(TetrisFont::create(std::to_string(scoreToChase), txtDrawNode, Color4F::ORANGE, Vec2(size.width * 0.53, size.height * 0.6), 1.0f, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, FontAlign::LEFT));
-	
+	addChild(TetrisFont::create(scoreToChase, txtDrawNode, Color4F::ORANGE, Vec2(size.width * 0.53, size.height * 0.6), 1.0f, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, FontAlign::LEFT));
+
 	addChild(TetrisFont::create("player1", txtDrawNode, Color4F::GRAY, Vec2(midpos.x, size.height * 0.5), 0.8f, FontColorPattern::FULL, FontDrawPattern::SOLID, FontAlign::RIGHT));
 	addChild(TetrisFont::create("player2", txtDrawNode, Color4F::GRAY, Vec2(midpos.x, size.height * 0.4), 0.8f, FontColorPattern::FULL, FontDrawPattern::SOLID, FontAlign::RIGHT));
 	addChild(TetrisFont::create("batting", txtDrawNode, Color4F::ORANGE, Vec2(size.width * 0.53, size.height * 0.5), 1.0f, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, FontAlign::LEFT));

@@ -28,9 +28,7 @@ bool MainMenuScene::init()
 
 	// single player
 	addChild(TetrisButton::create([](Ref*) {
-		//auto scene = TetrisBoardScene::create();
-
-		Director::getInstance()->replaceScene(TetrisCricketBoardScene::create(CricketInnings::FIRST_INIINGS));
+		Director::getInstance()->replaceScene(TetrisBoardScene::create());
 	}, "alone", Color4F::RED, Vec2(visibleSize.width / 2, visibleSize.height * 0.30), 1.5f, FontAlign::MIDDLE, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, 3));
 
 	// local multiplayer 
