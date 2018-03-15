@@ -1,4 +1,4 @@
-# TetrisCocos
+# [TetrisCocos](https://github.com/anuragyayhdapu/TetrisCocos/releases/download/v3.0.0/TetrisCocosGame.exe)
 A Tetris clone I am building in C++ using open source game engine Cocos2dx.
 
 ![TetrisCocos screenshot](Screenshots/main_menu_gif.gif)
@@ -26,7 +26,7 @@ The Tetris mode no one ever asked for, but thanks to my creativity....
 - First player's selects next Tetrominos making it difficult for Player 2 to play Tetris
 - Score achieved in First Inning becomes target in Second Inning when roles are switched
 
-Give it a try. It's quite fun.
+[Give it a try.](https://github.com/anuragyayhdapu/TetrisCocos/releases/download/v3.0.0/TetrisCocosGame.exe) It's quite fun.
 
 ![TetrisCocos screenshot](Screenshots/cricket.gif)
 
