@@ -106,6 +106,16 @@ TetrominoTemplate::fontTemplates = []() {
 	std::ifstream fontFile;
 	fontFile.open("../Resources/TetrisFontTemplate.txt");
 
+	// little hack to support creating executable without modifying project file structure
+	if (!fontFile.is_open()) {
+		// try in current directory
+		fontFile.open("TetrisFontTemplate.txt");
+		
+		if (!fontFile.is_open()) {
+			throw new std::exception("TetrisFontTemplate.txt file not found");
+		}
+	}
+
 	if (fontFile.is_open())
 	{
 		std::string line;
