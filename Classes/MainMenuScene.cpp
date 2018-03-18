@@ -1,6 +1,6 @@
 #include "MainMenuScene.h"
 #include "TetrisBoardScene.h"
-#include "LocalMultiplayerMenuScene.h"
+#include "MultiplayerTypeMenuScene.h"
 #include "TetrisButton.h"
 #include "TetrisCricketBoardScene.h"
 #include <functional>
@@ -33,7 +33,7 @@ bool MainMenuScene::init()
 
 	// local multiplayer 
 	addChild(TetrisButton::create([](Ref*) {
-		Director::getInstance()->replaceScene(LocalMultiPlayerMenuScene::create());
+		Director::getInstance()->replaceScene(MultiplayerTypeMenuScene::create());
 	}, "together", Color4F::RED, Vec2(visibleSize.width / 2, visibleSize.height * 0.15), 1.5f, FontAlign::MIDDLE, FontColorPattern::RANDOM_BLOCK, FontDrawPattern::SOLID, 3));
 
 	return true;
