@@ -60,4 +60,12 @@ public:
 	unsigned int getScore() const { return score; }
 	unsigned int getHighScore() const { return highScore; }
 	int getLevel() const { return level; }
+
+
+	/// Network Multiplayer Related Stuff ///
+	Board(double u, std::list<short>::iterator dummyIter, cocos2d::Vec2 leftTopPoint, short bucketLeft, short bucketRight, short bucketTop, short bucketBottom);
+
+	static Board* createNetworkBoard(double u, cocos2d::Vec2 leftTopPoint, short bucketLeft = t_const::lm::BUCKET_LEFT, short bucketRight = t_const::lm::BUCKET_RIGHT, short bucketTop = t_const::lm::BUCKET_TOP, short bucketBottom = t_const::lm::BUCKET_BOTTOM);
+
+	bool initNetworkBoard();
 };

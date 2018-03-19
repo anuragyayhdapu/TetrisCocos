@@ -429,3 +429,50 @@ bool Board::halfSecondUpdate(float dt)
 
 	return false;
 }
+
+
+
+
+///Network Multiplayer Related Stuff ///
+
+Board::Board(double u, std::list<short>::iterator dummyIter, cocos2d::Vec2 leftTopPoint, short bucketLeft, short bucketRight, short bucketTop, short bucketBottom) :
+	_u(u),
+	_pf(leftTopPoint),
+	bucketLeft(bucketLeft),
+	bucketRight(bucketRight),
+	bucketTop(bucketTop),
+	bucketBottom(bucketBottom),
+	randListIter(dummyIter)
+{
+}
+
+Board * Board::createNetworkBoard(double u, cocos2d::Vec2 leftTopPoint, short bucketLeft, short bucketRight, short bucketTop, short bucketBottom)
+{
+	std::list<short>::iterator dummyIter;
+	Board* board = new(std::nothrow)Board(u, dummyIter, leftTopPoint, bucketLeft, bucketRight, bucketTop, bucketBottom);
+	if (board && board->initNetworkBoard())
+	{
+		board->autorelease();
+		return board;
+	}
+	else
+	{
+		delete board;
+		board = nullptr;
+		return nullptr;
+	}
+}
+
+bool Board::initNetworkBoard()
+{
+	if (!Node::init())
+	{
+		return false;
+	}
+
+
+
+
+	return true;
+}
+
