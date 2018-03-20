@@ -117,3 +117,17 @@ enum CricketInnings {
 	FIRST_INIINGS,
 	SECOND_INNING
 };
+
+
+namespace t_network {
+
+	enum Messagetype {
+		GAME_OVER_SIGNAL,	// send score data
+		GAME_PAUSE_SIGNAL,
+		GAME_START_SIGNAL,
+
+		ENTIRE_BOARD_STATE,	// sned moving tetromino & solidblocks draw data, score & level
+		MOVING_TETROMINO_STATE	// send moving tetromino draw data
+	};
+
+}
