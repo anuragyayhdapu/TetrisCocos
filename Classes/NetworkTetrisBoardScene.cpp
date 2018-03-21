@@ -11,7 +11,7 @@ bool NetworkTetrisBoardScene::init()
 	}
 
 	auto visibleSize = Director::getInstance()->getVisibleSize();
-	visibleSize.width *= 0.7;
+	visibleSize.width *= 0.7f;
 	this->calcSceneDrawingData(_u, _pf, visibleSize, t_const::sp::NUM_OF_UNIT_BLOCKS_IN_HEIGHT, t_const::sp::NUM_OF_UNIT_BLOCKS_IN_WIDTH);
 	_pf.x -= 2 * _u;
 
@@ -32,6 +32,14 @@ bool NetworkTetrisBoardScene::init()
 	myBoard = Board::createBoard(_u, _pf, randListIter, 0, 1, t_const::sp::BUCKET_LEFT, t_const::sp::BUCKET_RIGHT, t_const::sp::BUCKET_TOP, t_const::sp::BUCKET_BOTTOM, t_const::sp::SPAWN_POSITION);
 	myBoard->registerObserver(this);
 	this->addChild(myBoard);
+
+	// add other board
+	auto pf2_x = _pf.x + _u * (t_const::sp::NUM_OF_UNIT_BLOCKS_IN_WIDTH + 2);
+	auto pf2_y = _pf.y;
+	auto _u2 = 0.8f * _u;
+	otherBoard = Board::createNetworkBoard(_u2, Vec2(pf2_x, pf2_y), t_const::lm::BUCKET_LEFT, t_const::lm::BUCKET_RIGHT, t_const::lm::BUCKET_TOP, t_const::lm::BUCKET_BOTTOM);
+	this->addChild(otherBoard);
+
 
 	addChild(windowDrawNode = DrawNode::create());
 	drawWindow();
@@ -135,39 +143,48 @@ void NetworkTetrisBoardScene::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCo
 	case EventKeyboard::KeyCode::KEY_DOWN_ARROW:
 
 		//myBoard->movingBlockDown();
-		down->freeze();
+		//down->freeze();
 
 		break;
 
 	case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
 
 		//myBoard->movingBlockRight();
-		right->freeze();
+		//right->freeze();
 
 		break;
 
 	case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
 
 		//myBoard->movingBlockLeft();
-		left->freeze();
+		//left->freeze();
 
 		break;
 
 	case EventKeyboard::KeyCode::KEY_UP_ARROW:
 
 		//myBoard->movingBlockRotate();
-		up->freeze();
+		//up->freeze();
 
 		break;
 
 	case EventKeyboard::KeyCode::KEY_SPACE:
 
 		//myBoard->movingBlockGravityDrop();
-		gdrop->freeze();
+		//gdrop->freeze();
 
 		break;
 
 	default: break;
 
 	}
+}
+
+void NetworkTetrisBoardScene::sendMyBoardState()
+{
+	
+}
+
+void NetworkTetrisBoardScene::recieveOtherBoardState()
+{
 }

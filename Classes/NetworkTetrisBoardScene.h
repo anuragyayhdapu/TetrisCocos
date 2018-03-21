@@ -15,7 +15,7 @@ public:
 	void onNotify(const Board& board, TetrisEvent _event) {}
 
 private:
-	Board * myBoard;
+	Board * myBoard, *otherBoard;
 	double _u;			// size of one unit block
 	cocos2d::Vec2 _pf;	// first middle point of a unit block in grid
 	std::list<short> randList;
@@ -31,4 +31,8 @@ private:
 	void drawFonts();
 	void addText(cocos2d::Size visibleSize);
 	virtual void onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);
+
+	// send and recieve data from network
+	void sendMyBoardState();
+	void recieveOtherBoardState();
 };

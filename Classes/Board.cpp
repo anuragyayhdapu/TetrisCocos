@@ -2,7 +2,7 @@
 
 USING_NS_CC;
 
-Board::Board(std::list<short>::iterator& iter, short bucketLeft, short bucketRight, short bucketTop, short bucketBottom, BoardPos spawnPoint) :
+Board::Board(std::list<short>::iterator& iter, short bucketLeft, short bucketRight, short bucketTop, short bucketBottom, BoardPos spawnPoint, double u, Vec2 leftTopPoint, unsigned int highScore, int level) :
 	randListIter(iter),
 	moveDelaySeconds(t_const::START_SPEED),
 	tempDt(0.0f),
@@ -10,7 +10,11 @@ Board::Board(std::list<short>::iterator& iter, short bucketLeft, short bucketRig
 	bucketRight(bucketRight),
 	bucketTop(bucketTop),
 	bucketBottom(bucketBottom),
-	spawnPoint(spawnPoint)
+	spawnPoint(spawnPoint),
+	_u(u),
+	_pf(leftTopPoint),
+	highScore(highScore),
+	level(level)
 {
 }
 
@@ -20,8 +24,8 @@ Board::~Board()
 
 Board * Board::createBoard(double u, Vec2 leftTopPoint, std::list<short>::iterator& randListIter, unsigned int highScore, int level, short bucketLeft, short bucketRight, short bucketTop, short bucketBottom, BoardPos spawnpoint)
 {
-	Board* board = new(std::nothrow)Board(randListIter, bucketLeft, bucketRight, bucketTop, bucketBottom, spawnpoint);
-	if (board && board->init(u, leftTopPoint, randListIter, highScore, level))
+	Board* board = new(std::nothrow)Board(randListIter, bucketLeft, bucketRight, bucketTop, bucketBottom, spawnpoint, u, leftTopPoint, highScore, level);
+	if (board && board->init())
 	{
 		board->autorelease();
 		return board;
@@ -34,32 +38,34 @@ Board * Board::createBoard(double u, Vec2 leftTopPoint, std::list<short>::iterat
 	}
 }
 
-bool Board::init(double u, Vec2 leftTopPoint, std::list<short>::iterator& randListIter, unsigned int highScore, int level)
+bool Board::init()
 {
 	if (!Node::init())
 	{
 		return false;
 	}
 
-	this->_pf = leftTopPoint;
-	this->_u = u;
-	this->highScore = highScore;
-	this->level = level;
-
 	score = 0;
 	totalLinesClear = lineClearCount = 0;
 
-	// add drawNodes
-	DrawNode *tempDrawNode = DrawNode::create();
-	this->addChild(tempDrawNode);
-	bucketDrawNode = DrawNode::create();
-	this->addChild(bucketDrawNode, -2);
-	ghostDrawNode = DrawNode::create();
-	this->addChild(ghostDrawNode, 1);
-	movingTetDrawNode = DrawNode::create();
-	this->addChild(movingTetDrawNode, 2);
-	solidTetDrawNode = DrawNode::create();
-	this->addChild(solidTetDrawNode, -1);
+	initDrawNodes();
+	initBucketWalls();
+
+	return true;
+}
+
+void Board::initDrawNodes()
+{
+	addChild(bucketDrawNode = DrawNode::create(), -2);
+	addChild(ghostDrawNode = DrawNode::create(), 1);
+	addChild(movingTetDrawNode = DrawNode::create(), 2);
+	addChild(solidTetDrawNode = DrawNode::create(), -1);
+}
+
+void Board::initBucketWalls()
+{
+	auto tempDrawNode = DrawNode::create();
+	addChild(tempDrawNode);
 
 	// bucket walls
 	// left wall
@@ -77,20 +83,18 @@ bool Board::init(double u, Vec2 leftTopPoint, std::list<short>::iterator& randLi
 	// bottom bed
 	tempDrawNode->drawRect(
 		Vec2((bucketLeft - 1)* _u + _pf.x - _u / 2, _pf.y - _u / 2 - (bucketBottom - 1) * _u),
-		Vec2((bucketRight + 1) * _u + _pf.x - _u / 2, _pf.y - _u / 2 - (bucketBottom) * _u),
+		Vec2((bucketRight + 1) * _u + _pf.x - _u / 2, _pf.y - _u / 2 - (bucketBottom)* _u),
 		Color4F(Color4B(105, 105, 105, 255))
 	);
 
 	/* ---- this board area*/
 	/*for (double i = 0; i < t_const::cr::NUM_OF_UNIT_BLOCKS_IN_WIDTH; ++i)
 	{
-		for (double j = 0; j < t_const::cr::NUM_OF_UNIT_BLOCKS_IN_HEIGHT; ++j)
-		{
-			tempDrawNode->drawPoint(Vec2(i * _u + _pf.x, _pf.y - j * _u), 2, Color4F::ORANGE);
-		}
+	for (double j = 0; j < t_const::cr::NUM_OF_UNIT_BLOCKS_IN_HEIGHT; ++j)
+	{
+	tempDrawNode->drawPoint(Vec2(i * _u + _pf.x, _pf.y - j * _u), 2, Color4F::ORANGE);
+	}
 	}*/
-
-	return true;
 }
 
 
@@ -465,12 +469,10 @@ Board * Board::createNetworkBoard(double u, cocos2d::Vec2 leftTopPoint, short bu
 
 bool Board::initNetworkBoard()
 {
-	if (!Node::init())
+	if (!init())
 	{
 		return false;
 	}
-
-
 
 
 	return true;
