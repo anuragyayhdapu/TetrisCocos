@@ -454,7 +454,7 @@ Board * Board::createNetworkBoard(double u, cocos2d::Vec2 leftTopPoint, short bu
 {
 	std::list<short>::iterator dummyIter;
 	Board* board = new(std::nothrow)Board(u, dummyIter, leftTopPoint, bucketLeft, bucketRight, bucketTop, bucketBottom);
-	if (board && board->initNetworkBoard())
+	if (board && board->init())
 	{
 		board->autorelease();
 		return board;
@@ -467,14 +467,10 @@ Board * Board::createNetworkBoard(double u, cocos2d::Vec2 leftTopPoint, short bu
 	}
 }
 
-bool Board::initNetworkBoard()
+void Board::redrawSolidBlocks()
 {
-	if (!init())
-	{
-		return false;
-	}
-
-
-	return true;
 }
 
+void Board::redrawMovingTetromino()
+{
+}

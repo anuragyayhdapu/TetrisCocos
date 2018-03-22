@@ -46,15 +46,13 @@ bool NetworkTetrisBoardScene::init()
 	drawFonts();
 	addText(visibleSize);
 
+	// initialize network
+	networkHandler.initialize();
+
 	//countDownLayer = nullptr;
 	//countDown(visibleSize);
 
 	return true;
-}
-
-// initiate handshake before starting game
-void NetworkTetrisBoardScene::handshake()
-{
 }
 
 void NetworkTetrisBoardScene::start()
@@ -182,7 +180,7 @@ void NetworkTetrisBoardScene::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCo
 
 void NetworkTetrisBoardScene::sendMyBoardState()
 {
-	
+	networkHandler.pushDataToNetwork(*myBoard);
 }
 
 void NetworkTetrisBoardScene::recieveOtherBoardState()

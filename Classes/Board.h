@@ -69,5 +69,6 @@ public:
 
 	static Board* createNetworkBoard(double u, cocos2d::Vec2 leftTopPoint, short bucketLeft = t_const::lm::BUCKET_LEFT, short bucketRight = t_const::lm::BUCKET_RIGHT, short bucketTop = t_const::lm::BUCKET_TOP, short bucketBottom = t_const::lm::BUCKET_BOTTOM);
 
-	bool initNetworkBoard();
+	void redrawSolidBlocks();
+	void redrawMovingTetromino();
 };
