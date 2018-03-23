@@ -13,7 +13,7 @@ public:
 	virtual bool init();
 	CREATE_FUNC(NetworkTetrisBoardScene);
 
-	void onNotify(const Board& board, TetrisEvent _event) {}
+	void onNotify(const Board& board, TetrisEvent _event);
 
 private:
 	NetworkHandler networkHandler;
@@ -34,6 +34,6 @@ private:
 	virtual void onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);
 
 	// send and recieve data from network
-	void sendMyBoardState();
+	void sendMyBoardState(t_network::Messagetype);
 	void recieveOtherBoardState();
 };

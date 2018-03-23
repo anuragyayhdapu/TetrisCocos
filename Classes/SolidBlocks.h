@@ -19,7 +19,7 @@ private:
 
 	// checks if a single row is filled
 	bool rowFilled(int rowNum);
-	
+
 	// shift this tetromino down in bucket
 	void shiftDown(Tetromino* tetromino);
 

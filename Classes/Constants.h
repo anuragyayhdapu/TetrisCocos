@@ -1,6 +1,7 @@
 #pragma once
 
 #include "BoardPos.h"
+#include <vector>
 
 // constants accessed from multiple files
 namespace t_const
@@ -92,7 +93,10 @@ namespace t_const
 
 enum TetrisEvent {
 	INCREMENT_RAND_ITERATOR, GAMEOVER,
-	LEVEL_UP, HIGH_SCORE_UP, SCORE_UP
+	LEVEL_UP, HIGH_SCORE_UP, SCORE_UP,
+
+	GAMEPAUSE, GAMESTART, GAMERESUME,
+	REDRAW_BOARD, REDRAW_MOVING_TET
 };
 
 enum FontColorPattern {
@@ -125,9 +129,38 @@ namespace t_network {
 		GAME_OVER_SIGNAL,	// send score data
 		GAME_PAUSE_SIGNAL,
 		GAME_START_SIGNAL,
+		GAME_RESUME_SIGNAL,
 
 		ENTIRE_BOARD_STATE,	// sned moving tetromino & solidblocks draw data, score & level
 		MOVING_TETROMINO_STATE	// send moving tetromino draw data
 	};
 
+
+	// TODO: only for testing, remove later with google protobufs
+	struct Pos {
+		short x, y;
+	};
+
+	struct Color {
+		float r, g, b, a;
+	};
+
+	struct Tetromino {
+		Color color, borderColor;
+		Pos gridMatrixPoint;
+		std::vector<Pos> unitBlocksPos;
+	};
+
+	struct SolidBlocks {
+		std::vector<Tetromino> tetrominos;
+	};
+
+	struct Board {
+		Messagetype messageType;
+
+		unsigned int score;
+		short level;
+		Tetromino movingTet;
+		SolidBlocks solidBlocks;
+	};
 }

@@ -48,11 +48,16 @@ bool NetworkTetrisBoardScene::init()
 
 	// initialize network
 	networkHandler.initialize();
+	networkHandler.registerObserver(this);
 
 	//countDownLayer = nullptr;
 	//countDown(visibleSize);
 
 	return true;
+}
+
+void NetworkTetrisBoardScene::onNotify(const Board & board, TetrisEvent _event)
+{
 }
 
 void NetworkTetrisBoardScene::start()
@@ -178,9 +183,9 @@ void NetworkTetrisBoardScene::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCo
 	}
 }
 
-void NetworkTetrisBoardScene::sendMyBoardState()
+void NetworkTetrisBoardScene::sendMyBoardState(t_network::Messagetype messageType)
 {
-	networkHandler.pushDataToNetwork(*myBoard);
+	networkHandler.pushDataToNetwork(*myBoard, messageType);
 }
 
 void NetworkTetrisBoardScene::recieveOtherBoardState()

@@ -9,6 +9,7 @@
 class Board : public cocos2d::Node, public Subject
 {
 public:
+	Board(std::list<short>::iterator& iter) : randListIter(iter) {}	// create a dummy board
 	Board(std::list<short>::iterator& iter, short bucketLeft, short bucketRight, short bucketTop, short bucketBottom, BoardPos spawnPoint, double u, cocos2d::Vec2 leftTopPoint, unsigned int highScore, int level);
 	virtual ~Board();
 	static Board* createBoard(double u, cocos2d::Vec2 leftTopPoint, std::list<short>::iterator& randListIter, unsigned int highScore, int level, short bucketLeft, short bucketRight, short bucketTop, short bucketBottom, BoardPos spawnPoint);
@@ -59,6 +60,8 @@ private:
 	bool Board::halfSecondUpdate(float dt);
 
 public:
+	void setScore(unsigned int newScore) { score = newScore; }
+	void setLevel(int newLevel) { level = newLevel; }
 	unsigned int getScore() const { return score; }
 	unsigned int getHighScore() const { return highScore; }
 	int getLevel() const { return level; }
@@ -71,4 +74,6 @@ public:
 
 	void redrawSolidBlocks();
 	void redrawMovingTetromino();
+	void setSolidTetrominos(std::list<Tetromino*>);
+	void setMovingTetromino(Tetromino*);
 };

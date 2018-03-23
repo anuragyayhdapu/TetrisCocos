@@ -38,6 +38,10 @@ public:
 
 	const std::vector<UnitBlock*>& getUnitBlocksVec() const { return unitBlocksVec; }
 
+	void setTetColor(cocos2d::Color4B newColor) { color = newColor; }
+	void setTetBorderColor(cocos2d::Color4B newColor) { borderColor = newColor; }
+	void setGridMatrixPoint(BoardPos pos) { gridMatrixPoint = pos; }
+
 private:
 	double u;
 	cocos2d::Vec2 pf;
