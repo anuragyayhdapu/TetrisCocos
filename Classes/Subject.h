@@ -13,6 +13,10 @@ protected:
 		observer->onNotify(board, event);
 	}
 
+	void networkNotify(t_network::Board newtworkBoard, t_network::Messagetype messageType) {
+		observer->onNetworkNotify(newtworkBoard, messageType);
+	}
+
 public:
 	void registerObserver(Observer* observer) {
 		this->observer = observer;
