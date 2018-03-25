@@ -3,22 +3,25 @@
 #include "Observer.h"
 #include "Board.h"
 #include "Constants.h"
+#include <forward_list>
 
 class Subject
 {
-	Observer* observer;
+	std::forward_list<Observer*> observers;
 
 protected:
 	void notify(const Board& board, TetrisEvent event) {
-		observer->onNotify(board, event);
+		for (auto observer : observers)
+			observer->onNotify(board, event);
 	}
 
 	void networkNotify(t_network::Board newtworkBoard, t_network::Messagetype messageType) {
-		observer->onNetworkNotify(newtworkBoard, messageType);
+		for (auto observer : observers)
+			observer->onNetworkNotify(newtworkBoard, messageType);
 	}
 
 public:
 	void registerObserver(Observer* observer) {
-		this->observer = observer;
+		observers.push_front(observer);
 	}
 };

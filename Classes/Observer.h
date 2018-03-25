@@ -8,6 +8,6 @@ class Observer
 {
 public:
 	virtual ~Observer() {}
-	virtual void onNotify(const Board& board, TetrisEvent _event) = 0;
-	virtual void onNetworkNotify(t_network::Board newtworkBoard, t_network::Messagetype) = 0;
+	virtual void onNotify(const Board& board, TetrisEvent _event) {}
+	virtual void onNetworkNotify(t_network::Board newtworkBoard, t_network::Messagetype) {}
 };
