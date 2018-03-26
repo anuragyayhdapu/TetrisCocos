@@ -1,0 +1,43 @@
+syntax = "proto3";
+package tetris.proto;
+option optimize_for = SPEED;
+
+message Tetromino {
+	message Color {
+		float r = 1;
+		float g = 2;
+		float b = 3;
+		float a = 4;
+	}
+
+	message Pos {
+		int32 x = 1;
+		int32 y = 2;
+	}
+
+	Color color = 1;
+	Color borderColor = 2;
+	Pos gridMatrixPoint = 3;
+	repeated Pos unitBlocksVec = 4;
+}
+
+message SolidBlocks {
+	repeated Tetromino tetrominos = 1;
+}
+
+message Board {
+	enum MessageType {
+		GAME_OVER_SIGNAL = 0;
+		GAME_PAUSE_SIGNAL = 1;
+		GAME_START_SIGNAL = 3;
+		GAME_RESUME_SIGNAL = 4;
+		ENTIRE_BOARD_STATE = 5;
+		MOVING_TETROMINO_STATE = 6;
+	}
+
+	MessageType messageType = 1;
+	int32 score = 2;
+	int32 level = 3;
+	Tetromino movingTet = 4;
+	SolidBlocks solidBlocks = 5;
+}
