@@ -13,4 +13,7 @@ public:
 
 private:
 	void listenForDataOnNetwork(t_network::Board);
+
+	// helpers
+	void fillEntireBoardStateHelper(Board& b, t_network::Board networkRawBoardData);
 };

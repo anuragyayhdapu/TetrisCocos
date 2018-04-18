@@ -22,4 +22,6 @@ public:
 	virtual void start() = 0;
 	virtual void initFromDB() {}
 	virtual void saveToDB() {}
+
+	virtual void onNetworkNotify(t_network::Board newtworkBoard, t_network::Messagetype) { /*DO NOTHING*/ }
 };

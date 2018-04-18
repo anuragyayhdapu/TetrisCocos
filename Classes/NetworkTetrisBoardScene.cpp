@@ -52,16 +52,45 @@ bool NetworkTetrisBoardScene::init()
 
 	//countDownLayer = nullptr;
 	//countDown(visibleSize);
+	start();
 
 	return true;
 }
 
 void NetworkTetrisBoardScene::onNotify(const Board & board, TetrisEvent _event)
 {
+	switch (_event)
+	{
+	case INCREMENT_RAND_ITERATOR:
+		++randListIter;
+		randList.push_back(rand() % TetrominoTemplate::size);
+		randList.pop_front();
+		redrawWindow();
+		break;
+
+	case GAMEOVER:
+		// 1. display game over scene
+		// 2. send game over signal to network
+		break;
+
+	case LEVEL_UP:
+		lvlNum->reWrite(board.getLevel(), lvlNumDrawNode);
+		// should probably send over network also
+		break;
+
+	case SCORE_UP:
+		scoreNum->reWrite(board.getScore(), scoreNumDrawNode);
+		// should probably send over network also
+		break;
+
+	default:
+		break;
+	}
 }
 
 void NetworkTetrisBoardScene::start()
 {
+	myBoard->start();
 }
 
 
@@ -145,35 +174,35 @@ void NetworkTetrisBoardScene::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCo
 
 	case EventKeyboard::KeyCode::KEY_DOWN_ARROW:
 
-		//myBoard->movingBlockDown();
+		myBoard->movingBlockDown();
 		//down->freeze();
 
 		break;
 
 	case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
 
-		//myBoard->movingBlockRight();
+		myBoard->movingBlockRight();
 		//right->freeze();
 
 		break;
 
 	case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
 
-		//myBoard->movingBlockLeft();
+		myBoard->movingBlockLeft();
 		//left->freeze();
 
 		break;
 
 	case EventKeyboard::KeyCode::KEY_UP_ARROW:
 
-		//myBoard->movingBlockRotate();
+		myBoard->movingBlockRotate();
 		//up->freeze();
 
 		break;
 
 	case EventKeyboard::KeyCode::KEY_SPACE:
 
-		//myBoard->movingBlockGravityDrop();
+		myBoard->movingBlockGravityDrop();
 		//gdrop->freeze();
 
 		break;
