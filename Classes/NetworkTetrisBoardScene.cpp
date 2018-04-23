@@ -71,6 +71,7 @@ void NetworkTetrisBoardScene::onNotify(const Board & board, TetrisEvent _event)
 	case GAMEOVER:
 		// 1. display game over scene
 		// 2. send game over signal to network
+		sendMyBoardState(t_network::Messagetype::GAME_OVER_SIGNAL);
 		break;
 
 	case LEVEL_UP:
@@ -83,6 +84,26 @@ void NetworkTetrisBoardScene::onNotify(const Board & board, TetrisEvent _event)
 		// should probably send over network also
 		break;
 
+	case SOLIDBLOCKS_UPDATED:
+		sendMyBoardState(t_network::Messagetype::ENTIRE_BOARD_STATE);
+		break;
+
+	case MOVING_TET_MOVED:
+		sendMyBoardState(t_network::Messagetype::MOVING_TETROMINO_STATE);
+		break;
+
+	default:
+		break;
+	}
+}
+
+void NetworkTetrisBoardScene::onNetworkNotify(const tetris::proto::Board& nBoard, t_network::Messagetype messageType)
+{
+	switch (messageType)
+	{
+	case t_network::Messagetype::MOVING_TETROMINO_STATE:
+		otherBoard->redrawMovingTetromino(nBoard.movingtet());
+		break;
 	default:
 		break;
 	}
@@ -215,8 +236,4 @@ void NetworkTetrisBoardScene::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCo
 void NetworkTetrisBoardScene::sendMyBoardState(t_network::Messagetype messageType)
 {
 	networkHandler.pushDataToNetwork(*myBoard, messageType);
-}
-
-void NetworkTetrisBoardScene::recieveOtherBoardState()
-{
 }

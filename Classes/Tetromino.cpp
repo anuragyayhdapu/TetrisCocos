@@ -11,6 +11,61 @@ Tetromino::~Tetromino()
 	rotationQ = nullptr;
 }
 
+Tetromino * Tetromino::createWithNetworkData(double u, cocos2d::Vec2 pf, const tetris::proto::Tetromino &nTet)
+{
+	Tetromino* pRet = new(std::nothrow)Tetromino();
+	if (pRet && pRet->initWithNetworkData(u, pf, nTet))
+	{
+		pRet->autorelease();
+		return pRet;
+	}
+	else
+	{
+		delete pRet;
+		pRet = nullptr;
+		return nullptr;
+	}
+}
+
+bool Tetromino::initWithNetworkData(double u, cocos2d::Vec2 pf, const tetris::proto::Tetromino &nTet)
+{
+	if (!Node::init())
+	{
+		return false;
+	}
+
+	this->u = u;
+	this->pf = pf;
+
+	/*const auto& gdPoint = nTet.gridmatrixpoint();
+	gridMatrixPoint.x = gdPoint.x() - (t_const::sp::BUCKET_LEFT - t_const::lm::BUCKET_LEFT);
+	gridMatrixPoint.y = gdPoint.y();*/
+	
+	const auto& nColor = nTet.color();
+	this->color.r = nColor.r();
+	this->color.g = nColor.g();
+	this->color.b = nColor.b();
+	this->color.a = nColor.a();
+	
+	const auto& nBColor = nTet.bordercolor();
+	this->borderColor.r = nBColor.r();
+	this->borderColor.g = nBColor.g();
+	this->borderColor.b = nBColor.b();
+	this->borderColor.a = nBColor.a();
+
+	for (const auto& nPos : nTet.unitblocksvec()) 
+	{
+		// read quick hack
+		auto revisedX = nPos.x() - (t_const::sp::BUCKET_LEFT - t_const::lm::BUCKET_LEFT);
+
+		auto block = UnitBlock::create(u, pf, revisedX, nPos.y(), this->color, this->borderColor);
+		unitBlocksVec.push_back(block);
+		this->addChild(block);
+	}
+
+	return true;
+}
+
 Tetromino * Tetromino::createWithBlocks(const Tetromino& old, std::forward_list<BoardPos> blocksPos)
 {
 	Tetromino* pRet = new(std::nothrow)Tetromino();

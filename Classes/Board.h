@@ -5,6 +5,7 @@
 #include "SolidBlocks.h"
 #include "Subject.h"
 #include <forward_list>
+#include "message.pb.h"
 
 class Board : public cocos2d::Node, public Subject
 {
@@ -65,6 +66,8 @@ public:
 	unsigned int getScore() const { return score; }
 	unsigned int getHighScore() const { return highScore; }
 	int getLevel() const { return level; }
+	const Tetromino& getMovingTetromino() const { return *movableTetromino; }
+	const SolidBlocks& getSolidBlocks() const { return *solidBlocks; }
 
 
 	/// Network Multiplayer Related Stuff ///
@@ -73,7 +76,7 @@ public:
 	static Board* createNetworkBoard(double u, cocos2d::Vec2 leftTopPoint, short bucketLeft = t_const::lm::BUCKET_LEFT, short bucketRight = t_const::lm::BUCKET_RIGHT, short bucketTop = t_const::lm::BUCKET_TOP, short bucketBottom = t_const::lm::BUCKET_BOTTOM);
 
 	void redrawSolidBlocks();
-	void redrawMovingTetromino();
-	void setSolidTetrominos(std::list<Tetromino*>);
-	void setMovingTetromino(Tetromino*);
+	void redrawMovingTetromino(const tetris::proto::Tetromino& movingTet);
+	/*void setSolidTetrominos(std::list<Tetromino*>);
+	void setMovingTetromino(Tetromino*);*/
 };

@@ -90,10 +90,10 @@ void Board::initBucketWalls()
 	/* ---- this board area*/
 	/*for (double i = 0; i < t_const::cr::NUM_OF_UNIT_BLOCKS_IN_WIDTH; ++i)
 	{
-	for (double j = 0; j < t_const::cr::NUM_OF_UNIT_BLOCKS_IN_HEIGHT; ++j)
-	{
-	tempDrawNode->drawPoint(Vec2(i * _u + _pf.x, _pf.y - j * _u), 2, Color4F::ORANGE);
-	}
+		for (double j = 0; j < t_const::cr::NUM_OF_UNIT_BLOCKS_IN_HEIGHT; ++j)
+		{
+			tempDrawNode->drawPoint(Vec2(i * _u + _pf.x, _pf.y - j * _u), 2, Color4F::ORANGE);
+		}
 	}*/
 }
 
@@ -232,6 +232,7 @@ void Board::drawMovingTetromino()
 {
 	movingTetDrawNode->clear();
 	movableTetromino->draw(movingTetDrawNode);
+	notify(*this, TetrisEvent::MOVING_TET_MOVED);
 }
 
 
@@ -242,6 +243,7 @@ void Board::drawSolidTetromino()
 	{
 		tetromino->draw(solidTetDrawNode);
 	}
+	notify(*this, TetrisEvent::SOLIDBLOCKS_UPDATED);
 }
 
 
@@ -471,6 +473,10 @@ void Board::redrawSolidBlocks()
 {
 }
 
-void Board::redrawMovingTetromino()
+void Board::redrawMovingTetromino(const tetris::proto::Tetromino& nMovingTet)
 {
+	//movableTetromino->release();
+	movableTetromino = Tetromino::createWithNetworkData(_u, _pf, nMovingTet);
+	movingTetDrawNode->clear();
+	movableTetromino->draw(movingTetDrawNode);
 }

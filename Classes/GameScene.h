@@ -3,6 +3,7 @@
 #include "cocos2d.h"
 #include "TetrisButton.h"
 #include "Observer.h"
+#include "message.pb.h"
 
 class GameScene : public cocos2d::Scene, public Observer
 {
@@ -23,5 +24,5 @@ public:
 	virtual void initFromDB() {}
 	virtual void saveToDB() {}
 
-	virtual void onNetworkNotify(t_network::Board newtworkBoard, t_network::Messagetype) { /*DO NOTHING*/ }
+	virtual void onNetworkNotify(const tetris::proto::Board&, t_network::Messagetype) { /*DO NOTHING*/ }
 };

@@ -8,6 +8,7 @@
 #include "RotationQ.h"
 #include "SolidBlocks.h"
 #include <forward_list>
+#include "message.pb.h"
 
 class SolidBlocks;
 class UnitBlock;
@@ -18,8 +19,12 @@ class Tetromino : public cocos2d::Node
 public:
 	Tetromino();
 	virtual ~Tetromino();
+	static Tetromino* createWithNetworkData(double u, cocos2d::Vec2 pf, const tetris::proto::Tetromino&);
+	bool initWithNetworkData(double u, cocos2d::Vec2 pf, const tetris::proto::Tetromino&);
+
 	static Tetromino* createWithBlocks(const Tetromino& old, std::forward_list<BoardPos> blocksPos);
 	bool initWithBlocks(const Tetromino& old, std::forward_list<BoardPos> blocksPos);
+	
 	static Tetromino* create(double u, cocos2d::Vec2 pf, RotationQ::Rnode* rotationQ, cocos2d::Color4B _color, cocos2d::Color4B _borderColor, BoardPos gridMatrixPoint);
 	bool init(double u, cocos2d::Vec2 pf, RotationQ::Rnode* rotationQ, cocos2d::Color4B _color, cocos2d::Color4B _borderColor, BoardPos gridMatrixPoint);
 
@@ -41,6 +46,10 @@ public:
 	void setTetColor(cocos2d::Color4B newColor) { color = newColor; }
 	void setTetBorderColor(cocos2d::Color4B newColor) { borderColor = newColor; }
 	void setGridMatrixPoint(BoardPos pos) { gridMatrixPoint = pos; }
+
+	cocos2d::Color4B getNColor() const { return color; }
+	cocos2d::Color4B getBorderColor() const { return borderColor; }
+	BoardPos getGridMatrixPoint() const { return gridMatrixPoint; }
 
 private:
 	double u;

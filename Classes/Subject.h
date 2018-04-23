@@ -4,6 +4,7 @@
 #include "Board.h"
 #include "Constants.h"
 #include <forward_list>
+#include "message.pb.h"
 
 class Subject
 {
@@ -15,9 +16,9 @@ protected:
 			observer->onNotify(board, event);
 	}
 
-	void networkNotify(t_network::Board newtworkBoard, t_network::Messagetype messageType) {
+	void networkNotify(tetris::proto::Board board, t_network::Messagetype messageType) {
 		for (auto observer : observers)
-			observer->onNetworkNotify(newtworkBoard, messageType);
+			observer->onNetworkNotify(board, messageType);
 	}
 
 public:

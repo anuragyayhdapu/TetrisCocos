@@ -49,4 +49,6 @@ public:
 
 	// clear bucket and solidTetrominos
 	void clear();
+
+	const std::list<Tetromino*>& getUnitBlocksVec() { return solidTetrominos; }
 };

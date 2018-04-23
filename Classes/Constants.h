@@ -94,6 +94,7 @@ namespace t_const
 enum TetrisEvent {
 	INCREMENT_RAND_ITERATOR, GAMEOVER,
 	LEVEL_UP, HIGH_SCORE_UP, SCORE_UP,
+	MOVING_TET_MOVED, SOLIDBLOCKS_UPDATED
 };
 
 enum FontColorPattern {
@@ -123,41 +124,55 @@ enum CricketInnings {
 namespace t_network {
 
 	enum Messagetype {
-		GAME_OVER_SIGNAL,	// send score data
-		GAME_PAUSE_SIGNAL,
-		GAME_START_SIGNAL,
-		GAME_RESUME_SIGNAL,
+		GAME_OVER_SIGNAL = 0,	// send score data
+		GAME_PAUSE_SIGNAL = 1,
+		GAME_START_SIGNAL = 3,
+		GAME_RESUME_SIGNAL = 4,
 
-		ENTIRE_BOARD_STATE,	// sned moving tetromino & solidblocks draw data, score & level
-		MOVING_TETROMINO_STATE	// send moving tetromino draw data
+		ENTIRE_BOARD_STATE = 5,	// sned moving tetromino & solidblocks draw data, score & level
+		MOVING_TETROMINO_STATE = 6	// send moving tetromino draw data
 	};
 
 
 	// TODO: only for testing, remove later with google protobufs
-	struct Pos {
+	/*struct Pos {
 		short x, y;
+		Pos(short x, short y) :
+			x(x), y(y) {}
 	};
 
 	struct Color {
 		float r, g, b, a;
+		Color(cocos2d::Color4B color) :
+			r(color.r), g(color.g), b(color.b), a(color.a) {}
 	};
 
 	struct Tetromino {
 		Color color, borderColor;
 		Pos gridMatrixPoint;
 		std::vector<Pos> unitBlocksPos;
+
+		Tetromino(Color color, Color borderColor, Pos gridMatrixPoint, std::vector<Pos> unitBlocksPos) :
+			color(color), borderColor(borderColor), gridMatrixPoint(gridMatrixPoint), 
+			unitBlocksPos(unitBlocksPos) {}
+
 	};
 
 	struct SolidBlocks {
 		std::vector<Tetromino> tetrominos;
+		SolidBlocks(std::vector<Tetromino> tetrominos) : 
+			tetrominos(tetrominos) {}
 	};
 
 	struct Board {
 		Messagetype messageType;
-
 		unsigned int score;
 		short level;
 		Tetromino movingTet;
 		SolidBlocks solidBlocks;
-	};
+
+		Board(Messagetype messageType, unsigned int score, short level, Tetromino movingTet, SolidBlocks solidBlocks) :
+			messageType(messageType), score(score), level(level), movingTet(movingTet), 
+			solidBlocks(solidBlocks) {}
+	};*/
 }
