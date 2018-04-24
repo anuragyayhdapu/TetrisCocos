@@ -1,4 +1,5 @@
 #include "NetworkTetrisBoardScene.h"
+#include <future>
 
 USING_NS_CC;
 
@@ -103,6 +104,9 @@ void NetworkTetrisBoardScene::onNetworkNotify(const tetris::proto::Board& nBoard
 	{
 	case t_network::Messagetype::MOVING_TETROMINO_STATE:
 		otherBoard->redrawMovingTetromino(nBoard.movingtet());
+		break;
+	case t_network::Messagetype::ENTIRE_BOARD_STATE:
+		otherBoard->redrawSolidBlocks(nBoard.solidblocks());
 		break;
 	default:
 		break;
@@ -235,5 +239,10 @@ void NetworkTetrisBoardScene::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCo
 
 void NetworkTetrisBoardScene::sendMyBoardState(t_network::Messagetype messageType)
 {
+
+	//void (NetworkHandler::*pump)(const Board& ,t_network::Messagetype) = &NetworkHandler::pushDataToNetwork;
+
+	//std::async((&NetworkHandler::pushDataToNetwork), *myBoard, messageType);
+
 	networkHandler.pushDataToNetwork(*myBoard, messageType);
 }

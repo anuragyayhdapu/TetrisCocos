@@ -469,8 +469,16 @@ Board * Board::createNetworkBoard(double u, cocos2d::Vec2 leftTopPoint, short bu
 	}
 }
 
-void Board::redrawSolidBlocks()
+void Board::redrawSolidBlocks(const tetris::proto::SolidBlocks& nSolidBlocks)
 {
+	movingTetDrawNode->clear();
+	solidTetDrawNode->clear();
+	for (const auto& nTet : nSolidBlocks.tetrominos())
+	{
+		auto tet = Tetromino::createWithNetworkData(_u, _pf, nTet);
+		tet->draw(solidTetDrawNode);
+		//tet->release();
+	}
 }
 
 void Board::redrawMovingTetromino(const tetris::proto::Tetromino& nMovingTet)
@@ -479,4 +487,5 @@ void Board::redrawMovingTetromino(const tetris::proto::Tetromino& nMovingTet)
 	movableTetromino = Tetromino::createWithNetworkData(_u, _pf, nMovingTet);
 	movingTetDrawNode->clear();
 	movableTetromino->draw(movingTetDrawNode);
+	//movableTetromino->release();
 }

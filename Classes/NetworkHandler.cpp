@@ -92,66 +92,78 @@ void NetworkHandler::listen(std::string data)
 // TODO: should be asynchronous function
 void NetworkHandler::pushDataToNetwork(const Board& board, t_network::Messagetype messageType)
 {
-	/*t_network::Board networkBoard;
-	networkBoard.messageType = messageType;
-	t_network::Tetromino networkTetromino;*/
+	// board
+	tetris::proto::Board n_Board;
 
 	// recieve data
 	switch (messageType)
 	{
 	case t_network::Messagetype::GAME_OVER_SIGNAL:
+
+		n_Board.set_messagetype(tetris::proto::Board_MessageType::Board_MessageType_GAME_OVER_SIGNAL);
+
 		break;
 	case t_network::Messagetype::GAME_PAUSE_SIGNAL:
+
+		n_Board.set_messagetype(tetris::proto::Board_MessageType::Board_MessageType_GAME_PAUSE_SIGNAL);
+
 		break;
 	case t_network::Messagetype::GAME_START_SIGNAL:
+
+		n_Board.set_messagetype(tetris::proto::Board_MessageType::Board_MessageType_GAME_START_SIGNAL);
+
 		break;
 	case t_network::Messagetype::GAME_RESUME_SIGNAL:
+
+		n_Board.set_messagetype(tetris::proto::Board_MessageType::Board_MessageType_GAME_RESUME_SIGNAL);
+
 		break;
 	case t_network::Messagetype::MOVING_TETROMINO_STATE:
-		//break;
-	//case t_network::Messagetype::ENTIRE_BOARD_STATE:
 	{
+		n_Board.set_messagetype(tetris::proto::Board_MessageType::Board_MessageType_MOVING_TETROMINO_STATE);
+
 		// moving tetromino
 		tetris::proto::Tetromino* n_MoveTet = new tetris::proto::Tetromino();
 		auto& movingTet = board.getMovingTetromino();
 		createNTetrominoHelper(movingTet, n_MoveTet);
 
+		n_Board.set_allocated_movingtet(n_MoveTet);
+	}
+	break;
+	case t_network::Messagetype::ENTIRE_BOARD_STATE:
+	{
+		n_Board.set_messagetype(tetris::proto::Board_MessageType::Board_MessageType_ENTIRE_BOARD_STATE);
+
 		// solidblocks
 		tetris::proto::SolidBlocks* n_SolidBlocks = new tetris::proto::SolidBlocks();
 		const auto& solidTetrominos = board.getSolidBlocks().getSolidTetrominos();
-		for (const auto solidTetromino : solidTetrominos) 
+		for (const auto solidTetromino : solidTetrominos)
 		{
 			auto n_SolidTetromino = n_SolidBlocks->add_tetrominos();
 			createNTetrominoHelper(*solidTetromino, n_SolidTetromino);
 		}
 
-		// board
-		tetris::proto::Board n_Board;
-		n_Board.set_messagetype(tetris::proto::Board_MessageType::Board_MessageType_MOVING_TETROMINO_STATE);
 		n_Board.set_level(board.getLevel());
 		n_Board.set_score(board.getScore());
-		n_Board.set_allocated_movingtet(n_MoveTet);
 		n_Board.set_allocated_solidblocks(n_SolidBlocks);
-
-		std::string output;
-		if (n_Board.SerializePartialToString(&output))
-		{
-			CCLOG("success");
-			listen(output);
-		}
-		else
-		{
-			CCLOG("Error");
-		}
-
-		break;
 	}
+	break;
 
 	default:
 		break;
 	}
 
 	// pack 
+	std::string output;
+	if (n_Board.SerializePartialToString(&output))
+	{
+		CCLOG("success");
+		listen(output);
+	}
+	else
+	{
+		CCLOG("Error");
+	}
 
 	// send
 }
