@@ -16,7 +16,6 @@ void NetworkHandler::listen(std::string data)
 
 	if (nBoard.ParseFromString(data))
 	{
-		CCLOG("hooray");
 		tetris::proto::Board_MessageType nMessageType = nBoard.messagetype();
 		t_network::Messagetype mType = (t_network::Messagetype) nMessageType;
 		networkNotify(nBoard, mType);
@@ -157,7 +156,6 @@ void NetworkHandler::pushDataToNetwork(const Board& board, t_network::Messagetyp
 	std::string output;
 	if (n_Board.SerializePartialToString(&output))
 	{
-		CCLOG("success");
 		listen(output);
 	}
 	else

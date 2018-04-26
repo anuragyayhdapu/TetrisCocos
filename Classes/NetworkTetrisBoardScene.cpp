@@ -1,5 +1,6 @@
 #include "NetworkTetrisBoardScene.h"
 #include <future>
+#include <functional>
 
 USING_NS_CC;
 
@@ -72,7 +73,9 @@ void NetworkTetrisBoardScene::onNotify(const Board & board, TetrisEvent _event)
 	case GAMEOVER:
 		// 1. display game over scene
 		// 2. send game over signal to network
-		sendMyBoardState(t_network::Messagetype::GAME_OVER_SIGNAL);
+		std::async(std::launch::async,
+			std::bind(&NetworkTetrisBoardScene::sendMyBoardState, this, std::placeholders::_1),
+			t_network::Messagetype::GAME_OVER_SIGNAL);
 		break;
 
 	case LEVEL_UP:
@@ -86,11 +89,15 @@ void NetworkTetrisBoardScene::onNotify(const Board & board, TetrisEvent _event)
 		break;
 
 	case SOLIDBLOCKS_UPDATED:
-		sendMyBoardState(t_network::Messagetype::ENTIRE_BOARD_STATE);
+		std::async(std::launch::async,
+			std::bind(&NetworkTetrisBoardScene::sendMyBoardState, this, std::placeholders::_1),
+			t_network::Messagetype::ENTIRE_BOARD_STATE);
 		break;
 
 	case MOVING_TET_MOVED:
-		sendMyBoardState(t_network::Messagetype::MOVING_TETROMINO_STATE);
+		std::async(std::launch::async,
+			std::bind(&NetworkTetrisBoardScene::sendMyBoardState, this, std::placeholders::_1),
+			t_network::Messagetype::MOVING_TETROMINO_STATE);
 		break;
 
 	default:
@@ -239,10 +246,5 @@ void NetworkTetrisBoardScene::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCo
 
 void NetworkTetrisBoardScene::sendMyBoardState(t_network::Messagetype messageType)
 {
-
-	//void (NetworkHandler::*pump)(const Board& ,t_network::Messagetype) = &NetworkHandler::pushDataToNetwork;
-
-	//std::async((&NetworkHandler::pushDataToNetwork), *myBoard, messageType);
-
 	networkHandler.pushDataToNetwork(*myBoard, messageType);
 }
