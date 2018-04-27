@@ -48,9 +48,10 @@ bool NetworkTetrisBoardScene::init()
 	drawFonts();
 	addText(visibleSize);
 
-	// initialize network
-	networkHandler.initialize();
-	networkHandler.registerObserver(this);
+	// TODO: delete this dummy code later
+	//networkHandler.initialize();
+	networkHandler = NetworkHandler::getInstance();
+	networkHandler->registerObserver(this);
 
 	//countDownLayer = nullptr;
 	//countDown(visibleSize);
@@ -246,5 +247,5 @@ void NetworkTetrisBoardScene::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCo
 
 void NetworkTetrisBoardScene::sendMyBoardState(t_network::Messagetype messageType)
 {
-	networkHandler.pushDataToNetwork(*myBoard, messageType);
+	networkHandler->pushDataToNetwork(*myBoard, messageType);
 }

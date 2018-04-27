@@ -17,7 +17,7 @@ public:
 	virtual void onNetworkNotify(const tetris::proto::Board&, t_network::Messagetype);
 
 private:
-	NetworkHandler networkHandler;
+	NetworkHandler *networkHandler;
 	Board * myBoard, *otherBoard;
 	double _u;			// size of one unit block
 	cocos2d::Vec2 _pf;	// first middle point of a unit block in grid

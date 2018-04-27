@@ -3,20 +3,24 @@
 #include "Board.h"
 #include "Constants.h"
 #include "message.pb.h"
+#include "RakPeerInterface.h"
 
 
 class NetworkHandler : public Subject
 {
 public:
-	NetworkHandler();
-	void initialize();
+	static NetworkHandler * getInstance();
+	~NetworkHandler();
+	void initRecieverServer();
+	void initSenderServer();
 	void pushDataToNetwork(const Board& board, t_network::Messagetype);
-
-private:
-	//void listenForDataOnNetwork(t_network::Board);
 	void listen(std::string data);
 
-	// helpers
-	//void fillEntireBoardStateHelper(Board& b, t_network::Board networkRawBoardData);
+private:
+
+	static RakNet::RakPeerInterface *rakPeerInterface;
+	static NetworkHandler *netInstance;
+	NetworkHandler();
+	void init();
 	void createNTetrominoHelper(const Tetromino& from, tetris::proto::Tetromino* to);
 };

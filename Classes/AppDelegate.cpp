@@ -2,6 +2,7 @@
 #include "MainMenuScene.h"
 #include "TetrisBoardScene.h"
 #include "TetrisFont.h"
+#include "NetworkHandler.h"
 #include <sqlite3\include\sqlite3.h>
 
 // #define USE_AUDIO_ENGINE 1
@@ -105,6 +106,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
 	initializeDatabase();
 	initializeTextUnitBlock();
+	initializeNetworkServer();
 
 	// create a scene. it's an autorelease object
 	auto scene = MainMenuScene::create();
@@ -241,4 +243,10 @@ void AppDelegate::initializeTextUnitBlock()
 
 	// standard unit text size is 1% of box
 	TetrisFont::u = 0.01 * box;
+}
+
+void AppDelegate::initializeNetworkServer()
+{
+	auto networkServer = NetworkHandler::getInstance();
+	networkServer->initRecieverServer();
 }

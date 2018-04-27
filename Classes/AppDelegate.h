@@ -38,7 +38,7 @@ public:
 private:
 	void initializeDatabase();
 	void initializeTextUnitBlock();
-
+	void initializeNetworkServer();
 };
 
 #endif // _APP_DELEGATE_H_
