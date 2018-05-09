@@ -1,7 +1,17 @@
 #include "NetworkHandler.h"
+#include "BitStream.h"
+#include "RakNetTypes.h"  // MessageID
+#include "MessageIdentifiers.h"
+#include <thread>
 
-RakNet::RakPeerInterface *NetworkHandler::rakPeerInterface;
+
+RakNet::RakPeerInterface *NetworkHandler::rakPeer = nullptr;
 NetworkHandler *NetworkHandler::netInstance = nullptr;
+
+enum GameMessages
+{
+	ID_GAME_MESSAGE_1 = ID_USER_PACKET_ENUM + 1
+};
 
 NetworkHandler::NetworkHandler()
 {
@@ -10,6 +20,16 @@ NetworkHandler::NetworkHandler()
 
 void NetworkHandler::init()
 {
+	auto id0 = std::this_thread::get_id();
+
+	rakPeer = RakNet::RakPeerInterface::GetInstance();
+	rakPeer->Startup(t_network::MAX_CONNECTIONS_ALLOWED, &RakNet::SocketDescriptor(t_network::SERVER_PORT, 0), 1);
+	rakPeer->SetMaximumIncomingConnections(t_network::MAX_INCOMING_CONNECTIONS_ALLOWED);
+	initSenderServer();
+
+	auto id1 = std::this_thread::get_id();
+
+	auto future =  std::async(std::launch::async, std::bind(&NetworkHandler::listen, this));
 }
 
 NetworkHandler::~NetworkHandler()
@@ -30,18 +50,86 @@ NetworkHandler * NetworkHandler::getInstance()
 
 void NetworkHandler::initSenderServer()
 {
-	rakPeerInterface = RakNet::RakPeerInterface::GetInstance();
-	//rakPeerInterface->Startup(1,);
+	rakPeer->Connect("127.0.0.1", t_network::SERVER_PORT, 0, 0);
 }
 
 void NetworkHandler::initRecieverServer()
 {
-	
+
 }
 
-void NetworkHandler::listen(std::string data)
+void NetworkHandler::listen()
 {
-	tetris::proto::Board nBoard;
+
+	auto id2 = std::this_thread::get_id();
+
+	RakNet::Packet *packet;
+
+	while (1)
+	{
+		for (packet = rakPeer->Receive(); packet; rakPeer->DeallocatePacket(packet), packet = rakPeer->Receive())
+		{
+			switch (packet->data[0])
+			{
+			case ID_REMOTE_DISCONNECTION_NOTIFICATION:
+				//CCLOG("Another client has disconnected.\n");
+				break;
+			case ID_REMOTE_CONNECTION_LOST:
+				//CCLOG("Another client has lost the connection.\n");
+				break;
+			case ID_REMOTE_NEW_INCOMING_CONNECTION:
+				//CCLOG("Another client has connected.\n");
+				break;
+			case ID_CONNECTION_REQUEST_ACCEPTED:
+			{
+				//CCLOG("Our connection request has been accepted.\n");
+
+				// Use a BitStream to write a custom user message
+				// Bitstreams are easier to use than sending casted structures, and handle endian swapping automatically
+				/*RakNet::BitStream bsOut;
+				bsOut.Write((RakNet::MessageID)ID_GAME_MESSAGE_1);
+				bsOut.Write("Hoopla");
+				rakPeer->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, packet->systemAddress, false);*/
+			}
+			break;
+			case ID_NEW_INCOMING_CONNECTION:
+				//CCLOG("A connection is incoming.\n");
+				break;
+			case ID_NO_FREE_INCOMING_CONNECTIONS:
+				//CCLOG("The server is full.\n");
+				break;
+			case ID_DISCONNECTION_NOTIFICATION:
+				//CCLOG("We have been disconnected.\n");
+				break;
+			case ID_CONNECTION_LOST:
+				//CCLOG("Connection lost.\n");
+				break;
+			case ID_GAME_MESSAGE_1:
+			{
+				std::string data;
+				RakNet::BitStream bsIn(packet->data, packet->length, false);
+				bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
+				bsIn.Read(data);
+
+				tetris::proto::Board nBoard;
+
+				if (nBoard.ParseFromString(data))
+				{
+					tetris::proto::Board_MessageType nMessageType = nBoard.messagetype();
+					t_network::Messagetype mType = (t_network::Messagetype) nMessageType;
+					networkNotify(nBoard, mType);
+				}
+				//CCLOG("%s\n", rs.C_String());
+			}
+			break;
+			default:
+				//CCLOG("Message with identifier %i has arrived.\n", packet->data[0]);
+				break;
+			}
+		}
+	}
+
+	/*tetris::proto::Board nBoard;
 
 	if (nBoard.ParseFromString(data))
 	{
@@ -52,7 +140,7 @@ void NetworkHandler::listen(std::string data)
 	else
 	{
 		CCLOG("uuuhhh");
-	}
+	}*/
 
 
 }
@@ -125,7 +213,13 @@ void NetworkHandler::pushDataToNetwork(const Board& board, t_network::Messagetyp
 	std::string output;
 	if (n_Board.SerializePartialToString(&output))
 	{
-		listen(output);
+		RakNet::BitStream bsOut;
+		bsOut.Write((RakNet::MessageID)ID_GAME_MESSAGE_1);
+		bsOut.Write(output.c_str());
+		RakNet::SystemAddress localSystemAddress("127.0.0.1", t_network::SERVER_PORT);
+		rakPeer->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, localSystemAddress, false);
+		//listen(output);
+
 	}
 	else
 	{

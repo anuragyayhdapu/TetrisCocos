@@ -14,11 +14,11 @@ public:
 	void initRecieverServer();
 	void initSenderServer();
 	void pushDataToNetwork(const Board& board, t_network::Messagetype);
-	void listen(std::string data);
+	void listen();
 
 private:
 
-	static RakNet::RakPeerInterface *rakPeerInterface;
+	static RakNet::RakPeerInterface *rakPeer;
 	static NetworkHandler *netInstance;
 	NetworkHandler();
 	void init();

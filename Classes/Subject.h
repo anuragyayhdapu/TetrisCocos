@@ -16,7 +16,7 @@ protected:
 			observer->onNotify(board, event);
 	}
 
-	void networkNotify(tetris::proto::Board board, t_network::Messagetype messageType) {
+	void networkNotify(const tetris::proto::Board& board, t_network::Messagetype messageType) {
 		for (auto observer : observers)
 			observer->onNetworkNotify(board, messageType);
 	}

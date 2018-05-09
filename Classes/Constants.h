@@ -129,50 +129,11 @@ namespace t_network {
 		GAME_START_SIGNAL = 3,
 		GAME_RESUME_SIGNAL = 4,
 
-		ENTIRE_BOARD_STATE = 5,	// sned moving tetromino & solidblocks draw data, score & level
+		ENTIRE_BOARD_STATE = 5,	// send moving tetromino & solidblocks draw data, score & level
 		MOVING_TETROMINO_STATE = 6	// send moving tetromino draw data
 	};
 
-
-	// TODO: only for testing, remove later with google protobufs
-	/*struct Pos {
-		short x, y;
-		Pos(short x, short y) :
-			x(x), y(y) {}
-	};
-
-	struct Color {
-		float r, g, b, a;
-		Color(cocos2d::Color4B color) :
-			r(color.r), g(color.g), b(color.b), a(color.a) {}
-	};
-
-	struct Tetromino {
-		Color color, borderColor;
-		Pos gridMatrixPoint;
-		std::vector<Pos> unitBlocksPos;
-
-		Tetromino(Color color, Color borderColor, Pos gridMatrixPoint, std::vector<Pos> unitBlocksPos) :
-			color(color), borderColor(borderColor), gridMatrixPoint(gridMatrixPoint), 
-			unitBlocksPos(unitBlocksPos) {}
-
-	};
-
-	struct SolidBlocks {
-		std::vector<Tetromino> tetrominos;
-		SolidBlocks(std::vector<Tetromino> tetrominos) : 
-			tetrominos(tetrominos) {}
-	};
-
-	struct Board {
-		Messagetype messageType;
-		unsigned int score;
-		short level;
-		Tetromino movingTet;
-		SolidBlocks solidBlocks;
-
-		Board(Messagetype messageType, unsigned int score, short level, Tetromino movingTet, SolidBlocks solidBlocks) :
-			messageType(messageType), score(score), level(level), movingTet(movingTet), 
-			solidBlocks(solidBlocks) {}
-	};*/
+	const unsigned int SERVER_PORT = 60000;
+	const short MAX_CONNECTIONS_ALLOWED = 2;
+	const short MAX_INCOMING_CONNECTIONS_ALLOWED = 1;
 }
